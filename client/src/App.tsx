@@ -1,24 +1,33 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
-import Header from './containers/layouts/Header';
-import Home from './screens/Home';
-import Login from './screens/Login';
-import Register from './screens/Register';
+import Login from './routes/Login';
+import Home from './routes/Home';
+import './App.css';
+import Register from './routes/Register';
+import { useMeQuery } from './generated/graphql';
+import PrivateRoute from './containers/PrivateRoute';
+import Posts from './routes/Posts';
+import { Alert, Spinner } from 'react-bootstrap';
 
-function App() {
+const App: React.FC = () => {
+  const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
+
+  if (loading) {
+    return <Spinner animation='grow' />;
+  } else if (error) {
+    return <Alert>{error.message}</Alert>;
+  }
+
   return (
     <BrowserRouter>
-      <Header />
-      <Container>
-        <Switch>
-          <Route exact path='/' component={Home} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/register' component={Register} />
-        </Switch>
-      </Container>
+      <Switch>
+        <Route exact path='/' component={Home} />
+        <Route exact path='/login' component={Login} />
+        <Route exact path='/register' component={Register} />
+        <PrivateRoute exact path='/posts' component={Posts} />
+      </Switch>
     </BrowserRouter>
   );
-}
+};
 
 export default App;

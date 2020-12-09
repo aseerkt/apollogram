@@ -1,0 +1,10 @@
+mutation AddPost($caption: String!, $image: Upload!) {
+  addPost(caption: $caption, image: $image) {
+    post {
+      id
+      caption
+      imgURL
+    }
+    error
+  }
+}

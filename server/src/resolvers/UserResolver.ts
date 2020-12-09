@@ -1,76 +1,57 @@
-import { User } from '../entity/User';
+import { Arg, Args, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import { validate } from 'class-validator';
+import { User } from '../entities/User';
+import { MyContext } from '../types';
 import {
-  Arg,
-  Ctx,
-  Field,
-  Mutation,
-  ObjectType,
-  Query,
-  Resolver,
-} from 'type-graphql';
-import { FieldError, MyContext } from '../types';
-import argon2 from 'argon2';
-import { minLengthErrors, uniqueErrors } from '../utils/formValidations';
-
-@ObjectType()
-export class UserResponse {
-  @Field()
-  ok: boolean;
-
-  @Field(() => [FieldError], { nullable: true })
-  errors: [FieldError];
-}
+  LoginResponse,
+  RegisterResponse,
+  RegisterVars,
+} from '../types/userTypes';
+import { formatErrors } from '../utils/formatErrors';
+import { COOKIE_NAME } from '../constants';
 
 @Resolver()
 export class UserResolver {
-  @Query(() => String)
-  hello() {
-    return 'hi';
+  @Query(() => User, { nullable: true })
+  me(@Ctx() { req }: MyContext) {
+    return User.findOne({ id: req.session.userId });
   }
 
-  @Mutation(() => UserResponse)
+  @Mutation(() => RegisterResponse)
   async register(
-    @Arg('username') username: string,
-    @Arg('email') email: string,
-    @Arg('password') password: string
-  ) {
-    const user1 = await User.findOne({ email });
-    if (user1) {
-      return {
-        ok: false,
-        errors: [{ path: 'email', message: 'Email already registered' }],
-      };
-    }
-    const user2 = await User.findOne({ username });
-    if (user2) {
-      return {
-        ok: false,
-        errors: [{ path: 'username', message: 'Username is taken' }],
-      };
-    }
+    @Args() { email, username, password }: RegisterVars
+  ): Promise<RegisterResponse> {
     let errors = [];
-    errors.push(
-      ...minLengthErrors('username', username, 3),
-      ...minLengthErrors('password', password, 6)
-    );
-    if (errors.length > 0) {
-      return { ok: false, errors };
-    }
+    const emailUser = await User.findOne({ email });
+    const usernameUser = await User.findOne({ username });
+    if (emailUser)
+      errors.push({ path: 'email', message: 'Email already registered' });
+    if (usernameUser)
+      errors.push({ path: 'username', message: 'Username already taken' });
 
-    const hashedPassword = await argon2.hash(password);
-    const user = User.create({ username, email, password: hashedPassword });
+    if (errors.length > 0)
+      return {
+        ok: false,
+        errors,
+      };
+
+    const user = User.create({ username, email, password });
+    errors = await validate(user);
+    if (errors.length > 0) {
+      return { ok: false, errors: formatErrors(errors) };
+    }
     try {
       await user.save();
       return { ok: true };
     } catch (err) {
-      console.log(err.code);
-      let errors = uniqueErrors(err);
-      if (errors.length > 0) return { ok: false, errors };
-      return { ok: false };
+      return {
+        ok: false,
+        errors: [{ path: 'unknown', message: 'Server Error' }],
+      };
     }
   }
 
-  @Mutation(() => UserResponse)
+  @Mutation(() => LoginResponse)
   async login(
     @Arg('username') username: string,
     @Arg('password') password: string,
@@ -84,17 +65,27 @@ export class UserResolver {
           errors: [{ path: 'username', message: 'User does not exist' }],
         };
       }
-      const valid = await argon2.verify(user.password, password);
-      if (!valid) {
+      if (!user.verifyPassword(password)) {
         return {
           ok: false,
           errors: [{ path: 'password', message: 'Invalid Password' }],
         };
       }
       req.session.userId = user.id;
-      return { ok: true };
+      return { ok: true, user };
     } catch (err) {
       return { ok: false };
     }
+  }
+
+  @Mutation(() => Boolean)
+  logout(@Ctx() { req, res }: MyContext) {
+    req.session.destroy((err) => {
+      if (err) {
+        return false;
+      }
+      res.clearCookie(COOKIE_NAME);
+      return true;
+    });
   }
 }

@@ -11,6 +11,6 @@ export class FieldError {
 }
 
 export interface MyContext {
-  req: Request & { session: { userId: number } };
+  req: Request & { session: { userId: string } };
   res: Response;
 }

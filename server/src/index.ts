@@ -9,6 +9,8 @@ import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
 import { UserResolver } from './resolvers/UserResolver';
 import { COOKIE_NAME, __prod__ } from './constants';
+import { PostResolver } from './resolvers/PostResolver';
+import imagesRoute from './routes/imageRoute';
 
 const main = async () => {
   await createConnection();
@@ -17,10 +19,12 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+      origin: __prod__ ? process.env.FRONTEND_URL : 'http://localhost:3000',
       credentials: true,
     })
   );
+
+  app.use('/images', imagesRoute);
 
   const RedisStore = connectRedis(session);
   const redisClient = createClient();
@@ -42,7 +46,10 @@ const main = async () => {
   );
 
   const apolloServer = new ApolloServer({
-    schema: await buildSchema({ resolvers: [UserResolver] }),
+    schema: await buildSchema({
+      resolvers: [UserResolver, PostResolver],
+      validate: false,
+    }),
     context: ({ req, res }) => ({ req, res }),
   });
 

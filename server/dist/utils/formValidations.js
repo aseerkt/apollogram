@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uniqueErrors = exports.minLengthErrors = void 0;
-exports.minLengthErrors = (field, value, minLength) => {
+exports.isEmail = exports.uniqueErrors = exports.minLengthErrors = void 0;
+const minLengthErrors = (field, value, minLength) => {
     if (value.length < minLength) {
         return [
             {
@@ -14,7 +14,8 @@ exports.minLengthErrors = (field, value, minLength) => {
         return [];
     }
 };
-exports.uniqueErrors = (err) => {
+exports.minLengthErrors = minLengthErrors;
+const uniqueErrors = (err) => {
     if (err.code === '23505') {
         if (err.detail.includes('username')) {
             console.log(err.detail);
@@ -24,4 +25,10 @@ exports.uniqueErrors = (err) => {
     }
     return [];
 };
+exports.uniqueErrors = uniqueErrors;
+const isEmail = (value) => {
+    const regex = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    return regex.test(value);
+};
+exports.isEmail = isEmail;
 //# sourceMappingURL=formValidations.js.map

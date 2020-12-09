@@ -20,67 +20,46 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UserResolver = exports.UserResponse = void 0;
-const User_1 = require("../entity/User");
+exports.UserResolver = void 0;
 const type_graphql_1 = require("type-graphql");
-const types_1 = require("../types");
-const argon2_1 = __importDefault(require("argon2"));
-const formValidations_1 = require("../utils/formValidations");
-let UserResponse = class UserResponse {
-};
-__decorate([
-    type_graphql_1.Field(),
-    __metadata("design:type", Boolean)
-], UserResponse.prototype, "ok", void 0);
-__decorate([
-    type_graphql_1.Field(() => [types_1.FieldError], { nullable: true }),
-    __metadata("design:type", Array)
-], UserResponse.prototype, "errors", void 0);
-UserResponse = __decorate([
-    type_graphql_1.ObjectType()
-], UserResponse);
-exports.UserResponse = UserResponse;
+const class_validator_1 = require("class-validator");
+const User_1 = require("../entities/User");
+const userTypes_1 = require("../types/userTypes");
+const formatErrors_1 = require("../utils/formatErrors");
+const constants_1 = require("../constants");
 let UserResolver = class UserResolver {
-    hello() {
-        return 'hi';
+    me({ req }) {
+        return User_1.User.findOne({ id: req.session.userId });
     }
-    register(username, email, password) {
+    register({ email, username, password }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user1 = yield User_1.User.findOne({ email });
-            if (user1) {
-                return {
-                    ok: false,
-                    errors: [{ path: 'email', message: 'Email already registered' }],
-                };
-            }
-            const user2 = yield User_1.User.findOne({ username });
-            if (user2) {
-                return {
-                    ok: false,
-                    errors: [{ path: 'username', message: 'Username is taken' }],
-                };
-            }
             let errors = [];
-            errors.push(...formValidations_1.minLengthErrors('username', username, 3), ...formValidations_1.minLengthErrors('password', password, 6));
+            const emailUser = yield User_1.User.findOne({ email });
+            const usernameUser = yield User_1.User.findOne({ username });
+            if (emailUser)
+                errors.push({ path: 'email', message: 'Email already registered' });
+            if (usernameUser)
+                errors.push({ path: 'username', message: 'Username already taken' });
+            if (errors.length > 0)
+                return {
+                    ok: false,
+                    errors,
+                };
+            const user = User_1.User.create({ username, email, password });
+            errors = yield class_validator_1.validate(user);
             if (errors.length > 0) {
-                return { ok: false, errors };
+                return { ok: false, errors: formatErrors_1.formatErrors(errors) };
             }
-            const hashedPassword = yield argon2_1.default.hash(password);
-            const user = User_1.User.create({ username, email, password: hashedPassword });
             try {
                 yield user.save();
                 return { ok: true };
             }
             catch (err) {
-                console.log(err.code);
-                let errors = formValidations_1.uniqueErrors(err);
-                if (errors.length > 0)
-                    return { ok: false, errors };
-                return { ok: false };
+                return {
+                    ok: false,
+                    errors: [{ path: 'unknown', message: 'Server Error' }],
+                };
             }
         });
     }
@@ -94,39 +73,46 @@ let UserResolver = class UserResolver {
                         errors: [{ path: 'username', message: 'User does not exist' }],
                     };
                 }
-                const valid = yield argon2_1.default.verify(user.password, password);
-                if (!valid) {
+                if (!user.verifyPassword(password)) {
                     return {
                         ok: false,
                         errors: [{ path: 'password', message: 'Invalid Password' }],
                     };
                 }
                 req.session.userId = user.id;
-                return { ok: true };
+                return { ok: true, user };
             }
             catch (err) {
                 return { ok: false };
             }
         });
     }
+    logout({ req, res }) {
+        req.session.destroy((err) => {
+            if (err) {
+                return false;
+            }
+            res.clearCookie(constants_1.COOKIE_NAME);
+            return true;
+        });
+    }
 };
 __decorate([
-    type_graphql_1.Query(() => String),
+    type_graphql_1.Query(() => User_1.User, { nullable: true }),
+    __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
-], UserResolver.prototype, "hello", null);
+], UserResolver.prototype, "me", null);
 __decorate([
-    type_graphql_1.Mutation(() => UserResponse),
-    __param(0, type_graphql_1.Arg('username')),
-    __param(1, type_graphql_1.Arg('email')),
-    __param(2, type_graphql_1.Arg('password')),
+    type_graphql_1.Mutation(() => userTypes_1.RegisterResponse),
+    __param(0, type_graphql_1.Args()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [userTypes_1.RegisterVars]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "register", null);
 __decorate([
-    type_graphql_1.Mutation(() => UserResponse),
+    type_graphql_1.Mutation(() => userTypes_1.LoginResponse),
     __param(0, type_graphql_1.Arg('username')),
     __param(1, type_graphql_1.Arg('password')),
     __param(2, type_graphql_1.Ctx()),
@@ -134,6 +120,13 @@ __decorate([
     __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
 ], UserResolver.prototype, "login", null);
+__decorate([
+    type_graphql_1.Mutation(() => Boolean),
+    __param(0, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "logout", null);
 UserResolver = __decorate([
     type_graphql_1.Resolver()
 ], UserResolver);
