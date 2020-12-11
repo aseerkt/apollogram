@@ -15,12 +15,6 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Query = {
-  __typename?: 'Query';
-  me?: Maybe<User>;
-  getPosts: Array<Post>;
-};
-
 export type User = {
   __typename?: 'User';
   id: Scalars['String'];
@@ -39,12 +33,49 @@ export type Post = {
   user: User;
 };
 
+export type FieldError = {
+  __typename?: 'FieldError';
+  path: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type RegisterResponse = {
+  __typename?: 'RegisterResponse';
+  ok: Scalars['Boolean'];
+  errors?: Maybe<Array<FieldError>>;
+};
+
+export type LoginResponse = {
+  __typename?: 'LoginResponse';
+  ok: Scalars['Boolean'];
+  errors?: Maybe<Array<FieldError>>;
+  user?: Maybe<User>;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  hello: Scalars['String'];
+  getPosts: Array<Post>;
+  me?: Maybe<User>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
+  fileUpload: Scalars['Boolean'];
+  addPost: Scalars['Boolean'];
   register: RegisterResponse;
   login: LoginResponse;
   logout: Scalars['Boolean'];
-  addPost: PostResponse;
+};
+
+
+export type MutationFileUploadArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type MutationAddPostArgs = {
+  file: Scalars['Upload'];
 };
 
 
@@ -61,53 +92,14 @@ export type MutationLoginArgs = {
 };
 
 
-export type MutationAddPostArgs = {
-  image: Scalars['Upload'];
-  caption: Scalars['String'];
-};
-
-export type RegisterResponse = {
-  __typename?: 'RegisterResponse';
-  ok: Scalars['Boolean'];
-  errors?: Maybe<Array<FieldError>>;
-};
-
-export type FieldError = {
-  __typename?: 'FieldError';
-  path: Scalars['String'];
-  message: Scalars['String'];
-};
-
-export type LoginResponse = {
-  __typename?: 'LoginResponse';
-  ok: Scalars['Boolean'];
-  errors?: Maybe<Array<FieldError>>;
-  user?: Maybe<User>;
-};
-
-export type PostResponse = {
-  __typename?: 'PostResponse';
-  post?: Maybe<Post>;
-  error?: Maybe<Scalars['String']>;
-};
-
-
 export type AddPostMutationVariables = Exact<{
-  caption: Scalars['String'];
-  image: Scalars['Upload'];
+  file: Scalars['Upload'];
 }>;
 
 
 export type AddPostMutation = (
   { __typename?: 'Mutation' }
-  & { addPost: (
-    { __typename?: 'PostResponse' }
-    & Pick<PostResponse, 'error'>
-    & { post?: Maybe<(
-      { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'caption' | 'imgURL'>
-    )> }
-  ) }
+  & Pick<Mutation, 'addPost'>
 );
 
 export type LoginMutationVariables = Exact<{
@@ -163,15 +155,8 @@ export type RegisterMutation = (
 
 
 export const AddPostDocument = gql`
-    mutation AddPost($caption: String!, $image: Upload!) {
-  addPost(caption: $caption, image: $image) {
-    post {
-      id
-      caption
-      imgURL
-    }
-    error
-  }
+    mutation AddPost($file: Upload!) {
+  addPost(file: $file)
 }
     `;
 export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPostMutationVariables>;
@@ -189,8 +174,7 @@ export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPost
  * @example
  * const [addPostMutation, { data, loading, error }] = useAddPostMutation({
  *   variables: {
- *      caption: // value for 'caption'
- *      image: // value for 'image'
+ *      file: // value for 'file'
  *   },
  * });
  */

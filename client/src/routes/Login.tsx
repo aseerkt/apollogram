@@ -27,7 +27,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
           }));
         });
       }
-      if (data?.login.user) {
+      if (data?.login.ok) {
         setUsername('');
         setPassword('');
         history.push('/posts');
@@ -40,7 +40,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
   // console.log(errors);
 
   return (
-    <Row className='justify-content-md-center mt-5'>
+    <Row className='mt-5 justify-content-md-center'>
       <Col md={6}>
         <Card>
           <Card.Header>
@@ -49,7 +49,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
               className='d-flex text-decoration-none justify-content-center align-items-center'
             >
               <FaInstagram size='4em' />
-              <h1 className='d-inline font-weight-bolder mb-0'>Instagram</h1>
+              <h1 className='mb-0 d-inline font-weight-bolder'>Instagram</h1>
             </Link>
             <h2 className='text-center font-weight-bolder'>Login</h2>
           </Card.Header>

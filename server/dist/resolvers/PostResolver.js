@@ -25,45 +25,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostResolver = void 0;
-const graphql_upload_1 = require("graphql-upload");
 const fs_1 = require("fs");
+const graphql_upload_1 = require("graphql-upload");
 const path_1 = __importDefault(require("path"));
 const type_graphql_1 = require("type-graphql");
 const Post_1 = require("../entities/Post");
-const User_1 = require("../entities/User");
 const isAuth_1 = require("../middlewares/isAuth");
-const postTypes_1 = require("../types/postTypes");
 let PostResolver = class PostResolver {
     getPosts() {
         return Post_1.Post.find();
     }
-    addPost(caption, file, { req }) {
+    addPost(file) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (caption.length < 5) {
-                return { error: 'Caption must be at least 5 characters long' };
-            }
             const { filename, createReadStream } = file;
-            console.log('Hero goes file', file);
+            console.log(file);
             const uploadTime = new Date().toISOString();
-            return new Promise((resolve) => {
-                createReadStream()
-                    .pipe(fs_1.createWriteStream(path_1.default.join(__dirname, `../../images/${uploadTime}_${filename}`)))
-                    .on('finish', () => __awaiter(this, void 0, void 0, function* () {
-                    console.log('finished upload');
-                    const user = yield User_1.User.findOne({ id: req.session.userId });
-                    const post = Post_1.Post.create({
-                        caption,
-                        imgURL: `${req.headers.host}/images/${uploadTime}_${filename}`,
-                        user,
-                    });
-                    yield post.save();
-                    resolve({ post });
-                }))
-                    .on('error', (err) => {
-                    console.log(err);
-                    resolve({ error: err.message });
-                });
-            });
+            const pathName = path_1.default.join(__dirname, `../../images/${uploadTime}_${filename}`);
+            return new Promise((resolve, reject) => createReadStream()
+                .pipe(fs_1.createWriteStream(pathName, { autoClose: true }))
+                .on('finish', () => resolve(true))
+                .on('error', () => reject(false)));
         });
     }
 };
@@ -74,13 +55,11 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostResolver.prototype, "getPosts", null);
 __decorate([
-    type_graphql_1.Mutation(() => postTypes_1.PostResponse),
+    type_graphql_1.Mutation(() => Boolean),
     type_graphql_1.UseMiddleware(isAuth_1.isAuth),
-    __param(0, type_graphql_1.Arg('caption')),
-    __param(1, type_graphql_1.Arg('image', () => graphql_upload_1.GraphQLUpload)),
-    __param(2, type_graphql_1.Ctx()),
+    __param(0, type_graphql_1.Arg('file', () => graphql_upload_1.GraphQLUpload)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "addPost", null);
 PostResolver = __decorate([

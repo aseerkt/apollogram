@@ -7,10 +7,9 @@ import { buildSchema } from 'type-graphql';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
-import { UserResolver } from './resolvers/UserResolver';
 import { COOKIE_NAME, __prod__ } from './constants';
-import { PostResolver } from './resolvers/PostResolver';
 import imagesRoute from './routes/imageRoute';
+import uploadRoute from './routes/uploadFile';
 
 const main = async () => {
   await createConnection();
@@ -24,7 +23,10 @@ const main = async () => {
     })
   );
 
+  // app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+
   app.use('/images', imagesRoute);
+  app.use('/upload', uploadRoute);
 
   const RedisStore = connectRedis(session);
   const redisClient = createClient();
@@ -47,8 +49,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver, PostResolver],
-      validate: false,
+      resolvers: [__dirname + '/resolvers/**/**.{ts,js}'],
     }),
     context: ({ req, res }) => ({ req, res }),
   });

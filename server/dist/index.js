@@ -21,10 +21,9 @@ const type_graphql_1 = require("type-graphql");
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const redis_1 = require("redis");
-const UserResolver_1 = require("./resolvers/UserResolver");
 const constants_1 = require("./constants");
-const PostResolver_1 = require("./resolvers/PostResolver");
 const imageRoute_1 = __importDefault(require("./routes/imageRoute"));
+const uploadFile_1 = __importDefault(require("./routes/uploadFile"));
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield typeorm_1.createConnection();
     const app = express_1.default();
@@ -33,6 +32,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         credentials: true,
     }));
     app.use('/images', imageRoute_1.default);
+    app.use('/upload', uploadFile_1.default);
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.createClient();
     app.use(express_session_1.default({
@@ -50,8 +50,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     }));
     const apolloServer = new apollo_server_express_1.ApolloServer({
         schema: yield type_graphql_1.buildSchema({
-            resolvers: [UserResolver_1.UserResolver, PostResolver_1.PostResolver],
-            validate: false,
+            resolvers: [__dirname + '/resolvers/**/**.{ts,js}'],
         }),
         context: ({ req, res }) => ({ req, res }),
     });
