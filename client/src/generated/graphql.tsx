@@ -54,23 +54,16 @@ export type LoginResponse = {
 
 export type Query = {
   __typename?: 'Query';
-  hello: Scalars['String'];
   getPosts: Array<Post>;
   me?: Maybe<User>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  fileUpload: Scalars['Boolean'];
   addPost: Scalars['Boolean'];
   register: RegisterResponse;
   login: LoginResponse;
   logout: Scalars['Boolean'];
-};
-
-
-export type MutationFileUploadArgs = {
-  file: Scalars['Upload'];
 };
 
 

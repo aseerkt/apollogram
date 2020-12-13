@@ -38,13 +38,20 @@ let PostResolver = class PostResolver {
     addPost(file) {
         return __awaiter(this, void 0, void 0, function* () {
             const { filename, createReadStream } = file;
-            console.log(file);
             const uploadTime = new Date().toISOString();
-            const pathName = path_1.default.join(__dirname, `../../images/${uploadTime}_${filename}`);
-            return new Promise((resolve, reject) => createReadStream()
-                .pipe(fs_1.createWriteStream(pathName, { autoClose: true }))
-                .on('finish', () => resolve(true))
-                .on('error', () => reject(false)));
+            const pathName = path_1.default.join(__dirname, `../images/${uploadTime}_${filename}`);
+            const isUploaded = yield new Promise((res, rej) => createReadStream()
+                .pipe(fs_1.createWriteStream(pathName))
+                .on('close', () => {
+                console.log('closed');
+                res(true);
+            })
+                .on('error', (err) => {
+                console.log(err);
+                rej(false);
+            }));
+            console.log(isUploaded);
+            return isUploaded;
         });
     }
 };

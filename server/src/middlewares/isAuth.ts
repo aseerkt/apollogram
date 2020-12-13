@@ -9,11 +9,13 @@ export const isAuth: MiddlewareFn<MyContext> = async (
 ) => {
   const { userId } = req.session;
   if (!userId) {
+    console.log('Something is wrong');
     throw new AuthenticationError('Unauthorized');
   }
 
   const user = await User.findOne({ id: userId });
   if (!user) {
+    console.log('Something is wrong');
     throw new AuthenticationError('Unauthorized');
   }
   next();

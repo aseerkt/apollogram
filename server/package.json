@@ -7,8 +7,10 @@
       "start": "node dist/index.js",
       "watch": "tsc -w",
       "server": "nodemon dist/index.js",
+      "server2": "TS_NODE=true nodemon --exec ts-node src/index.ts",
       "redis": "redis-server",
       "dev": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server\" ",
+      "dev2": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server2\" ",
       "typeorm": "TS_NODE=true ts-node ./node_modules/typeorm/cli.js"
    },
    "dependencies": {
@@ -40,7 +42,7 @@
    },
    "license": "MIT",
    "resolutions": {
-      "fs-capacitor": "^5.0.0",
+      "fs-capacitor": "^6.0.0",
       "graphql-upload": "^11.0.0"
    }
 }

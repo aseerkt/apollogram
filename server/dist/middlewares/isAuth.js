@@ -15,10 +15,12 @@ const User_1 = require("../entities/User");
 const isAuth = ({ context: { req } }, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.session;
     if (!userId) {
+        console.log('Something is wrong');
         throw new apollo_server_express_1.AuthenticationError('Unauthorized');
     }
     const user = yield User_1.User.findOne({ id: userId });
     if (!user) {
+        console.log('Something is wrong');
         throw new apollo_server_express_1.AuthenticationError('Unauthorized');
     }
     next();

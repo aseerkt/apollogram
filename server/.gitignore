@@ -6,3 +6,4 @@ tmp/
 temp/
 .env
 images/
+yarn-error.log

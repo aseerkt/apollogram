@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
+import { graphqlUploadExpress } from 'graphql-upload';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
@@ -18,12 +19,12 @@ const main = async () => {
 
   app.use(
     cors({
-      origin: __prod__ ? process.env.FRONTEND_URL : 'http://localhost:3000',
+      origin: __prod__ ? process.env.FRONTEND_URL! : 'http://localhost:3000',
       credentials: true,
     })
   );
 
-  // app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
   app.use('/images', imagesRoute);
   app.use('/upload', uploadRoute);
@@ -49,9 +50,10 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [__dirname + '/resolvers/**/**.{ts,js}'],
+      resolvers: [`${__dirname}/resolvers/**/*.{ts,js}`],
     }),
     context: ({ req, res }) => ({ req, res }),
+    uploads: false,
   });
 
   apolloServer.applyMiddleware({ app, cors: false });

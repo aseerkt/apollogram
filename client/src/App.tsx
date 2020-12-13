@@ -8,6 +8,7 @@ import { useMeQuery } from './generated/graphql';
 import PrivateRoute from './containers/PrivateRoute';
 import Posts from './routes/Posts';
 import { Alert, Spinner } from 'react-bootstrap';
+import Test from './routes/Test.jsx';
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
@@ -25,6 +26,7 @@ const App: React.FC = () => {
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
         <PrivateRoute exact path='/posts' component={Posts} />
+        <Route exact path='/test' component={Test} />
       </Switch>
     </BrowserRouter>
   );

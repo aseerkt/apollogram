@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useAddPostMutation } from '../generated/graphql';
@@ -21,8 +20,8 @@ const AddPost: React.FC = () => {
     if (!file) return alert('No file selected');
     try {
       // console.log(file);
-      const { data } = await addPost({ variables: { file } });
-      console.log(data);
+      const res = await addPost({ variables: { file } });
+      console.log(res);
     } catch (err) {
       console.log(err.message);
     }
