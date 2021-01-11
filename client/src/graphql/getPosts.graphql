@@ -1,0 +1,12 @@
+query GetPosts {
+  getPosts {
+    id
+    caption
+    imgURL
+    createdAt
+    updatedAt
+    user {
+      ...RegularUser
+    }
+  }
+}

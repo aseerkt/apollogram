@@ -25,27 +25,21 @@ const argon2_2 = require("argon2");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Post_1 = require("./Post");
-let User = class User extends typeorm_1.BaseEntity {
+const BaseEntity_1 = require("./BaseEntity");
+let User = class User extends BaseEntity_1.BaseEntity {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
             this.password = yield argon2_1.hash(this.password);
         });
     }
     verifyPassword(password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield argon2_2.verify(this.password, password);
-        });
+        return argon2_2.verify(this.password, password);
     }
 };
 __decorate([
     type_graphql_1.Field(),
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
-    __metadata("design:type", String)
-], User.prototype, "id", void 0);
-__decorate([
-    type_graphql_1.Field(),
     class_validator_1.IsAlphanumeric(undefined, { message: 'Username must be alphanumeric' }),
-    class_validator_1.MinLength(3, { message: 'Username must be atleast 2 characters long' }),
+    class_validator_1.MinLength(3, { message: 'Username must be atleast 3 characters long' }),
     typeorm_1.Column({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "username", void 0);
@@ -55,6 +49,16 @@ __decorate([
     typeorm_1.Column({ unique: true }),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column({ default: '' }),
+    __metadata("design:type", String)
+], User.prototype, "fullName", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    typeorm_1.Column({ default: '/user.jpeg' }),
+    __metadata("design:type", String)
+], User.prototype, "imgURL", void 0);
 __decorate([
     type_graphql_1.Field(() => [Post_1.Post]),
     typeorm_1.OneToMany(() => Post_1.Post, (post) => post.user),

@@ -16,15 +16,18 @@ require("reflect-metadata");
 const typeorm_1 = require("typeorm");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+require("dotenv/config");
 const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const graphql_upload_1 = require("graphql-upload");
 const express_session_1 = __importDefault(require("express-session"));
 const connect_redis_1 = __importDefault(require("connect-redis"));
 const redis_1 = require("redis");
+const passport_1 = __importDefault(require("passport"));
 const constants_1 = require("./constants");
 const imageRoute_1 = __importDefault(require("./routes/imageRoute"));
-const uploadFile_1 = __importDefault(require("./routes/uploadFile"));
+const fb_oauth_1 = __importDefault(require("./routes/fb-oauth"));
+const possport_1 = require("./config/possport");
 const main = () => __awaiter(void 0, void 0, void 0, function* () {
     yield typeorm_1.createConnection();
     const app = express_1.default();
@@ -32,9 +35,13 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         origin: constants_1.__prod__ ? process.env.FRONTEND_URL : 'http://localhost:3000',
         credentials: true,
     }));
-    app.use(graphql_upload_1.graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+    console.log(constants_1.EXPRESS_ENDPOINT);
+    app.use(graphql_upload_1.graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
     app.use('/images', imageRoute_1.default);
-    app.use('/upload', uploadFile_1.default);
+    app.use('/auth', fb_oauth_1.default);
+    app.use(passport_1.default.initialize());
+    app.use(passport_1.default.session());
+    possport_1.FacebookOAuthSetup(passport_1.default);
     const RedisStore = connect_redis_1.default(express_session_1.default);
     const redisClient = redis_1.createClient();
     app.use(express_session_1.default({

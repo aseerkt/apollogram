@@ -22,6 +22,8 @@
       "express": "^4.17.1",
       "express-session": "^1.17.1",
       "graphql": "^15.4.0",
+      "passport": "^0.4.1",
+      "passport-facebook": "^3.0.0",
       "pg": "^8.5.1",
       "redis": "^3.0.2",
       "reflect-metadata": "^0.1.10",
@@ -33,6 +35,8 @@
       "@types/express": "^4.17.9",
       "@types/express-session": "^1.17.3",
       "@types/node": "^14.14.10",
+      "@types/passport": "^1.0.5",
+      "@types/passport-facebook": "^2.1.10",
       "@types/redis": "^2.8.28",
       "concurrently": "^5.3.0",
       "nodemon": "^2.0.6",
@@ -42,7 +46,7 @@
    },
    "license": "MIT",
    "resolutions": {
-      "fs-capacitor": "^6.0.0",
+      "fs-capacitor": "^6.2.0",
       "graphql-upload": "^11.0.0"
    }
 }

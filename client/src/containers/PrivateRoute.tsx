@@ -1,22 +1,39 @@
 import React from 'react';
-import { useApolloClient } from '@apollo/client';
-import { Redirect, Route, RouteProps } from 'react-router-dom';
+import {
+  Redirect,
+  Route,
+  RouteComponentProps,
+  RouteProps,
+} from 'react-router-dom';
+import { apolloClient } from '..';
+import Navbar from '../components/Navbar';
 import { MeDocument } from '../generated/graphql';
 
-interface PrivateRouteProps {
-  component: React.ComponentType;
-}
+type PrivateRouteProps = RouteProps & {
+  component: React.FC<RouteComponentProps>;
+};
 
-const PrivateRoute: React.FC<PrivateRouteProps & RouteProps> = ({
+const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { me } = useApolloClient().readQuery({ query: MeDocument });
+  const { me } = apolloClient.readQuery({ query: MeDocument });
   return (
     <Route
       {...rest}
       render={(props) =>
-        me ? <Component {...props} /> : <Redirect to='/login' />
+        me ? (
+          <>
+            <Navbar />
+            <div className='mt-20'>
+              <Component {...props} />
+            </div>
+          </>
+        ) : (
+          <Redirect
+            to={{ pathname: '/login', state: { from: props.location } }}
+          />
+        )
       }
     />
   );

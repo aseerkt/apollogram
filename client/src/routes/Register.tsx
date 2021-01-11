@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Card, Col, Form, Row } from 'react-bootstrap';
-import { FaInstagram } from 'react-icons/fa';
+
 import { Link, RouteComponentProps } from 'react-router-dom';
+import FormWrapper from '../containers/FormWrapper';
+import Button from '../components-ui/Button';
+import InputField from '../components-ui/InputField';
 import { useRegisterMutation } from '../generated/graphql';
 
 const Register: React.FC<RouteComponentProps> = ({ history }) => {
@@ -35,13 +37,17 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
       email: null as any,
       password2: null as any,
     });
+    console.log('got here');
     if (password !== password2) {
       setErrors((prev) => ({ ...prev, password2: 'Password Mismatch' }));
       return;
     }
     try {
-      const { data } = await register();
+      const { data, errors } = await register();
+      console.log(errors);
+      console.log(data);
       if (data?.register.errors) {
+        console.log(data.register.errors);
         data.register.errors.forEach(({ path, message }) => {
           setErrors((prev) => ({
             ...prev,
@@ -50,91 +56,70 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
         });
       }
       if (data?.register.ok) {
-        history.push('/');
+        history.push('/login');
       }
       console.log(data);
     } catch (err) {
       console.log(err?.networkError.result);
     }
   };
-  // console.log(errors);
+  console.log(errors);
 
   return (
-    <Row className='justify-content-md-center mt-5'>
-      <Col md={6}>
-        <Card>
-          <Card.Header>
-            <Link
-              to='/'
-              className='d-flex text-decoration-none justify-content-center align-items-center'
-            >
-              <FaInstagram size='4em' />
-              <h1 className='d-inline font-weight-bolder mb-0'>Instagram</h1>
-            </Link>
-            <h2 className='text-center font-weight-bolder'>Sign Up</h2>
-          </Card.Header>
-          <Card.Body>
-            <Form onSubmit={onSubmit}>
-              <Form.Group>
-                <Form.Control
-                  className={errors.email && 'is-invalid'}
-                  name='email'
-                  placeholder='Email'
-                  value={email}
-                  onChange={onChange}
-                />
-                <Form.Text className='text-danger'>{errors.email}</Form.Text>
-              </Form.Group>
-              <Form.Group>
-                <Form.Control
-                  className={errors.email && 'is-invalid'}
-                  name='username'
-                  placeholder='Username'
-                  value={username}
-                  onChange={onChange}
-                />
-                <Form.Text className='text-danger'>{errors.username}</Form.Text>
-              </Form.Group>
-              <Form.Group>
-                <Form.Control
-                  className={errors.password && 'is-invalid'}
-                  type='password'
-                  name='password'
-                  placeholder='Password'
-                  value={password}
-                  onChange={onChange}
-                />
-                <Form.Text className='text-danger'>{errors.password}</Form.Text>
-              </Form.Group>
-              <Form.Group>
-                <Form.Control
-                  className={errors.password2 && 'is-invalid'}
-                  type='password'
-                  name='password2'
-                  placeholder='Confirm Password'
-                  value={password2}
-                  onChange={onChange}
-                />
-                <Form.Text className='text-danger'>
-                  {errors.password2}
-                </Form.Text>
-              </Form.Group>
-              <Button
-                type='submit'
-                disabled={!username || !password || !email || !password2}
-              >
-                Sign Up
-              </Button>
-            </Form>
-          </Card.Body>
-          <Card.Footer>
-            <small>
-              Already have an account? <Link to='/login'>Login</Link>{' '}
-            </small>
-          </Card.Footer>
-        </Card>
-      </Col>
-    </Row>
+    <FormWrapper title='Register'>
+      <div className='p-4'>
+        <form onSubmit={onSubmit}>
+          <InputField
+            error={errors.email}
+            name='email'
+            placeholder='Email'
+            value={email}
+            onChange={onChange}
+          />
+
+          <InputField
+            error={errors.username}
+            name='username'
+            placeholder='Username'
+            value={username}
+            onChange={onChange}
+          />
+
+          <InputField
+            error={errors.password}
+            type='password'
+            name='password'
+            placeholder='Password'
+            value={password}
+            onChange={onChange}
+          />
+          <InputField
+            error={errors.password2}
+            type='password'
+            name='password2'
+            placeholder='Confirm Password'
+            value={password2}
+            onChange={onChange}
+          />
+          <Button
+            className='my-3'
+            color='dark'
+            fullWidth
+            type='submit'
+            disabled={!username || !password || !email || !password2}
+          >
+            Sign Up
+          </Button>
+        </form>
+
+        <small className='mt-3'>
+          Already an account?{' '}
+          <Link to='/login' className='text-blue-500'>
+            Log In
+          </Link>{' '}
+        </small>
+      </div>
+    </FormWrapper>
   );
 };
 

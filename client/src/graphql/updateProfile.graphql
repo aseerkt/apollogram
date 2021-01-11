@@ -1,0 +1,3 @@
+mutation UpdateProfile($file: Upload, $fullName: String!) {
+  updateProfile(file: $file, fullName: $fullName)
+}

@@ -49,6 +49,7 @@ let UserResolver = class UserResolver {
             const user = User_1.User.create({ username, email, password });
             errors = yield class_validator_1.validate(user);
             if (errors.length > 0) {
+                console.log(errors);
                 return { ok: false, errors: formatErrors_1.formatErrors(errors) };
             }
             try {
@@ -73,10 +74,11 @@ let UserResolver = class UserResolver {
                         errors: [{ path: 'username', message: 'User does not exist' }],
                     };
                 }
-                if (!user.verifyPassword(password)) {
+                const valid = yield user.verifyPassword(password);
+                if (!valid) {
                     return {
                         ok: false,
-                        errors: [{ path: 'password', message: 'Invalid Password' }],
+                        errors: [{ path: 'password', message: 'Incorrect Password' }],
                     };
                 }
                 req.session.userId = user.id;
@@ -88,12 +90,14 @@ let UserResolver = class UserResolver {
         });
     }
     logout({ req, res }) {
-        req.session.destroy((err) => {
-            if (err) {
-                return false;
-            }
-            res.clearCookie(constants_1.COOKIE_NAME);
-            return true;
+        return new Promise((resolve) => {
+            req.session.destroy((err) => {
+                if (err) {
+                    resolve(false);
+                }
+                res.clearCookie(constants_1.COOKIE_NAME);
+                resolve(true);
+            });
         });
     }
 };

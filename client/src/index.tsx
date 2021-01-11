@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import './index.css';
 import App from './App';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 import reportWebVitals from './reportWebVitals';
-import './bootstrap.min.css';
 
 const uploadLink = createUploadLink({
   uri: 'http://localhost:5000/graphql',

@@ -15,28 +15,46 @@ export type Scalars = {
   Upload: any;
 };
 
-export type User = {
-  __typename?: 'User';
+export type BaseEntity = {
+  __typename?: 'BaseEntity';
   id: Scalars['String'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  posts: Array<Post>;
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Post = {
   __typename?: 'Post';
   id: Scalars['String'];
-  caption: Scalars['String'];
-  imgURL: Scalars['String'];
   createdAt: Scalars['String'];
   updatedAt: Scalars['String'];
+  caption: Scalars['String'];
+  imgURL: Scalars['String'];
   user: User;
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  fullName: Scalars['String'];
+  imgURL: Scalars['String'];
+  posts: Array<Post>;
 };
 
 export type FieldError = {
   __typename?: 'FieldError';
   path: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type CreatePostResponse = {
+  __typename?: 'CreatePostResponse';
+  ok: Scalars['Boolean'];
+  post?: Maybe<Post>;
+  error?: Maybe<FieldError>;
 };
 
 export type RegisterResponse = {
@@ -60,7 +78,8 @@ export type Query = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addPost: Scalars['Boolean'];
+  addPost: CreatePostResponse;
+  updateProfile: Scalars['Boolean'];
   register: RegisterResponse;
   login: LoginResponse;
   logout: Scalars['Boolean'];
@@ -69,6 +88,13 @@ export type Mutation = {
 
 export type MutationAddPostArgs = {
   file: Scalars['Upload'];
+  caption: Scalars['String'];
+};
+
+
+export type MutationUpdateProfileArgs = {
+  file?: Maybe<Scalars['Upload']>;
+  fullName: Scalars['String'];
 };
 
 
@@ -87,12 +113,47 @@ export type MutationLoginArgs = {
 
 export type AddPostMutationVariables = Exact<{
   file: Scalars['Upload'];
+  caption: Scalars['String'];
 }>;
 
 
 export type AddPostMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'addPost'>
+  & { addPost: (
+    { __typename?: 'CreatePostResponse' }
+    & Pick<CreatePostResponse, 'ok'>
+    & { post?: Maybe<(
+      { __typename?: 'Post' }
+      & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt'>
+      & { user: (
+        { __typename?: 'User' }
+        & Pick<User, 'username'>
+      ) }
+    )>, error?: Maybe<(
+      { __typename?: 'FieldError' }
+      & Pick<FieldError, 'path' | 'message'>
+    )> }
+  ) }
+);
+
+export type RegularUserFragment = (
+  { __typename?: 'User' }
+  & Pick<User, 'id' | 'username' | 'email' | 'fullName' | 'imgURL'>
+);
+
+export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetPostsQuery = (
+  { __typename?: 'Query' }
+  & { getPosts: Array<(
+    { __typename?: 'Post' }
+    & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt'>
+    & { user: (
+      { __typename?: 'User' }
+      & RegularUserFragment
+    ) }
+  )> }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -111,9 +172,17 @@ export type LoginMutation = (
       & Pick<FieldError, 'path' | 'message'>
     )>>, user?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, 'id' | 'username' | 'email'>
+      & RegularUserFragment
     )> }
   ) }
+);
+
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'logout'>
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -123,7 +192,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'username' | 'email'>
+    & RegularUserFragment
   )> }
 );
 
@@ -146,10 +215,45 @@ export type RegisterMutation = (
   ) }
 );
 
+export type UpdateProfileMutationVariables = Exact<{
+  file?: Maybe<Scalars['Upload']>;
+  fullName: Scalars['String'];
+}>;
 
+
+export type UpdateProfileMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'updateProfile'>
+);
+
+export const RegularUserFragmentDoc = gql`
+    fragment RegularUser on User {
+  id
+  username
+  email
+  fullName
+  imgURL
+}
+    `;
 export const AddPostDocument = gql`
-    mutation AddPost($file: Upload!) {
-  addPost(file: $file)
+    mutation AddPost($file: Upload!, $caption: String!) {
+  addPost(file: $file, caption: $caption) {
+    ok
+    post {
+      id
+      caption
+      imgURL
+      createdAt
+      updatedAt
+      user {
+        username
+      }
+    }
+    error {
+      path
+      message
+    }
+  }
 }
     `;
 export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPostMutationVariables>;
@@ -168,6 +272,7 @@ export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPost
  * const [addPostMutation, { data, loading, error }] = useAddPostMutation({
  *   variables: {
  *      file: // value for 'file'
+ *      caption: // value for 'caption'
  *   },
  * });
  */
@@ -177,6 +282,45 @@ export function useAddPostMutation(baseOptions?: Apollo.MutationHookOptions<AddP
 export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
 export type AddPostMutationResult = Apollo.MutationResult<AddPostMutation>;
 export type AddPostMutationOptions = Apollo.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;
+export const GetPostsDocument = gql`
+    query GetPosts {
+  getPosts {
+    id
+    caption
+    imgURL
+    createdAt
+    updatedAt
+    user {
+      ...RegularUser
+    }
+  }
+}
+    ${RegularUserFragmentDoc}`;
+
+/**
+ * __useGetPostsQuery__
+ *
+ * To run a query within a React component, call `useGetPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+        return Apollo.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+      }
+export function useGetPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+          return Apollo.useLazyQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+        }
+export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
+export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
+export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($username: String!, $password: String!) {
   login(username: $username, password: $password) {
@@ -186,13 +330,11 @@ export const LoginDocument = gql`
       message
     }
     user {
-      id
-      username
-      email
+      ...RegularUser
     }
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 export type LoginMutationFn = Apollo.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -219,15 +361,42 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const LogoutDocument = gql`
+    mutation Logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, baseOptions);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const MeDocument = gql`
     query Me {
   me {
-    id
-    username
-    email
+    ...RegularUser
   }
 }
-    `;
+    ${RegularUserFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -291,3 +460,34 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($file: Upload, $fullName: String!) {
+  updateProfile(file: $file, fullName: $fullName)
+}
+    `;
+export type UpdateProfileMutationFn = Apollo.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *      fullName: // value for 'fullName'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: Apollo.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        return Apollo.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, baseOptions);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = Apollo.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;

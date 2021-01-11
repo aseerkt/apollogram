@@ -13,14 +13,10 @@ exports.Post = void 0;
 const class_validator_1 = require("class-validator");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
+const BaseEntity_1 = require("./BaseEntity");
 const User_1 = require("./User");
-let Post = class Post extends typeorm_1.BaseEntity {
+let Post = class Post extends BaseEntity_1.BaseEntity {
 };
-__decorate([
-    type_graphql_1.Field(),
-    typeorm_1.PrimaryGeneratedColumn('uuid'),
-    __metadata("design:type", String)
-], Post.prototype, "id", void 0);
 __decorate([
     type_graphql_1.Field(),
     class_validator_1.MinLength(3, { message: 'Post caption must be minimum 3 characters long' }),
@@ -33,20 +29,11 @@ __decorate([
     __metadata("design:type", String)
 ], Post.prototype, "imgURL", void 0);
 __decorate([
-    type_graphql_1.Field(),
-    typeorm_1.CreateDateColumn(),
-    __metadata("design:type", String)
-], Post.prototype, "createdAt", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    typeorm_1.UpdateDateColumn(),
-    __metadata("design:type", String)
-], Post.prototype, "updatedAt", void 0);
-__decorate([
     type_graphql_1.Field(() => User_1.User),
     typeorm_1.ManyToOne(() => User_1.User, (user) => user.posts, {
         onDelete: 'CASCADE',
         eager: true,
+        nullable: false,
     }),
     __metadata("design:type", User_1.User)
 ], Post.prototype, "user", void 0);

@@ -1,3 +1,19 @@
-mutation AddPost($file: Upload!) {
-  addPost(file: $file)
+mutation AddPost($file: Upload!, $caption: String!) {
+  addPost(file: $file, caption: $caption) {
+    ok
+    post {
+      id
+      caption
+      imgURL
+      createdAt
+      updatedAt
+      user {
+        username
+      }
+    }
+    error {
+      path
+      message
+    }
+  }
 }

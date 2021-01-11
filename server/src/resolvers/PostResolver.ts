@@ -1,44 +1,60 @@
-import { createWriteStream } from 'fs';
+import { AuthenticationError } from 'apollo-server-express';
+import { validate } from 'class-validator';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
-import path from 'path';
-import { Arg, Mutation, Query, Resolver, UseMiddleware } from 'type-graphql';
+import {
+  Arg,
+  Ctx,
+  Field,
+  Mutation,
+  ObjectType,
+  Query,
+  Resolver,
+} from 'type-graphql';
 import { Post } from '../entities/Post';
-import { isAuth } from '../middlewares/isAuth';
+import { User } from '../entities/User';
+import { FieldError, MyContext } from '../types';
+import { formatErrors } from '../utils/formatErrors';
+import { uploadFile } from '../utils/uploadFile';
+
+@ObjectType()
+class CreatePostResponse {
+  @Field()
+  ok: boolean;
+  @Field(() => Post, { nullable: true })
+  post?: Post;
+  @Field(() => FieldError, { nullable: true })
+  error?: FieldError;
+}
 
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
   getPosts() {
-    return Post.find();
+    return Post.find({ order: { createdAt: 'DESC' }, relations: ['user'] });
   }
 
-  @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
+  @Mutation(() => CreatePostResponse)
   async addPost(
+    @Arg('caption') caption: string,
+    @Ctx() { req }: MyContext,
     @Arg('file', () => GraphQLUpload)
     file: FileUpload
-  ): Promise<boolean> {
-    const { filename, createReadStream } = file;
-    const uploadTime = new Date().toISOString();
-    const pathName = path.join(
-      __dirname,
-      `../images/${uploadTime}_${filename}`
-    );
-
-    const isUploaded: boolean = await new Promise((res, rej) =>
-      createReadStream()
-        .pipe(createWriteStream(pathName))
-        .on('close', () => {
-          console.log('closed');
-          res(true);
-        })
-        .on('error', (err) => {
-          console.log(err);
-          rej(false);
-        })
-    );
-    console.log(isUploaded);
-    return isUploaded;
+  ): Promise<CreatePostResponse> {
+    const user = await User.findOne({ id: req.session.userId });
+    if (!user) {
+      throw new AuthenticationError('Unauthorized');
+    }
+    const { isUploaded, imgURL } = await uploadFile(file, 'posts');
+    if (isUploaded) {
+      const post = Post.create({ caption, imgURL, user });
+      const errors = await validate(post);
+      if (errors.length > 0) {
+        return { ok: false, error: formatErrors(errors)[0] };
+      }
+      await post.save();
+      return { ok: true, post };
+    }
+    return { ok: false, error: { path: 'file', message: 'File Upload Fail' } };
   }
 }
 /*

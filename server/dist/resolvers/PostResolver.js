@@ -20,38 +20,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostResolver = void 0;
-const fs_1 = require("fs");
+const apollo_server_express_1 = require("apollo-server-express");
+const class_validator_1 = require("class-validator");
 const graphql_upload_1 = require("graphql-upload");
-const path_1 = __importDefault(require("path"));
 const type_graphql_1 = require("type-graphql");
 const Post_1 = require("../entities/Post");
-const isAuth_1 = require("../middlewares/isAuth");
+const User_1 = require("../entities/User");
+const types_1 = require("../types");
+const formatErrors_1 = require("../utils/formatErrors");
+const uploadFile_1 = require("../utils/uploadFile");
+let CreatePostResponse = class CreatePostResponse {
+};
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Boolean)
+], CreatePostResponse.prototype, "ok", void 0);
+__decorate([
+    type_graphql_1.Field(() => Post_1.Post, { nullable: true }),
+    __metadata("design:type", Post_1.Post)
+], CreatePostResponse.prototype, "post", void 0);
+__decorate([
+    type_graphql_1.Field(() => types_1.FieldError, { nullable: true }),
+    __metadata("design:type", types_1.FieldError)
+], CreatePostResponse.prototype, "error", void 0);
+CreatePostResponse = __decorate([
+    type_graphql_1.ObjectType()
+], CreatePostResponse);
 let PostResolver = class PostResolver {
     getPosts() {
-        return Post_1.Post.find();
+        return Post_1.Post.find({ order: { createdAt: 'DESC' }, relations: ['user'] });
     }
-    addPost(file) {
+    addPost(caption, { req }, file) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { filename, createReadStream } = file;
-            const uploadTime = new Date().toISOString();
-            const pathName = path_1.default.join(__dirname, `../images/${uploadTime}_${filename}`);
-            const isUploaded = yield new Promise((res, rej) => createReadStream()
-                .pipe(fs_1.createWriteStream(pathName))
-                .on('close', () => {
-                console.log('closed');
-                res(true);
-            })
-                .on('error', (err) => {
-                console.log(err);
-                rej(false);
-            }));
-            console.log(isUploaded);
-            return isUploaded;
+            const user = yield User_1.User.findOne({ id: req.session.userId });
+            if (!user) {
+                throw new apollo_server_express_1.AuthenticationError('Unauthorized');
+            }
+            const { isUploaded, imgURL } = yield uploadFile_1.uploadFile(file, 'posts');
+            if (isUploaded) {
+                const post = Post_1.Post.create({ caption, imgURL, user });
+                const errors = yield class_validator_1.validate(post);
+                if (errors.length > 0) {
+                    return { ok: false, error: formatErrors_1.formatErrors(errors)[0] };
+                }
+                yield post.save();
+                return { ok: true, post };
+            }
+            return { ok: false, error: { path: 'file', message: 'File Upload Fail' } };
         });
     }
 };
@@ -62,11 +79,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PostResolver.prototype, "getPosts", null);
 __decorate([
-    type_graphql_1.Mutation(() => Boolean),
-    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
-    __param(0, type_graphql_1.Arg('file', () => graphql_upload_1.GraphQLUpload)),
+    type_graphql_1.Mutation(() => CreatePostResponse),
+    __param(0, type_graphql_1.Arg('caption')),
+    __param(1, type_graphql_1.Ctx()),
+    __param(2, type_graphql_1.Arg('file', () => graphql_upload_1.GraphQLUpload)),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [String, Object, Object]),
     __metadata("design:returntype", Promise)
 ], PostResolver.prototype, "addPost", null);
 PostResolver = __decorate([

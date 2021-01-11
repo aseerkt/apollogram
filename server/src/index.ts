@@ -2,15 +2,18 @@ import 'reflect-metadata';
 import { createConnection } from 'typeorm';
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
 import session from 'express-session';
 import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
-import { COOKIE_NAME, __prod__ } from './constants';
+import passport from 'passport';
+import { COOKIE_NAME, EXPRESS_ENDPOINT, __prod__ } from './constants';
 import imagesRoute from './routes/imageRoute';
-import uploadRoute from './routes/uploadFile';
+import fbOauthRoute from './routes/fb-oauth';
+import { FacebookOAuthSetup } from './config/possport';
 
 const main = async () => {
   await createConnection();
@@ -23,11 +26,16 @@ const main = async () => {
       credentials: true,
     })
   );
-
-  app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
+  console.log(EXPRESS_ENDPOINT);
+  app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
 
   app.use('/images', imagesRoute);
-  app.use('/upload', uploadRoute);
+  app.use('/auth', fbOauthRoute);
+
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  FacebookOAuthSetup(passport);
 
   const RedisStore = connectRedis(session);
   const redisClient = createClient();

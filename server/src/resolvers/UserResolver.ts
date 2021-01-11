@@ -38,6 +38,7 @@ export class UserResolver {
     const user = User.create({ username, email, password });
     errors = await validate(user);
     if (errors.length > 0) {
+      console.log(errors);
       return { ok: false, errors: formatErrors(errors) };
     }
     try {
@@ -65,10 +66,11 @@ export class UserResolver {
           errors: [{ path: 'username', message: 'User does not exist' }],
         };
       }
-      if (!user.verifyPassword(password)) {
+      const valid = await user.verifyPassword(password);
+      if (!valid) {
         return {
           ok: false,
-          errors: [{ path: 'password', message: 'Invalid Password' }],
+          errors: [{ path: 'password', message: 'Incorrect Password' }],
         };
       }
       req.session.userId = user.id;
@@ -80,12 +82,14 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   logout(@Ctx() { req, res }: MyContext) {
-    req.session.destroy((err) => {
-      if (err) {
-        return false;
-      }
-      res.clearCookie(COOKIE_NAME);
-      return true;
+    return new Promise((resolve) => {
+      req.session.destroy((err) => {
+        if (err) {
+          resolve(false);
+        }
+        res.clearCookie(COOKIE_NAME);
+        resolve(true);
+      });
     });
   }
 }
