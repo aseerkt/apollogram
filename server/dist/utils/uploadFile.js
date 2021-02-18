@@ -22,7 +22,7 @@ function uploadFile(file, pathPrefix) {
         const pathName = path_1.default.join(__dirname, '../images', pathPrefix, `${uploadTime}_${filename}`);
         const dirname = path_1.default.dirname(pathName);
         if (!fs_1.existsSync(dirname)) {
-            fs_1.mkdirSync(dirname);
+            fs_1.mkdirSync(dirname, { recursive: true });
         }
         const imgURL = `/images/${pathPrefix}/${uploadTime}_${filename}`;
         const writeStream = fs_1.createWriteStream(pathName);

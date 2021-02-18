@@ -4,8 +4,14 @@ import { GetPostsDocument, useAddPostMutation } from '../generated/graphql';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import Card from '../components-ui/Card';
+import { FaCameraRetro } from 'react-icons/fa';
 
-const AddPost: React.FC = () => {
+interface AddPostProps {
+  className?: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [caption, setCaption] = useState('');
   const [file, setFile] = useState<File>(null as any);
   const onDrop = useCallback(
@@ -19,6 +25,7 @@ const AddPost: React.FC = () => {
   const [addPost] = useAddPostMutation({
     refetchQueries: [{ query: GetPostsDocument }],
   });
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +38,7 @@ const AddPost: React.FC = () => {
       if (res.data?.addPost.ok) {
         setFile(null as any);
         setCaption('');
+        setIsOpen(false);
       }
     } catch (err) {
       console.log(err.message);
@@ -38,14 +46,17 @@ const AddPost: React.FC = () => {
   };
 
   return (
-    <Card className='p-3'>
-      <h1 className='my-1 text-xl font-semibold uppercase'>Upload Post</h1>
+    <Card className={`p-5 ${className}`}>
+      <h1 className='mt-1 mb-3 text-xl font-semibold uppercase'>Upload Post</h1>
       <form onSubmit={onSubmit}>
         <InputField
+          focusOnRender
           error=''
           type='text'
           value={caption}
-          placeholder='Caption'
+          name='caption'
+          label='Caption'
+          placeholder='Add caption for your post...'
           onChange={(e) => setCaption(e.target.value)}
         />
         <div
@@ -60,13 +71,14 @@ const AddPost: React.FC = () => {
               Drop the files here ...
             </p>
           ) : (
-            <p className='text-sm text-center uppercase'>
-              browse or drop file here
+            <p className='flex items-center justify-center text-sm uppercase'>
+              <FaCameraRetro className='mr-3 text-gray-500' size='2em' />
+              click to browse or drop file here
             </p>
           )}
         </div>
 
-        <Button fullWidth type='submit'>
+        <Button className='block mx-auto mt-3' color='dark' type='submit'>
           Upload
         </Button>
       </form>

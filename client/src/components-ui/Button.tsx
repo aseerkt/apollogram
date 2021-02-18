@@ -18,14 +18,14 @@ const Button: React.FC<ButtonProps> = ({
   const disabledStyle = props.disabled ? 'cursor-not-allowed opacity-40' : '';
   const buttonColor =
     color === 'light'
-      ? 'bg-white border border-grey-100 text-grqy-500 hover:bg-gray-100'
-      : 'bg-black text-white hover:bg-gray-700';
+      ? 'bg-white border border-grey-100 text-blue-700 hover:bg-gray-100'
+      : 'bg-blue-500 text-white hover:bg-blue-700';
   return (
     <button
       {...props}
       className={`${className} ${buttonColor} ${
         fullWidth ? 'w-full' : ''
-      } px-3 py-1 shadow rounded-md outline-none focus:outline-none uppercase ${disabledStyle}`}
+      } px-3 py-1 shadow rounded-md font-bold outline-none focus:outline-none ${disabledStyle}`}
     >
       {children}
     </button>

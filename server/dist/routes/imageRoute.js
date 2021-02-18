@@ -18,7 +18,8 @@ const path_1 = __importDefault(require("path"));
 const router = express_1.Router();
 router.get('/:profile_post_image/:imageURN', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const pathPrefix = req.params.profile_post_image;
-    fs_1.default.readFile(path_1.default.join(__dirname, '/../images', pathPrefix, req.params.imageURN), (err, data) => {
+    const filePath = path_1.default.join(__dirname, '/../images', pathPrefix, req.params.imageURN);
+    fs_1.default.readFile(filePath, (err, data) => {
         if (err || !data) {
             console.log(err);
             return res.status(404).send('Image Not Found');

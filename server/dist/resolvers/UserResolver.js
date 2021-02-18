@@ -28,9 +28,32 @@ const User_1 = require("../entities/User");
 const userTypes_1 = require("../types/userTypes");
 const formatErrors_1 = require("../utils/formatErrors");
 const constants_1 = require("../constants");
+const Profile_1 = require("../entities/Profile");
 let UserResolver = class UserResolver {
+    email(user, { req }) {
+        if (req.session.userId === user.id) {
+            return user.email;
+        }
+        return '';
+    }
     me({ req }) {
-        return User_1.User.findOne({ id: req.session.userId });
+        return User_1.User.findOne({
+            where: { id: req.session.userId },
+            relations: ['followers', 'followings'],
+        });
+    }
+    getUser(username) {
+        return User_1.User.findOne({
+            where: { username },
+            relations: [
+                'posts',
+                'posts.likes',
+                'posts.comments',
+                'posts.comments.user',
+                'followers',
+                'followings',
+            ],
+        });
     }
     register({ email, username, password }) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -54,9 +77,15 @@ let UserResolver = class UserResolver {
             }
             try {
                 yield user.save();
+                yield Profile_1.Profile.create({ userId: user.id }).save();
                 return { ok: true };
             }
             catch (err) {
+                console.log(err);
+                try {
+                    yield user.remove();
+                }
+                catch (err) { }
                 return {
                     ok: false,
                     errors: [{ path: 'unknown', message: 'Server Error' }],
@@ -102,12 +131,26 @@ let UserResolver = class UserResolver {
     }
 };
 __decorate([
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()), __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [User_1.User, Object]),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "email", null);
+__decorate([
     type_graphql_1.Query(() => User_1.User, { nullable: true }),
     __param(0, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "me", null);
+__decorate([
+    type_graphql_1.Query(() => User_1.User, { nullable: true }),
+    __param(0, type_graphql_1.Arg('username')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], UserResolver.prototype, "getUser", null);
 __decorate([
     type_graphql_1.Mutation(() => userTypes_1.RegisterResponse),
     __param(0, type_graphql_1.Args()),
@@ -132,7 +175,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], UserResolver.prototype, "logout", null);
 UserResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(User_1.User)
 ], UserResolver);
 exports.UserResolver = UserResolver;
 //# sourceMappingURL=UserResolver.js.map

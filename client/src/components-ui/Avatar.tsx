@@ -5,24 +5,28 @@ type AvatarProps = React.DetailedHTMLProps<
   HTMLImageElement
 > & {
   size?: 'large' | 'small';
+  customSize?: string | null;
 };
 
 const Avatar: React.FC<AvatarProps> = ({
   size = 'small',
-  src = '/user.jpeg',
+  customSize,
+  src = '/user.jpg',
+  className,
   ...props
 }) => {
-  const avatarSize = size === 'large' ? '400' : '60';
+  let avatarSize = size === 'large' ? '25' : '10';
   const imgSrc =
-    src === '/user.jpeg' ? src : `${process.env.REACT_APP_EXPRESS_URI}${src}`;
+    src === '/user.jpg' ? src : `${process.env.REACT_APP_EXPRESS_URI}${src}`;
+
+  if (customSize) avatarSize = customSize;
   return (
     <img
       src={imgSrc}
-      height={avatarSize}
       style={{ borderRadius: '50%' }}
-      width={avatarSize}
       alt='avatar'
       {...props}
+      className={`${className}  w-${avatarSize} h-${avatarSize}`}
     />
   );
 };

@@ -25,8 +25,10 @@ const argon2_2 = require("argon2");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
 const Post_1 = require("./Post");
-const BaseEntity_1 = require("./BaseEntity");
-let User = class User extends BaseEntity_1.BaseEntity {
+const BaseColumns_1 = require("./BaseColumns");
+const Profile_1 = require("./Profile");
+const Follow_1 = require("./Follow");
+let User = class User extends BaseColumns_1.BaseColumns {
     hashPassword() {
         return __awaiter(this, void 0, void 0, function* () {
             this.password = yield argon2_1.hash(this.password);
@@ -50,25 +52,30 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    type_graphql_1.Field(),
-    typeorm_1.Column({ default: '' }),
+    class_validator_1.MinLength(6, { message: 'Password must be atleast 6 characters long' }),
+    typeorm_1.Column(),
     __metadata("design:type", String)
-], User.prototype, "fullName", void 0);
-__decorate([
-    type_graphql_1.Field(),
-    typeorm_1.Column({ default: '/user.jpeg' }),
-    __metadata("design:type", String)
-], User.prototype, "imgURL", void 0);
+], User.prototype, "password", void 0);
 __decorate([
     type_graphql_1.Field(() => [Post_1.Post]),
     typeorm_1.OneToMany(() => Post_1.Post, (post) => post.user),
     __metadata("design:type", Array)
 ], User.prototype, "posts", void 0);
 __decorate([
-    class_validator_1.MinLength(6, { message: 'Password must be atleast 6 characters long' }),
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
+    type_graphql_1.Field(() => Profile_1.Profile),
+    typeorm_1.OneToOne(() => Profile_1.Profile, (profile) => profile.user, { eager: true }),
+    __metadata("design:type", Profile_1.Profile)
+], User.prototype, "profile", void 0);
+__decorate([
+    type_graphql_1.Field(() => [Follow_1.Follow]),
+    typeorm_1.OneToMany(() => Follow_1.Follow, (follow) => follow.following),
+    __metadata("design:type", Array)
+], User.prototype, "followers", void 0);
+__decorate([
+    type_graphql_1.Field(() => [Follow_1.Follow]),
+    typeorm_1.OneToMany(() => Follow_1.Follow, (follow) => follow.follower),
+    __metadata("design:type", Array)
+], User.prototype, "followings", void 0);
 __decorate([
     typeorm_1.BeforeInsert(),
     __metadata("design:type", Function),

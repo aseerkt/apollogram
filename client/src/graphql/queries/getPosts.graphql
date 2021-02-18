@@ -1,0 +1,5 @@
+query GetPosts {
+  getPosts {
+    ...RegualarPost
+  }
+}

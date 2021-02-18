@@ -1,22 +1,22 @@
 import { Field, ObjectType } from 'type-graphql';
 import {
-  BaseEntity as BEntity,
+  BaseEntity,
   CreateDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
 @ObjectType()
-export abstract class BaseEntity extends BEntity {
+export abstract class BaseColumns extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Field()
   @CreateDateColumn()
-  createdAt: string;
+  createdAt: Date;
 
   @Field()
   @UpdateDateColumn()
-  updatedAt: string;
+  updatedAt: Date;
 }

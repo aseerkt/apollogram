@@ -21,53 +21,181 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProfileResolver = void 0;
+exports.ProfileResolver = exports.EditProfileResponse = exports.EditProfileArgs = void 0;
 const type_graphql_1 = require("type-graphql");
 const graphql_upload_1 = require("graphql-upload");
+const types_1 = require("../types");
 const apollo_server_express_1 = require("apollo-server-express");
 const uploadFile_1 = require("../utils/uploadFile");
 const User_1 = require("../entities/User");
+const Profile_1 = require("../entities/Profile");
+const isAuth_1 = require("../middlewares/isAuth");
+const class_validator_1 = require("class-validator");
+const formatErrors_1 = require("../utils/formatErrors");
+let EditProfileArgs = class EditProfileArgs {
+};
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "name", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "username", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "email", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "website", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "bio", void 0);
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", String)
+], EditProfileArgs.prototype, "gender", void 0);
+EditProfileArgs = __decorate([
+    type_graphql_1.ArgsType()
+], EditProfileArgs);
+exports.EditProfileArgs = EditProfileArgs;
+let EditProfileResponse = class EditProfileResponse {
+};
+__decorate([
+    type_graphql_1.Field(),
+    __metadata("design:type", Boolean)
+], EditProfileResponse.prototype, "ok", void 0);
+__decorate([
+    type_graphql_1.Field(() => [types_1.FieldError], { nullable: true }),
+    __metadata("design:type", Array)
+], EditProfileResponse.prototype, "errors", void 0);
+EditProfileResponse = __decorate([
+    type_graphql_1.ObjectType()
+], EditProfileResponse);
+exports.EditProfileResponse = EditProfileResponse;
 let ProfileResolver = class ProfileResolver {
-    updateProfile(fullName, file, { req }) {
+    gender(profile, { req }) {
+        if (req.session.userId == profile.userId) {
+            return profile.gender;
+        }
+        return '';
+    }
+    name(profile, { req }) {
+        if (req.session.userId == profile.userId) {
+            return profile.name;
+        }
+        return '';
+    }
+    changeProfilePhoto(file, { req }) {
         return __awaiter(this, void 0, void 0, function* () {
             const { userId } = req.session;
             if (!userId) {
                 throw new apollo_server_express_1.AuthenticationError('Not Authorized');
             }
-            const user = yield User_1.User.findOne(userId);
-            if (file) {
+            const profile = yield Profile_1.Profile.findOne({ where: { userId } });
+            if (profile && file) {
                 const { isUploaded, imgURL } = yield uploadFile_1.uploadFile(file, 'profile');
                 console.log(isUploaded);
-                if (isUploaded && user) {
-                    user.imgURL = imgURL;
-                    console.log(fullName);
-                    user.fullName = fullName;
-                    yield user.save();
-                    return true;
-                }
-            }
-            else {
-                if (user) {
-                    user.fullName = fullName;
-                    yield user.save();
+                if (isUploaded) {
+                    profile.imgURL = imgURL;
+                    yield profile.save();
                     return true;
                 }
             }
             return false;
         });
     }
+    removeProfilePhoto({ req }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const profile = yield Profile_1.Profile.findOne({
+                where: { userId: req.session.userId },
+            });
+            if (profile) {
+                profile.imgURL = '/user.jpg';
+                yield profile.save();
+                return true;
+            }
+            return false;
+        });
+    }
+    editProfile({ name, gender, website, bio, email, username }, { req }) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { userId } = req.session;
+            const user = yield User_1.User.findOne(userId);
+            const profile = yield Profile_1.Profile.findOne({ user });
+            if (profile && user) {
+                user.email = email;
+                user.username = username;
+                profile.gender = gender;
+                profile.website = website;
+                profile.name = name;
+                profile.bio = bio;
+                try {
+                    const userErrors = yield class_validator_1.validate(user);
+                    const profileErrors = yield class_validator_1.validate(profile);
+                    if (userErrors.length > 0 || profileErrors.length > 0) {
+                        const errors = formatErrors_1.formatErrors([...userErrors, ...profileErrors]);
+                        return { ok: false, errors };
+                    }
+                    yield user.save();
+                    yield profile.save();
+                    return { ok: true };
+                }
+                catch (err) {
+                    console.log(err);
+                }
+            }
+            return {
+                ok: false,
+                errors: [{ path: 'unknown', message: 'Server Error' }],
+            };
+        });
+    }
 };
 __decorate([
-    type_graphql_1.Mutation(() => Boolean),
-    __param(0, type_graphql_1.Arg('fullName')),
-    __param(1, type_graphql_1.Arg('file', () => graphql_upload_1.GraphQLUpload, { nullable: true })),
-    __param(2, type_graphql_1.Ctx()),
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()), __param(1, type_graphql_1.Ctx()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, Object, Object]),
+    __metadata("design:paramtypes", [Profile_1.Profile, Object]),
+    __metadata("design:returntype", void 0)
+], ProfileResolver.prototype, "gender", null);
+__decorate([
+    type_graphql_1.FieldResolver(() => String),
+    __param(0, type_graphql_1.Root()), __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Profile_1.Profile, Object]),
+    __metadata("design:returntype", void 0)
+], ProfileResolver.prototype, "name", null);
+__decorate([
+    type_graphql_1.Mutation(() => Boolean),
+    __param(0, type_graphql_1.Arg('file', () => graphql_upload_1.GraphQLUpload, { nullable: true })),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], ProfileResolver.prototype, "updateProfile", null);
+], ProfileResolver.prototype, "changeProfilePhoto", null);
+__decorate([
+    type_graphql_1.Mutation(() => Boolean),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
+    __param(0, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ProfileResolver.prototype, "removeProfilePhoto", null);
+__decorate([
+    type_graphql_1.Mutation(() => EditProfileResponse),
+    type_graphql_1.UseMiddleware(isAuth_1.isAuth),
+    __param(0, type_graphql_1.Args()),
+    __param(1, type_graphql_1.Ctx()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [EditProfileArgs, Object]),
+    __metadata("design:returntype", Promise)
+], ProfileResolver.prototype, "editProfile", null);
 ProfileResolver = __decorate([
-    type_graphql_1.Resolver()
+    type_graphql_1.Resolver(Profile_1.Profile)
 ], ProfileResolver);
 exports.ProfileResolver = ProfileResolver;
 //# sourceMappingURL=ProfileResolver.js.map

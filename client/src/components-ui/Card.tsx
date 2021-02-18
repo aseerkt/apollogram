@@ -9,7 +9,7 @@ const Card: React.FC<CardProps> = ({ children, className, ...props }) => {
   return (
     <div
       {...props}
-      className={`${className} overflow-hidden border border-gray-200 bg-white rounded shadow-xl`}
+      className={`${className} overflow-hidden border border-gray-300 bg-white rounded `}
     >
       {children}
     </div>

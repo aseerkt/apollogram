@@ -1,7 +1,13 @@
 fragment RegularUser on User {
-  id
-  username
-  email
-  fullName
-  imgURL
+  ...UserWithProfile
+  followings {
+    following {
+      ...UserField
+    }
+  }
+  followers {
+    follower {
+      ...UserField
+    }
+  }
 }

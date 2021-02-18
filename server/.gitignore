@@ -8,3 +8,4 @@ temp/
 images/
 yarn-error.log
 dump.rdb
+dist/

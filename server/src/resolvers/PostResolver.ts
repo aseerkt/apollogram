@@ -30,7 +30,18 @@ class CreatePostResponse {
 export class PostResolver {
   @Query(() => [Post])
   getPosts() {
-    return Post.find({ order: { createdAt: 'DESC' }, relations: ['user'] });
+    return Post.find({
+      order: { createdAt: 'DESC' },
+      relations: ['user', 'likes', 'comments', 'likes.user', 'comments.user'],
+    });
+  }
+
+  @Query(() => Post, { nullable: true })
+  getSinglePost(@Arg('postId') postId: string) {
+    return Post.findOne({
+      where: { id: postId },
+      relations: ['user', 'likes', 'comments', 'likes.user', 'comments.user'],
+    });
   }
 
   @Mutation(() => CreatePostResponse)

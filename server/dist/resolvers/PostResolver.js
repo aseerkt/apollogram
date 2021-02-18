@@ -50,7 +50,16 @@ CreatePostResponse = __decorate([
 ], CreatePostResponse);
 let PostResolver = class PostResolver {
     getPosts() {
-        return Post_1.Post.find({ order: { createdAt: 'DESC' }, relations: ['user'] });
+        return Post_1.Post.find({
+            order: { createdAt: 'DESC' },
+            relations: ['user', 'likes', 'comments', 'likes.user', 'comments.user'],
+        });
+    }
+    getSinglePost(postId) {
+        return Post_1.Post.findOne({
+            where: { id: postId },
+            relations: ['user', 'likes', 'comments', 'likes.user', 'comments.user'],
+        });
     }
     addPost(caption, { req }, file) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -78,6 +87,13 @@ __decorate([
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], PostResolver.prototype, "getPosts", null);
+__decorate([
+    type_graphql_1.Query(() => Post_1.Post, { nullable: true }),
+    __param(0, type_graphql_1.Arg('postId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], PostResolver.prototype, "getSinglePost", null);
 __decorate([
     type_graphql_1.Mutation(() => CreatePostResponse),
     __param(0, type_graphql_1.Arg('caption')),

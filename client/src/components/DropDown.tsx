@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { apolloClient } from '..';
-import { MeDocument } from '../generated/graphql';
+import { MeDocument, useLogoutMutation } from '../generated/graphql';
+import { CgProfile } from 'react-icons/cg';
+import { FiEdit } from 'react-icons/fi';
+import { HiOutlineLogout } from 'react-icons/hi';
 
 interface MenuItemProps {
   href: string;
-  label?: string;
   onClick: (
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
   ) => void | undefined;
 }
 
-export const MenuItem: React.FC<MenuItemProps> = ({ href, label, onClick }) => (
+export const MenuItem: React.FC<MenuItemProps> = ({
+  href,
+  children,
+  onClick,
+}) => (
   <Link
     onClick={onClick}
-    className='block px-3 py-1 hover:bg-gray-100'
+    className='flex items-center p-3 hover:bg-gray-100'
     to={href}
   >
-    {label}
+    {children}
   </Link>
 );
 
@@ -25,6 +31,14 @@ const DropDown: React.FC = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
   const { me } = apolloClient.readQuery({ query: MeDocument });
+
+  const [logout] = useLogoutMutation({
+    onCompleted: (data) => {
+      if (data.logout) {
+        apolloClient.resetStore();
+      }
+    },
+  });
 
   return (
     <div
@@ -43,15 +57,21 @@ const DropDown: React.FC = ({ children }) => {
       <button onClick={toggle}>{children}</button>
       <div
         hidden={!open}
-        className='absolute right-0 w-48 mt-8 bg-white rounded-lg shadow-md place-items-end'
+        className='absolute right-0 z-50 w-48 bg-white rounded-lg shadow-md top-full place-items-end'
       >
-        <MenuItem onClick={toggle} href={`/${me.username}`} label='Profile' />
+        <MenuItem onClick={toggle} href={`/u/${me.username}`}>
+          <CgProfile size='1.5em' className='mr-3' />
+          Profile
+        </MenuItem>
 
-        <MenuItem
-          onClick={toggle}
-          href='/update-profile'
-          label='Update Profile'
-        />
+        <MenuItem onClick={toggle} href='/edit-profile'>
+          <FiEdit size='1.5em' className='mr-3' />
+          Edit Profile
+        </MenuItem>
+        <MenuItem onClick={() => logout() as any} href='/login'>
+          <HiOutlineLogout size='1.5em' className='mr-3' />
+          Logout
+        </MenuItem>
       </div>
     </div>
   );

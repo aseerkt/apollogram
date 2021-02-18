@@ -1,10 +1,10 @@
 import React from 'react';
-import AddPost from '../components/AddPost';
 import PostCard from '../components/PostCard';
 import Container from '../components-ui/Container';
 import { Post, useGetPostsQuery } from '../generated/graphql';
 import Spinner from '../components-ui/Spinner';
 import Alert from '../components-ui/Alert';
+import ProfileRight from '../components/ProfileRight';
 
 const Posts: React.FC = () => {
   const { data, loading, error } = useGetPostsQuery();
@@ -15,13 +15,15 @@ const Posts: React.FC = () => {
   }
   return (
     <Container>
-      <div className='flex justify-between w-full pt-15'>
-        <div className='w-8/12'>
+      <div className='flex flex-wrap justify-between w-full pt-15'>
+        <div className='md:w-8/12 sm:w-full'>
           {data &&
-            data.getPosts.map((post) => <PostCard key={post.id} post={post} />)}
+            data.getPosts.map((post) => (
+              <PostCard key={post.id} post={post as Post} />
+            ))}
         </div>
-        <div className=''>
-          <AddPost />
+        <div className='relative flex-1 md:ml-4'>
+          <ProfileRight />
         </div>
       </div>
     </Container>

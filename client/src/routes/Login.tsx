@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { apolloClient } from '..';
+// import { apolloClient } from '..';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
-import { FaFacebookSquare } from 'react-icons/fa';
+// import { FaFacebookSquare } from 'react-icons/fa';
+
+// document.title = 'Sign Up - Instagram';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [username, setUsername] = useState('');
@@ -15,16 +17,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   const [login] = useLoginMutation({
     variables: { username, password },
-    onCompleted: (data) => {
-      const user = data?.login.user;
-      if (user) {
-        apolloClient.writeQuery({
-          query: MeDocument,
-          data: { me: { ...user } },
-        });
-        history.push('/posts');
-      }
-    },
+    refetchQueries: [{ query: MeDocument }],
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -47,7 +40,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
       }
       console.log(data);
     } catch (err) {
-      console.log(err?.networkError.result);
+      console.log(err);
     }
   };
   // console.log(errors);
@@ -57,16 +50,18 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
       <div className='p-4'>
         <form onSubmit={onSubmit}>
           <InputField
+            name='username'
             error={errors.username}
-            placeholder='Username'
+            label='Username'
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
           <InputField
+            name='password'
             error={errors.password}
             type='password'
             value={password}
-            placeholder='Password'
+            label='Password'
             onChange={(e) => setPassword(e.target.value)}
           />
 
@@ -80,7 +75,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
             Login
           </Button>
         </form>
-        <a
+        {/* <a
           href={`${process.env.REACT_APP_EXPRESS_URI!}/auth/facebook`}
           className='block px-3 py-1 my-1 text-center text-white uppercase bg-blue-800 rounded-lg'
         >
@@ -88,7 +83,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
             <FaFacebookSquare className='mr-2' />
             Login With Facebook
           </span>
-        </a>
+        </a> */}
         <small className='mt-3'>
           Don't have an account?{' '}
           <Link to='/register' className='text-blue-500'>

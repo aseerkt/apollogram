@@ -1,0 +1,17 @@
+fragment RegualarPost on Post {
+  id
+  caption
+  imgURL
+  createdAt
+  updatedAt
+  user {
+    ...UserWithProfile
+  }
+  likes {
+    id
+    userId
+  }
+  comments {
+    ...RegularComment
+  }
+}

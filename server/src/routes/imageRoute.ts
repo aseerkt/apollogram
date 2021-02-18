@@ -8,18 +8,22 @@ router.get(
   '/:profile_post_image/:imageURN',
   async (req: Request, res: Response) => {
     const pathPrefix = req.params.profile_post_image;
-    fs.readFile(
-      path.join(__dirname, '/../images', pathPrefix, req.params.imageURN),
-      (err, data) => {
-        if (err || !data) {
-          console.log(err);
-          return res.status(404).send('Image Not Found');
-        }
-        console.log(data);
-        res.setHeader('Content-Type', 'image/jpeg');
-        return res.send(data);
-      }
+    const filePath = path.join(
+      __dirname,
+      '/../images',
+      pathPrefix,
+      req.params.imageURN
     );
+
+    fs.readFile(filePath, (err, data) => {
+      if (err || !data) {
+        console.log(err);
+        return res.status(404).send('Image Not Found');
+      }
+      console.log(data);
+      res.setHeader('Content-Type', 'image/jpeg');
+      return res.send(data);
+    });
   }
 );
 

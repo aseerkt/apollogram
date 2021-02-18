@@ -13,15 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
-const typeorm_1 = require("typeorm");
+require("dotenv/config");
+require("colors");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
-require("dotenv/config");
+const express_session_1 = __importDefault(require("express-session"));
+const connect_redis_1 = __importDefault(require("connect-redis"));
+const typeorm_1 = require("typeorm");
 const apollo_server_express_1 = require("apollo-server-express");
 const type_graphql_1 = require("type-graphql");
 const graphql_upload_1 = require("graphql-upload");
-const express_session_1 = __importDefault(require("express-session"));
-const connect_redis_1 = __importDefault(require("connect-redis"));
 const redis_1 = require("redis");
 const passport_1 = __importDefault(require("passport"));
 const constants_1 = require("./constants");
@@ -67,7 +68,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
     apolloServer.applyMiddleware({ app, cors: false });
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-        console.log(`Graph API is running at http://localhost:${PORT}${apolloServer.graphqlPath}`);
+        console.log(`Graph API is running at http://localhost:${PORT}${apolloServer.graphqlPath}`
+            .blue.bold);
     });
 });
 main().catch((err) => console.log('Root Error: ', err));

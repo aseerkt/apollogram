@@ -1,0 +1,8 @@
+fragment RegularProfile on Profile {
+  id
+  name
+  website
+  bio
+  gender
+  imgURL
+}

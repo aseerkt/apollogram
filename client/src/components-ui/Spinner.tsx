@@ -12,7 +12,7 @@ const Spinner: React.FC<SpinnerProps> = ({ size = 'default' }) => {
       alt='Loading...'
       height={sizeFactor}
       width={sizeFactor}
-      className='mx-auto max-h-96'
+      className='m-auto max-h-96'
     />
   );
 };

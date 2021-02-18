@@ -10,8 +10,9 @@ import Alert from './components-ui/Alert';
 import { apolloClient } from '.';
 import Spinner from './components-ui/Spinner';
 import PrivateRoute from './containers/PrivateRoute';
-import UpdateProfile from './routes/UpdateProfile';
+import EditProfile from './routes/EditProfile';
 import Profile from './routes/Profile';
+import SinglePost from './routes/SinglePost';
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
@@ -30,8 +31,9 @@ const App: React.FC = () => {
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
         <PrivateRoute exact path='/posts' component={Posts} />
-        <PrivateRoute exact path='/update-profile' component={UpdateProfile} />
-        <PrivateRoute exact path='/:username' component={Profile} />
+        <PrivateRoute exact path='/p/:postId' component={SinglePost} />
+        <PrivateRoute exact path='/edit-profile' component={EditProfile} />
+        <PrivateRoute exact path='/u/:username' component={Profile} />
       </Switch>
     </BrowserRouter>
   );

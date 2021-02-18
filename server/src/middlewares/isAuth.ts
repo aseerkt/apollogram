@@ -18,5 +18,5 @@ export const isAuth: MiddlewareFn<MyContext> = async (
     console.log('Something is wrong');
     throw new AuthenticationError('Unauthorized');
   }
-  next();
+  return next();
 };

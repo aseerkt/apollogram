@@ -13,9 +13,15 @@ exports.Post = void 0;
 const class_validator_1 = require("class-validator");
 const type_graphql_1 = require("type-graphql");
 const typeorm_1 = require("typeorm");
-const BaseEntity_1 = require("./BaseEntity");
+const BaseColumns_1 = require("./BaseColumns");
+const Comment_1 = require("./Comment");
+const Like_1 = require("./Like");
 const User_1 = require("./User");
-let Post = class Post extends BaseEntity_1.BaseEntity {
+let Post = class Post extends BaseColumns_1.BaseColumns {
+    sortComments() {
+        var _a;
+        (_a = this.comments) === null || _a === void 0 ? void 0 : _a.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    }
 };
 __decorate([
     type_graphql_1.Field(),
@@ -37,6 +43,22 @@ __decorate([
     }),
     __metadata("design:type", User_1.User)
 ], Post.prototype, "user", void 0);
+__decorate([
+    type_graphql_1.Field(() => [Comment_1.Comment]),
+    typeorm_1.OneToMany(() => Comment_1.Comment, (comment) => comment.post),
+    __metadata("design:type", Array)
+], Post.prototype, "comments", void 0);
+__decorate([
+    type_graphql_1.Field(() => [Like_1.Like]),
+    typeorm_1.OneToMany(() => Like_1.Like, (like) => like.post),
+    __metadata("design:type", Array)
+], Post.prototype, "likes", void 0);
+__decorate([
+    typeorm_1.AfterLoad(),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], Post.prototype, "sortComments", null);
 Post = __decorate([
     type_graphql_1.ObjectType(),
     typeorm_1.Entity('posts')

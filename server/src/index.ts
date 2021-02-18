@@ -1,13 +1,14 @@
 import 'reflect-metadata';
-import { createConnection } from 'typeorm';
+import 'dotenv/config';
+import 'colors';
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
+import session from 'express-session';
+import connectRedis from 'connect-redis';
+import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
-import session from 'express-session';
-import connectRedis from 'connect-redis';
 import { createClient } from 'redis';
 import passport from 'passport';
 import { COOKIE_NAME, EXPRESS_ENDPOINT, __prod__ } from './constants';
@@ -71,6 +72,7 @@ const main = async () => {
   app.listen(PORT, () => {
     console.log(
       `Graph API is running at http://localhost:${PORT}${apolloServer.graphqlPath}`
+        .blue.bold
     );
   });
 };

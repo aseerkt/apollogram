@@ -23,7 +23,7 @@ const isAuth = ({ context: { req } }, next) => __awaiter(void 0, void 0, void 0,
         console.log('Something is wrong');
         throw new apollo_server_express_1.AuthenticationError('Unauthorized');
     }
-    next();
+    return next();
 });
 exports.isAuth = isAuth;
 //# sourceMappingURL=isAuth.js.map

@@ -1,0 +1,8 @@
+fragment RegularFollow on Follow {
+  follower {
+    ...UserField
+  }
+  following {
+    ...UserField
+  }
+}

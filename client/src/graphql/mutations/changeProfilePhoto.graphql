@@ -1,0 +1,3 @@
+mutation ChangeProfilePhoto($file: Upload) {
+  changeProfilePhoto(file: $file)
+}

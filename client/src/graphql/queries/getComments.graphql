@@ -1,0 +1,5 @@
+query GetComments($postId: String!) {
+  getComments(postId: $postId) {
+    ...RegularComment
+  }
+}

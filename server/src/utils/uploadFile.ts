@@ -13,7 +13,7 @@ export async function uploadFile(file: FileUpload, pathPrefix: string) {
   );
   const dirname = path.dirname(pathName);
   if (!existsSync(dirname)) {
-    mkdirSync(dirname);
+    mkdirSync(dirname, { recursive: true });
   }
   const imgURL = `/images/${pathPrefix}/${uploadTime}_${filename}`;
   const writeStream = createWriteStream(pathName);

@@ -70,34 +70,34 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
       <div className='p-4'>
         <form onSubmit={onSubmit}>
           <InputField
+            label='Email'
             error={errors.email}
             name='email'
-            placeholder='Email'
             value={email}
             onChange={onChange}
           />
 
           <InputField
+            label='Username'
             error={errors.username}
             name='username'
-            placeholder='Username'
             value={username}
             onChange={onChange}
           />
 
           <InputField
+            label='Password'
             error={errors.password}
             type='password'
             name='password'
-            placeholder='Password'
             value={password}
             onChange={onChange}
           />
           <InputField
+            label='Confirm Password'
             error={errors.password2}
             type='password'
             name='password2'
-            placeholder='Confirm Password'
             value={password2}
             onChange={onChange}
           />

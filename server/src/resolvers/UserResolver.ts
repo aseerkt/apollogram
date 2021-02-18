@@ -1,4 +1,13 @@
-import { Arg, Args, Ctx, Mutation, Query, Resolver } from 'type-graphql';
+import {
+  Arg,
+  Args,
+  Ctx,
+  FieldResolver,
+  Mutation,
+  Query,
+  Resolver,
+  Root,
+} from 'type-graphql';
 import { validate } from 'class-validator';
 import { User } from '../entities/User';
 import { MyContext } from '../types';
@@ -9,13 +18,43 @@ import {
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
 import { COOKIE_NAME } from '../constants';
+import { Profile } from '../entities/Profile';
 
-@Resolver()
+@Resolver(User)
 export class UserResolver {
+  // Email Field Resolver
+  @FieldResolver(() => String)
+  email(@Root() user: User, @Ctx() { req }: MyContext) {
+    if (req.session.userId === user.id) {
+      return user.email;
+    }
+    return '';
+  }
+
   @Query(() => User, { nullable: true })
   me(@Ctx() { req }: MyContext) {
-    return User.findOne({ id: req.session.userId });
+    return User.findOne({
+      where: { id: req.session.userId },
+      relations: ['followers', 'followings'],
+    });
   }
+
+  @Query(() => User, { nullable: true })
+  getUser(@Arg('username') username: string) {
+    return User.findOne({
+      where: { username },
+      relations: [
+        'posts',
+        'posts.likes',
+        'posts.comments',
+        'posts.comments.user',
+        'followers',
+        'followings',
+      ],
+    });
+  }
+
+  // Register
 
   @Mutation(() => RegisterResponse)
   async register(
@@ -43,14 +82,21 @@ export class UserResolver {
     }
     try {
       await user.save();
+      await Profile.create({ userId: user.id }).save();
       return { ok: true };
     } catch (err) {
+      console.log(err);
+      try {
+        await user.remove();
+      } catch (err) {}
       return {
         ok: false,
         errors: [{ path: 'unknown', message: 'Server Error' }],
       };
     }
   }
+
+  // Login
 
   @Mutation(() => LoginResponse)
   async login(
