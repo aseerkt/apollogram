@@ -116,7 +116,7 @@ const SinglePost = () => {
                 {/* Comments */}
                 <div className='my-1'>
                   {comments.map((c) => (
-                    <div className='flex'>
+                    <div key={c.id} className='flex'>
                       <Link
                         to={`/u/${c.username}`}
                         className='mr-2 font-semibold '

@@ -13,10 +13,16 @@ export class Follow extends BaseColumns {
   followingId: string;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.followings, { eager: true })
+  @ManyToOne(() => User, (user) => user.followings, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   follower: User;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.followers, { eager: true })
+  @ManyToOne(() => User, (user) => user.followers, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
   following: User;
 }

@@ -52,7 +52,11 @@ const Profile: React.FC = () => {
           <div className='col-span-2 col-start-1 p-3 mt-3 md:order-4 md:col-start-2'>
             <strong>{name}</strong>
             <p className='text-lg'>{bio}</p>
-            <a className='font-semibold text-blue-600' href={website}>
+            <a
+              className='font-semibold text-blue-600'
+              href={website}
+              target='_blank'
+            >
               {website.replace('https://', '')}
             </a>
           </div>

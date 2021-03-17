@@ -28,10 +28,10 @@ export class Comment extends BaseColumns {
   }
 
   @Field(() => User)
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   user: User;
 
   @Field(() => Post)
-  @ManyToOne(() => Post, (post) => post.comments)
+  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
   post: Post;
 }

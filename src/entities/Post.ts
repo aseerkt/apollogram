@@ -18,6 +18,11 @@ export class Post extends BaseColumns {
   @Column()
   imgURL: string;
 
+  // GraphQL only fields
+
+  @Field(() => [Comment])
+  twoComments: Comment[];
+
   // Relations
 
   @Field(() => User)

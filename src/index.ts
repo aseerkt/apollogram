@@ -15,6 +15,7 @@ import { COOKIE_NAME, EXPRESS_ENDPOINT, __prod__ } from './constants';
 import imagesRoute from './routes/imageRoute';
 import fbOauthRoute from './routes/fb-oauth';
 import { FacebookOAuthSetup } from './config/possport';
+import { createUserLoader } from './utils/createUserLoader';
 
 const main = async () => {
   await createConnection();
@@ -61,7 +62,7 @@ const main = async () => {
     schema: await buildSchema({
       resolvers: [`${__dirname}/resolvers/**/*.{ts,js}`],
     }),
-    context: ({ req, res }) => ({ req, res }),
+    context: ({ req, res }) => ({ req, res, userLoader: createUserLoader() }),
     uploads: false,
   });
 

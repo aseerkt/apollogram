@@ -17,7 +17,13 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   const [login] = useLoginMutation({
     variables: { username, password },
-    refetchQueries: [{ query: MeDocument }],
+    update: (cache, result) => {
+      const user = result.data?.login.user;
+      if (user) {
+        cache.writeQuery({ query: MeDocument, data: { me: user } });
+        history.push('/posts');
+      }
+    },
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -36,7 +42,6 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
       if (data?.login.ok) {
         setUsername('');
         setPassword('');
-        history.push('/posts');
       }
       console.log(data);
     } catch (err) {

@@ -9,9 +9,12 @@ import {
   ObjectType,
   Query,
   Resolver,
+  UseMiddleware,
 } from 'type-graphql';
+import { Follow } from '../entities/Follow';
 import { Post } from '../entities/Post';
 import { User } from '../entities/User';
+import { isAuth } from '../middlewares/isAuth';
 import { FieldError, MyContext } from '../types';
 import { formatErrors } from '../utils/formatErrors';
 import { uploadFile } from '../utils/uploadFile';
@@ -29,11 +32,27 @@ class CreatePostResponse {
 @Resolver()
 export class PostResolver {
   @Query(() => [Post])
+  @UseMiddleware(isAuth)
   getPosts() {
     return Post.find({
       order: { createdAt: 'DESC' },
       relations: ['user', 'likes', 'comments', 'likes.user', 'comments.user'],
     });
+  }
+
+  @Query(() => [Post])
+  @UseMiddleware(isAuth)
+  async getFeedPosts(@Ctx() { req }: MyContext) {
+    const followings = await Follow.find({
+      where: { followerId: req.session.userId },
+      select: ['following'],
+      relations: ['following.posts'],
+    });
+    const feedPosts: Post[] = [];
+    followings.forEach((f) => {
+      feedPosts.push(...f.following.posts);
+    });
+    return feedPosts;
   }
 
   @Query(() => Post, { nullable: true })

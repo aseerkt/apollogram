@@ -16,10 +16,10 @@ export class Like extends BaseColumns {
   postId: string;
 
   @Field(() => User)
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   user: User;
 
   @Field(() => Post)
-  @ManyToOne(() => Post, (post) => post.likes)
+  @ManyToOne(() => Post, (post) => post.likes, { onDelete: 'CASCADE' })
   post: Post;
 }

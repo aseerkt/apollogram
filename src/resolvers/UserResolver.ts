@@ -105,7 +105,17 @@ export class UserResolver {
     @Ctx() { req }: MyContext
   ) {
     try {
-      const user = await User.findOne({ username });
+      const user = await User.findOne({
+        where: { username },
+        relations: [
+          'posts',
+          'posts.likes',
+          'posts.comments',
+          'posts.comments.user',
+          'followers',
+          'followings',
+        ],
+      });
       if (!user) {
         return {
           ok: false,
