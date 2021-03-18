@@ -34,8 +34,13 @@
 
 ## Authors
 
-- Aseer KT - [github/aseerkt](https://github.com/aseerkt)
+- [Aseer KT](https://github.com/aseerkt)
 
 ## License
 
 - This project is licensed under the MIT License - see the [LICENSE.md](./LICENSE) file for details
+
+## Acknowledgments
+
+- [Ben Awad](https://github.com/benawad)
+- [Ahmed Hadjou](https://github.com/hidjou)
