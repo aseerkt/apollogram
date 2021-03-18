@@ -3,12 +3,11 @@ import { Link } from 'react-router-dom';
 import { apolloClient } from '..';
 import Avatar from '../components-ui/Avatar';
 import Button from '../components-ui/Button';
-import { MeDocument, useGetFollowSuggestionsQuery } from '../generated/graphql';
+import { MeDocument } from '../generated/graphql';
 
 const ProfileRight: React.FC = () => {
   const { me } = apolloClient.readQuery({ query: MeDocument });
 
-  const { data, loading } = useGetFollowSuggestionsQuery();
   return (
     <>
       <div className='flex items-center py-3 mt-3'>
@@ -31,7 +30,8 @@ const ProfileRight: React.FC = () => {
         <p className='font-semibold text-gray-800 cursor-pointer'>See All</p>
       </div>
       <div className='flex flex-col'>
-        {data && data.getFollowSuggestions ? (
+        <h2>Upcoming</h2>
+        {/* {data && data.getFollowSuggestions ? (
           data.getFollowSuggestions.map(({ username, profile: { imgURL } }) => (
             <div className='flex items-center justify-between'>
               <div className='flex items-center'>
@@ -52,7 +52,7 @@ const ProfileRight: React.FC = () => {
           ))
         ) : (
           <p>No Suggestions</p>
-        )}
+        )} */}
       </div>
     </>
   );

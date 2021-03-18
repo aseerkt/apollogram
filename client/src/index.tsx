@@ -12,9 +12,14 @@ const uploadLink = createUploadLink({
 });
 
 export const apolloClient = new ApolloClient({
-  cache: new InMemoryCache(),
   link: uploadLink as any,
-  connectToDevTools: true,
+  cache: new InMemoryCache({
+    typePolicies: {
+      User: {
+        keyFields: ['username'],
+      },
+    },
+  }),
 });
 
 ReactDOM.render(

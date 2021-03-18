@@ -48,14 +48,12 @@ const SinglePost = () => {
       user,
       caption,
       comments,
-      likes,
+      likeCount,
+      userLike,
       createdAt,
       imgURL,
     } = data.getSinglePost;
-    let liked: boolean = false;
-    likes.forEach((like) => {
-      if (like.userId === me.id) liked = true;
-    });
+
     return (
       <Container>
         <Card className='relative mb-10 min-h-450'>
@@ -79,7 +77,7 @@ const SinglePost = () => {
           <div className='md:h-full md:mr-80'>
             <img
               className='w-full mr-0 md:w-full md:object-cover md:h-full'
-              src={`${process.env.REACT_APP_EXPRESS_URI}${imgURL}`}
+              src={imgURL}
               alt=''
             />
           </div>
@@ -148,7 +146,7 @@ const SinglePost = () => {
               <div>
                 <div className='flex items-center px-3 py-2 border-t border-gray-300'>
                   <LikeButton postId={id}>
-                    {liked ? (
+                    {userLike ? (
                       <FaHeart
                         size='1.5em'
                         className='mr-2 text-red-600 duration-150 transform cursor-pointer active:scale-110'
@@ -169,7 +167,7 @@ const SinglePost = () => {
                   />
                 </div>
                 {/* Like Count */}
-                <p className='px-3 font-semibold'>{likes.length} likes</p>
+                <p className='px-3 font-semibold'>{likeCount} likes</p>
                 {/* TimeStamp */}
                 <Link
                   to={`/p/${id}`}

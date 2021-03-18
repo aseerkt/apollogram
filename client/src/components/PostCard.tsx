@@ -21,7 +21,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({
-  post: { user, imgURL, caption, likes, comments, id, createdAt },
+  post: { user, imgURL, caption, likeCount, userLike, comments, id, createdAt },
 }) => {
   const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
@@ -34,11 +34,6 @@ const PostCard: React.FC<PostCardProps> = ({
 
   const history = useHistory();
   const addCommentRef = useRef<HTMLInputElement>(null);
-
-  let liked: boolean = false;
-  likes.forEach((like) => {
-    if (like.userId === me.id) liked = true;
-  });
 
   return (
     <Card className='mb-16'>
@@ -58,12 +53,8 @@ const PostCard: React.FC<PostCardProps> = ({
         </button>
       </div>
       {/* Media */}
-      <ImageLikeButton postId={id} liked={liked}>
-        <img
-          className='w-full'
-          src={`${process.env.REACT_APP_EXPRESS_URI}${imgURL}`}
-          alt=''
-        />
+      <ImageLikeButton postId={id} liked={userLike}>
+        <img className='w-full' src={imgURL} alt='' />
       </ImageLikeButton>
       {/* Likes and comments */}
       <div className='h-full'>
@@ -71,7 +62,7 @@ const PostCard: React.FC<PostCardProps> = ({
           {/* Like And Comment Button */}
           <div className='flex items-center pb-2'>
             <LikeButton postId={id}>
-              {liked ? (
+              {userLike ? (
                 <FaHeart
                   size='2em'
                   className='mr-2 text-red-600 duration-150 transform cursor-pointer active:scale-110'
@@ -97,7 +88,7 @@ const PostCard: React.FC<PostCardProps> = ({
           </div>
           {/* Like Count */}
           <p className='font-semibold '>
-            {likes.length} like{likes.length !== 1 ? 's' : ''}
+            {likeCount} like{likeCount !== 1 ? 's' : ''}
           </p>
           {/* Post Caption */}
           <div>

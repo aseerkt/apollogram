@@ -1,9 +1,9 @@
 fragment RegularComment on Comment {
   id
   text
+  username
   createdAt
   updatedAt
-  username
   user {
     ...UserWithProfile
   }

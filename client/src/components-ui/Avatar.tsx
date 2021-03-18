@@ -11,22 +11,19 @@ type AvatarProps = React.DetailedHTMLProps<
 const Avatar: React.FC<AvatarProps> = ({
   size = 'small',
   customSize,
-  src = '/user.jpg',
+  src,
   className,
   ...props
 }) => {
-  let avatarSize = size === 'large' ? '25' : '10';
-  const imgSrc =
-    src === '/user.jpg' ? src : `${process.env.REACT_APP_EXPRESS_URI}${src}`;
+  let avatarSize = size === 'large' ? 'w-25 h-25' : 'w-10 h-10';
 
   if (customSize) avatarSize = customSize;
   return (
     <img
-      src={imgSrc}
-      style={{ borderRadius: '50%' }}
+      src={src}
       alt='avatar'
       {...props}
-      className={`${className}  w-${avatarSize} h-${avatarSize}`}
+      className={`${className} ring-1 ring-gray-200 rounded-full ${avatarSize}`}
     />
   );
 };

@@ -23,7 +23,11 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     [setFile]
   );
   const [addPost] = useAddPostMutation({
-    refetchQueries: [{ query: GetPostsDocument }],
+    update: (cache, { data }) => {
+      if (data?.addPost.post) {
+        cache.evict({ fieldName: 'getPosts' });
+      }
+    },
   });
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });

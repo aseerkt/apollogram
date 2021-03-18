@@ -1,6 +1,6 @@
 query GetUser($username: String!) {
   getUser(username: $username) {
-    ...RegularUser
+    ...UserWithProfile
     posts {
       id
       caption
@@ -13,15 +13,12 @@ query GetUser($username: String!) {
           imgURL
         }
       }
-      likes {
-        id
-        userId
-      }
+      likeCount
       comments {
         text
-        userId
-        user{
-        	profile{
+        username
+        user {
+          profile {
             imgURL
           }
         }

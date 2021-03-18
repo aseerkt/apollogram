@@ -1,3 +1,4 @@
+import { gql, Reference } from '@apollo/client';
 import { useState } from 'react';
 import Spinner from '../components-ui/Spinner';
 import {
@@ -22,7 +23,56 @@ const AddComment: React.FC<AddCommentProps> = ({
 
   const [addComment] = useAddCommentMutation({
     variables: { postId, text },
-    refetchQueries: [{ query: GetSinglePostDocument, variables: { postId } }],
+    update: (cache, { data }) => {
+      const newComment = data?.addComment;
+      if (newComment) {
+        cache.modify({
+          id: 'Post:' + postId,
+          broadcast: false,
+          fields: {
+            comments(existingCommentRefs = [], { readField }) {
+              const newCommentRef = cache.writeFragment({
+                data: newComment,
+                fragment: gql`
+                  fragment NewComment on Comment {
+                    id
+                    text
+                    username
+                    createdAt
+                    updatedAt
+                    user {
+                      id
+                      username
+                      email
+                      profile {
+                        id
+                        name
+                        website
+                        bio
+                        gender
+                        imgURL
+                      }
+                    }
+                  }
+                `,
+              });
+
+              // Quick safety check - if the new comment is already
+              // present in the cache, we don't need to add it again.
+              if (
+                existingCommentRefs.some(
+                  (ref: any) => readField('id', ref) === newComment.id
+                )
+              ) {
+                return existingCommentRefs;
+              }
+
+              return [newCommentRef, ...existingCommentRefs];
+            },
+          },
+        });
+      }
+    },
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

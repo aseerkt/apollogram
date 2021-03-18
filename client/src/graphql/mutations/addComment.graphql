@@ -1,3 +1,5 @@
 mutation AddComment($text: String!, $postId: String!) {
-  addComment(text: $text, postId: $postId)
+  addComment(text: $text, postId: $postId) {
+    ...RegularComment
+  }
 }

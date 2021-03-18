@@ -29,8 +29,6 @@ const Profile: React.FC = () => {
       username,
       posts,
       profile: { imgURL, name, bio, website },
-      followers,
-      followings,
     } = data.getUser;
     return (
       <Container>
@@ -66,11 +64,11 @@ const Profile: React.FC = () => {
               <p className='text-gray-600 md:text-black'>posts</p>
             </div>
             <div className='md:flex'>
-              <strong className='md:mr-1'>{followers.length}</strong>
+              <strong className='md:mr-1'>20</strong>
               <p className='text-gray-600 md:text-black'>followers</p>
             </div>
             <div className='md:flex'>
-              <strong className='md:mr-1'>{followings.length}</strong>
+              <strong className='md:mr-1'>100</strong>
               <p className='text-gray-600 md:text-black'>following</p>
             </div>
           </main>
@@ -91,7 +89,7 @@ const Profile: React.FC = () => {
               No Posts Uploaded
             </strong>
           )}
-          {posts.map(({ imgURL, comments, likes, id }) => (
+          {posts.map(({ imgURL, comments, likeCount, id }) => (
             <Link
               key={id}
               className='relative w-full h-32 md:h-64'
@@ -99,14 +97,14 @@ const Profile: React.FC = () => {
             >
               <img
                 className='z-10 object-cover w-full h-full'
-                src={`${process.env.REACT_APP_EXPRESS_URI}${imgURL}`}
+                src={imgURL}
                 alt=''
               />
               <div className='absolute top-0 left-0 z-20 flex items-center justify-center w-full h-full text-lg text-white text-opacity-100 bg-black opacity-0 bg-opacity-30 hover:opacity-100'>
                 <div className='flex items-center'>
                   <div className='z-30 flex items-center mr-2'>
                     <AiFillHeart />
-                    <strong className='ml-1'>{likes.length}</strong>
+                    <strong className='ml-1'>{likeCount}</strong>
                   </div>
                   <div className='z-30 flex items-center ml-2'>
                     <RiChat3Fill />

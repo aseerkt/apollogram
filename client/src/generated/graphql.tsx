@@ -19,7 +19,7 @@ export type Scalars = {
 
 export type BaseColumns = {
   __typename?: 'BaseColumns';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
 };
@@ -27,43 +27,32 @@ export type BaseColumns = {
 
 export type Comment = {
   __typename?: 'Comment';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   text: Scalars['String'];
   postId: Scalars['String'];
-  userId: Scalars['String'];
   username: Scalars['String'];
   user: User;
-  post: Post;
-};
-
-export type Like = {
-  __typename?: 'Like';
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  userId: Scalars['String'];
-  postId: Scalars['String'];
-  user: User;
-  post: Post;
 };
 
 export type Post = {
   __typename?: 'Post';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   caption: Scalars['String'];
   imgURL: Scalars['String'];
+  username: Scalars['String'];
   user: User;
+  likeCount: Scalars['Int'];
+  userLike: Scalars['Boolean'];
   comments: Array<Comment>;
-  likes: Array<Like>;
 };
 
 export type Profile = {
   __typename?: 'Profile';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   imgURL: Scalars['String'];
@@ -73,26 +62,15 @@ export type Profile = {
   gender: Scalars['String'];
 };
 
-export type Follow = {
-  __typename?: 'Follow';
-  id: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  follower: User;
-  following: User;
-};
-
 export type User = {
   __typename?: 'User';
-  id: Scalars['String'];
+  id: Scalars['ID'];
   createdAt: Scalars['DateTime'];
   updatedAt: Scalars['DateTime'];
   username: Scalars['String'];
   email: Scalars['String'];
   posts: Array<Post>;
   profile: Profile;
-  followers: Array<Follow>;
-  followings: Array<Follow>;
 };
 
 export type FieldError = {
@@ -131,7 +109,6 @@ export type Query = {
   __typename?: 'Query';
   getComments: Array<Comment>;
   getFollowSuggestions: Array<User>;
-  getLikes: Array<Like>;
   getPosts: Array<Post>;
   getSinglePost?: Maybe<Post>;
   me?: Maybe<User>;
@@ -140,11 +117,6 @@ export type Query = {
 
 
 export type QueryGetCommentsArgs = {
-  postId: Scalars['String'];
-};
-
-
-export type QueryGetLikesArgs = {
   postId: Scalars['String'];
 };
 
@@ -160,7 +132,7 @@ export type QueryGetUserArgs = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addComment: Scalars['Boolean'];
+  addComment?: Maybe<Comment>;
   deleteComment: Scalars['Boolean'];
   toggleFollow: Scalars['Boolean'];
   toggleLike: Scalars['Boolean'];
@@ -231,34 +203,20 @@ export type MutationLoginArgs = {
 
 export type RegularCommentFragment = (
   { __typename?: 'Comment' }
-  & Pick<Comment, 'id' | 'text' | 'createdAt' | 'updatedAt' | 'username'>
+  & Pick<Comment, 'id' | 'text' | 'username' | 'createdAt' | 'updatedAt'>
   & { user: (
     { __typename?: 'User' }
     & UserWithProfileFragment
-  ) }
-);
-
-export type RegularFollowFragment = (
-  { __typename?: 'Follow' }
-  & { follower: (
-    { __typename?: 'User' }
-    & UserFieldFragment
-  ), following: (
-    { __typename?: 'User' }
-    & UserFieldFragment
   ) }
 );
 
 export type RegualarPostFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt'>
+  & Pick<Post, 'id' | 'caption' | 'imgURL' | 'likeCount' | 'userLike' | 'createdAt' | 'updatedAt'>
   & { user: (
     { __typename?: 'User' }
     & UserWithProfileFragment
-  ), likes: Array<(
-    { __typename?: 'Like' }
-    & Pick<Like, 'id' | 'userId'>
-  )>, comments: Array<(
+  ), comments: Array<(
     { __typename?: 'Comment' }
     & RegularCommentFragment
   )> }
@@ -267,24 +225,6 @@ export type RegualarPostFragment = (
 export type RegularProfileFragment = (
   { __typename?: 'Profile' }
   & Pick<Profile, 'id' | 'name' | 'website' | 'bio' | 'gender' | 'imgURL'>
-);
-
-export type RegularUserFragment = (
-  { __typename?: 'User' }
-  & { followings: Array<(
-    { __typename?: 'Follow' }
-    & { following: (
-      { __typename?: 'User' }
-      & UserFieldFragment
-    ) }
-  )>, followers: Array<(
-    { __typename?: 'Follow' }
-    & { follower: (
-      { __typename?: 'User' }
-      & UserFieldFragment
-    ) }
-  )> }
-  & UserWithProfileFragment
 );
 
 export type UserFieldFragment = (
@@ -309,7 +249,10 @@ export type AddCommentMutationVariables = Exact<{
 
 export type AddCommentMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'addComment'>
+  & { addComment?: Maybe<(
+    { __typename?: 'Comment' }
+    & RegularCommentFragment
+  )> }
 );
 
 export type AddPostMutationVariables = Exact<{
@@ -440,17 +383,6 @@ export type GetCommentsQuery = (
   )> }
 );
 
-export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetFollowSuggestionsQuery = (
-  { __typename?: 'Query' }
-  & { getFollowSuggestions: Array<(
-    { __typename?: 'User' }
-    & RegularUserFragment
-  )> }
-);
-
 export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -486,7 +418,7 @@ export type GetUserQuery = (
     { __typename?: 'User' }
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt'>
+      & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt' | 'likeCount'>
       & { user: (
         { __typename?: 'User' }
         & Pick<User, 'username'>
@@ -494,12 +426,9 @@ export type GetUserQuery = (
           { __typename?: 'Profile' }
           & Pick<Profile, 'imgURL'>
         ) }
-      ), likes: Array<(
-        { __typename?: 'Like' }
-        & Pick<Like, 'id' | 'userId'>
-      )>, comments: Array<(
+      ), comments: Array<(
         { __typename?: 'Comment' }
-        & Pick<Comment, 'text' | 'userId'>
+        & Pick<Comment, 'text' | 'username'>
         & { user: (
           { __typename?: 'User' }
           & { profile: (
@@ -509,7 +438,7 @@ export type GetUserQuery = (
         ) }
       )> }
     )> }
-    & RegularUserFragment
+    & UserWithProfileFragment
   )> }
 );
 
@@ -520,7 +449,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & RegularUserFragment
+    & UserWithProfileFragment
   )> }
 );
 
@@ -531,16 +460,6 @@ export const UserFieldFragmentDoc = gql`
   email
 }
     `;
-export const RegularFollowFragmentDoc = gql`
-    fragment RegularFollow on Follow {
-  follower {
-    ...UserField
-  }
-  following {
-    ...UserField
-  }
-}
-    ${UserFieldFragmentDoc}`;
 export const RegularProfileFragmentDoc = gql`
     fragment RegularProfile on Profile {
   id
@@ -564,9 +483,9 @@ export const RegularCommentFragmentDoc = gql`
     fragment RegularComment on Comment {
   id
   text
+  username
   createdAt
   updatedAt
-  username
   user {
     ...UserWithProfile
   }
@@ -577,14 +496,12 @@ export const RegualarPostFragmentDoc = gql`
   id
   caption
   imgURL
+  likeCount
+  userLike
   createdAt
   updatedAt
   user {
     ...UserWithProfile
-  }
-  likes {
-    id
-    userId
   }
   comments {
     ...RegularComment
@@ -592,27 +509,13 @@ export const RegualarPostFragmentDoc = gql`
 }
     ${UserWithProfileFragmentDoc}
 ${RegularCommentFragmentDoc}`;
-export const RegularUserFragmentDoc = gql`
-    fragment RegularUser on User {
-  ...UserWithProfile
-  followings {
-    following {
-      ...UserField
-    }
-  }
-  followers {
-    follower {
-      ...UserField
-    }
-  }
-}
-    ${UserWithProfileFragmentDoc}
-${UserFieldFragmentDoc}`;
 export const AddCommentDocument = gql`
     mutation AddComment($text: String!, $postId: String!) {
-  addComment(text: $text, postId: $postId)
+  addComment(text: $text, postId: $postId) {
+    ...RegularComment
+  }
 }
-    `;
+    ${RegularCommentFragmentDoc}`;
 export type AddCommentMutationFn = Apollo.MutationFunction<AddCommentMutation, AddCommentMutationVariables>;
 
 /**
@@ -934,38 +837,6 @@ export function useGetCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
-export const GetFollowSuggestionsDocument = gql`
-    query GetFollowSuggestions {
-  getFollowSuggestions {
-    ...RegularUser
-  }
-}
-    ${RegularUserFragmentDoc}`;
-
-/**
- * __useGetFollowSuggestionsQuery__
- *
- * To run a query within a React component, call `useGetFollowSuggestionsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetFollowSuggestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetFollowSuggestionsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetFollowSuggestionsQuery(baseOptions?: Apollo.QueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
-        return Apollo.useQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, baseOptions);
-      }
-export function useGetFollowSuggestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
-          return Apollo.useLazyQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, baseOptions);
-        }
-export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollowSuggestionsQuery>;
-export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
-export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;
 export const GetPostsDocument = gql`
     query GetPosts {
   getPosts {
@@ -1034,7 +905,7 @@ export type GetSinglePostQueryResult = Apollo.QueryResult<GetSinglePostQuery, Ge
 export const GetUserDocument = gql`
     query GetUser($username: String!) {
   getUser(username: $username) {
-    ...RegularUser
+    ...UserWithProfile
     posts {
       id
       caption
@@ -1047,13 +918,10 @@ export const GetUserDocument = gql`
           imgURL
         }
       }
-      likes {
-        id
-        userId
-      }
+      likeCount
       comments {
         text
-        userId
+        username
         user {
           profile {
             imgURL
@@ -1063,7 +931,7 @@ export const GetUserDocument = gql`
     }
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${UserWithProfileFragmentDoc}`;
 
 /**
  * __useGetUserQuery__
@@ -1093,10 +961,10 @@ export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVa
 export const MeDocument = gql`
     query Me {
   me {
-    ...RegularUser
+    ...UserWithProfile
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${UserWithProfileFragmentDoc}`;
 
 /**
  * __useMeQuery__
