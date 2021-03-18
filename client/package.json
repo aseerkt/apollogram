@@ -64,5 +64,6 @@
     "@types/classnames": "^2.2.11",
     "@types/react-icons": "^3.0.0",
     "@types/react-router-dom": "^5.1.6"
-  }
+  },
+  "license": "MIT"
 }
