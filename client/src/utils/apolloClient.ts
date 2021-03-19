@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { createUploadLink } from 'apollo-upload-client';
 
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:5000/graphql',
+  uri: `${process.env.REACT_APP_EXPRESS_URI}/graphql`,
   credentials: 'include',
 });
 
