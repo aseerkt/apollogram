@@ -4,12 +4,14 @@ import 'colors';
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
-import connectRedis from 'connect-redis';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { createClient } from 'redis';
+import connectRedis from 'connect-redis';
+import pg from 'pg';
+import connectPg from 'connect-pg-simple';
 // import passport from 'passport';
 import { COOKIE_NAME, __prod__ } from './constants';
 import { createUserLoader } from './utils/createUserLoader';
@@ -17,6 +19,9 @@ import { createProfileLoader } from './utils/createProfileLoader';
 
 const RedisStore = connectRedis(session);
 const redisClient = createClient();
+
+const PgStore = connectPg(session);
+const pgPool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
 
 const main = async () => {
   await createConnection();
@@ -38,7 +43,11 @@ const main = async () => {
   app.use(
     session({
       name: COOKIE_NAME,
-      store: new RedisStore({ client: redisClient, disableTouch: true }),
+      store: __prod__
+        ? new PgStore({
+            pool: pgPool,
+          })
+        : new RedisStore({ client: redisClient, disableTouch: true }),
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
