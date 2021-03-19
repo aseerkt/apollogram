@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import { MeDocument, useLogoutMutation } from '../generated/graphql';
 import { CgProfile } from 'react-icons/cg';
 import { FiEdit } from 'react-icons/fi';

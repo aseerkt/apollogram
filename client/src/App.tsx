@@ -1,13 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './routes/Login';
-import Home from './routes/Home';
 import './App.css';
 import Register from './routes/Register';
 import { MeDocument, useMeQuery } from './generated/graphql';
 import Posts from './routes/Posts';
 import Alert from './components-ui/Alert';
-import { apolloClient } from '.';
+import { apolloClient } from './utils/apolloClient';
 import Spinner from './components-ui/Spinner';
 import PrivateRoute from './containers/PrivateRoute';
 import EditProfile from './routes/EditProfile';
@@ -27,10 +26,9 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path='/' component={Home} />
+        <PrivateRoute exact path='/' component={Posts} />
         <Route exact path='/login' component={Login} />
         <Route exact path='/register' component={Register} />
-        <PrivateRoute exact path='/posts' component={Posts} />
         <PrivateRoute exact path='/p/:postId' component={SinglePost} />
         <PrivateRoute exact path='/edit-profile' component={EditProfile} />
         <PrivateRoute exact path='/u/:username' component={Profile} />

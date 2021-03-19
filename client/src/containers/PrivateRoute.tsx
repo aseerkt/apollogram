@@ -5,7 +5,7 @@ import {
   RouteComponentProps,
   RouteProps,
 } from 'react-router-dom';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Navbar from '../components/Navbar';
 import { MeDocument } from '../generated/graphql';
 

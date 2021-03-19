@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import Spinner from '../components-ui/Spinner';
@@ -51,6 +51,7 @@ const Profile: React.FC = () => {
             <strong>{name}</strong>
             <p className='text-lg'>{bio}</p>
             <a
+              rel='noreferrer'
               className='font-semibold text-blue-600'
               href={website}
               target='_blank'

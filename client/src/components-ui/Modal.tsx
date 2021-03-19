@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
       // Unbind the event listener on clean up
       document.removeEventListener('mousedown', handleClickOutside as any);
     };
-  }, [modalRef]);
+  }, [modalRef, isOpen, setIsOpen]);
 
   return isOpen ? (
     <div className='fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-70'>

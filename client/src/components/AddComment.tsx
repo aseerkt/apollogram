@@ -1,11 +1,7 @@
-import { gql, Reference } from '@apollo/client';
+import { gql } from '@apollo/client';
 import { useState } from 'react';
 import Spinner from '../components-ui/Spinner';
-import {
-  useAddCommentMutation,
-  GetSinglePostDocument,
-  GetUserDocument,
-} from '../generated/graphql';
+import { useAddCommentMutation } from '../generated/graphql';
 
 interface AddCommentProps {
   postId: string;
@@ -79,6 +75,7 @@ const AddComment: React.FC<AddCommentProps> = ({
     e.preventDefault();
     try {
       setSubmitting(true);
+      if (!text) throw new Error('Comment Text is Empty');
       const res = await addComment();
       if (res) {
         setSubmitting(false);
@@ -95,12 +92,11 @@ const AddComment: React.FC<AddCommentProps> = ({
     <div
       className={`px-3 relative py-3 border-t-2 justify-items-end ${className}`}
     >
-      <div
-        hidden={!submitting}
-        className='absolute top-0 left-0 w-full h-full bg-black bg-opacity-50'
-      >
-        <Spinner size='small' />
-      </div>
+      {submitting && (
+        <div className='absolute top-0 left-0 flex items-center w-full h-full bg-white bg-opacity-80'>
+          <Spinner size='small' />
+        </div>
+      )}
       <form className='flex items-center w-full' onSubmit={onSubmit}>
         <input
           ref={customRef}
@@ -111,7 +107,7 @@ const AddComment: React.FC<AddCommentProps> = ({
           onChange={(e) => setText(e.target.value)}
         />
         <button
-          className='pl-2 font-bold text-blue-800 disabled:opacity-40'
+          className='pl-2 font-bold text-blue-800 disabled:opacity-20 disabled:cursor-default'
           disabled={!text}
         >
           Post

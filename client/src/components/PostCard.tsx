@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import Avatar from '../components-ui/Avatar';
 import Card from '../components-ui/Card';
-import { Comment, MeDocument, Post } from '../generated/graphql';
+import { Comment, Post } from '../generated/graphql';
 import { MdMoreHoriz } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { RiChat1Line } from 'react-icons/ri';
 import AddComment from './AddComment';
 import LikeButton from './LikeButton';
-import { apolloClient } from '..';
+// import { apolloClient } from '..';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, useHistory } from 'react-router-dom';
@@ -23,7 +23,7 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({
   post: { user, imgURL, caption, likeCount, userLike, comments, id, createdAt },
 }) => {
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  // const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
 
   useEffect(() => {

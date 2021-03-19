@@ -1,5 +1,5 @@
 import { Connection } from 'typeorm';
-import { Seeder } from 'typeorm-seeding';
+import { Factory, Seeder } from 'typeorm-seeding';
 import { User } from '../entities/User';
 import fakeUserData from './userData.json';
 import profileData from './profileData.json';
@@ -16,11 +16,9 @@ fakeUserData.forEach(async (u) => {
 });
 
 export default class CreateMockData implements Seeder {
-  public async run(_: any, connection: Connection): Promise<any> {
+  public async run(_factory: Factory, connection: Connection): Promise<any> {
     await connection.dropDatabase();
     await connection.synchronize();
-
-    // Create 3 User
 
     await connection
       .createQueryBuilder()

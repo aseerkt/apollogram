@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Button from '../components-ui/Button';
 import Container from '../components-ui/Container';
 import InputField from '../components-ui/InputField';
 import { MeDocument, useEditProfileMutation, User } from '../generated/graphql';
-import { useRouteMatch } from 'react-router-dom';
+// import { useRouteMatch } from 'react-router-dom';
 import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 
 const EditProfile: React.FC = () => {
@@ -17,7 +17,7 @@ const EditProfile: React.FC = () => {
     email: '',
   });
 
-  const match = useRouteMatch();
+  // const match = useRouteMatch();
 
   const { me } = apolloClient.readQuery({ query: MeDocument });
 
@@ -33,7 +33,7 @@ const EditProfile: React.FC = () => {
       username: user.username,
       email: user.email,
     });
-  }, [me]);
+  }, [me, setFormData, user, formData]);
 
   const { name, website, bio, gender, username, email } = formData;
 
@@ -57,7 +57,7 @@ const EditProfile: React.FC = () => {
     try {
       const res = await editProfile();
       if (res.data) {
-        const { ok, errors } = res.data.editProfile;
+        const { errors } = res.data.editProfile;
         if (errors) {
           errors.forEach(({ path, message }) => {
             setFormErrors((prev) => ({ ...prev, [path]: message }));

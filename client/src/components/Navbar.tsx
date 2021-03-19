@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import DropDown from './DropDown';
@@ -17,7 +17,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className='fixed inset-x-0 top-0 z-10 bg-white border border-gray-200 h-14'>
       <Container className='flex items-center h-full px-2 md:px-0'>
-        <Link to='/posts'>
+        <Link to='/'>
           <img
             className='object-contain w-auto h-8'
             src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'

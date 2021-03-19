@@ -4,13 +4,13 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { MdMoreHoriz } from 'react-icons/md';
 import { RiChat1Line } from 'react-icons/ri';
 import { Link, useParams } from 'react-router-dom';
-import { apolloClient } from '..';
+// import { apolloClient } from '..';
 import Avatar from '../components-ui/Avatar';
 import Card from '../components-ui/Card';
 import Container from '../components-ui/Container';
 import AddComment from '../components/AddComment';
 import LikeButton from '../components/LikeButton';
-import { MeDocument, useGetSinglePostQuery } from '../generated/graphql';
+import { useGetSinglePostQuery } from '../generated/graphql';
 
 const scrollBarCss = `
 ::-webkit-scrollbar {
@@ -38,7 +38,7 @@ const SinglePost = () => {
   const { postId }: any = useParams();
   const { data, loading } = useGetSinglePostQuery({ variables: { postId } });
 
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  // const { me } = apolloClient.readQuery({ query: MeDocument });
   const addCommentRef = useRef<HTMLInputElement>(null);
 
   if (loading) return <div>Loading...</div>;

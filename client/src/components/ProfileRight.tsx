@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
-import Button from '../components-ui/Button';
+// import Button from '../components-ui/Button';
 import { MeDocument } from '../generated/graphql';
 
 const ProfileRight: React.FC = () => {

@@ -9,7 +9,7 @@ import {
 import Button from '../components-ui/Button';
 import { getCroppedImg } from '../utils/cropImage';
 import { dataURLtoFile } from '../utils/dataURLtoFile';
-import { apolloClient } from '..';
+import { apolloClient } from '../utils/apolloClient';
 import Spinner from '../components-ui/Spinner';
 
 interface ChangeProfilePhotoProps {
@@ -23,11 +23,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
 
   const triggerFileSelectPopup = () => inputRef.current?.click();
 
-  const imgSrc =
-    me.profile.imgURL === '/user.jpg'
-      ? '/user.jpg'
-      : `${process.env.REACT_APP_EXPRESS_URI}${me.profile.imgURL}`;
-  const [displayImage, setDisplayImage] = useState(imgSrc);
+  const [displayImage, setDisplayImage] = useState(me.profile.imgURL);
   const inputRef = useRef<HTMLInputElement>(null);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });

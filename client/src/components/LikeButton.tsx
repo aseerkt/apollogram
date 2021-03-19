@@ -1,6 +1,5 @@
 import {
   GetSinglePostDocument,
-  GetUserDocument,
   useToggleLikeMutation,
 } from '../generated/graphql';
 
