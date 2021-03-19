@@ -33,7 +33,8 @@ const EditProfile: React.FC = () => {
       username: user.username,
       email: user.email,
     });
-  }, [me, setFormData, user, formData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [me]);
 
   const { name, website, bio, gender, username, email } = formData;
 

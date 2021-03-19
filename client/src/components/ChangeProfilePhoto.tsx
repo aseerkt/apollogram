@@ -44,6 +44,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   const onSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
       const reader = new FileReader();
+      setFileName(event.target.files[0].name);
       reader.readAsDataURL(event.target.files[0]);
       reader.addEventListener('load', () => {
         setSubmitting(false);
