@@ -43,7 +43,7 @@ const main = async () => {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: __prod__,
-        sameSite: 'lax',
+        sameSite: 'none',
       },
       secret: __prod__ ? process.env.SESSION_SECRET! : 'secretForYa',
       resave: false,
