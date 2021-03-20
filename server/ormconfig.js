@@ -1,7 +1,7 @@
-require('dotenv').confi();
+require('dotenv').config();
 
 const urlConfig =
-  process.env.NODE_ENV === production
+  process.env.NODE_ENV === 'production'
     ? {
         url: process.env.DATABASE_URL,
       }
