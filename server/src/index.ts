@@ -17,12 +17,6 @@ import { COOKIE_NAME, __prod__ } from './constants';
 import { createUserLoader } from './utils/createUserLoader';
 import { createProfileLoader } from './utils/createProfileLoader';
 
-const RedisStore = connectRedis(session);
-const redisClient = createClient();
-
-const PgStore = connectPg(session);
-const pgPool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-
 const main = async () => {
   await createConnection();
 
@@ -44,10 +38,13 @@ const main = async () => {
     session({
       name: COOKIE_NAME,
       store: __prod__
-        ? new PgStore({
-            pool: pgPool,
+        ? new (connectPg(session))({
+            pool: new pg.Pool({ connectionString: process.env.DATABASE_URL }),
           })
-        : new RedisStore({ client: redisClient, disableTouch: true }),
+        : new (connectRedis(session))({
+            client: createClient(),
+            disableTouch: true,
+          }),
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
