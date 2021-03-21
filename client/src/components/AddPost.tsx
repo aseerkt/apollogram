@@ -14,6 +14,9 @@ interface AddPostProps {
 const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [caption, setCaption] = useState('');
   const [file, setFile] = useState<File>(null as any);
+  const inputRef = React.createRef<HTMLInputElement>();
+  const [submitting, setSubmitting] = useState(false);
+
   const onDrop = useCallback(
     (files: File[]) => {
       console.log('files dropped');
@@ -30,11 +33,16 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     },
   });
 
+  React.useEffect(() => {
+    inputRef.current?.focus();
+  }, [inputRef]);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) return alert('No file selected');
+    setSubmitting(true);
     try {
       // console.log(file);
       const res = await addPost({ variables: { file, caption } });
@@ -47,24 +55,35 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     } catch (err) {
       console.log(err.message);
     }
+    setSubmitting(false);
   };
 
   return (
     <Card className={`p-5 ${className}`}>
       <h1 className='mt-1 mb-3 text-xl font-semibold uppercase'>Upload Post</h1>
       <form onSubmit={onSubmit}>
-        <InputField
-          focusOnRender
-          error=''
-          type='text'
-          value={caption}
-          name='caption'
-          label='Caption'
-          placeholder='Add caption for your post...'
-          onChange={(e) => setCaption(e.target.value)}
-        />
+        <div className='mb-5'>
+          <label className='inline-block mb-1 font-bold' htmlFor='caption'>
+            Caption
+          </label>
+          <div>
+            <input
+              id='caption'
+              name='caption'
+              placeholder='Add caption for your post...'
+              className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
+              ref={inputRef}
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+            />
+            <small className='block leading-4 text-gray-500'>
+              Give your post a catchy caption
+            </small>
+            {/* <small className='my-1 text-red-700'>{error}</small> */}
+          </div>
+        </div>
         <div
-          className='p-5 my-2 text-gray-700 border border-blue-400 rounded cursor-pointer hover:bg-gray-100'
+          className='p-5 my-2 mb-5 text-gray-700 border border-blue-400 rounded cursor-pointer hover:bg-gray-100'
           {...getRootProps()}
         >
           <input {...getInputProps()} />
@@ -82,7 +101,13 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           )}
         </div>
 
-        <Button className='block mx-auto mt-3' color='dark' type='submit'>
+        <Button
+          isLoading={submitting}
+          className='block mx-auto'
+          color='dark'
+          type='submit'
+          disabled={!file || !caption}
+        >
           Upload
         </Button>
       </form>

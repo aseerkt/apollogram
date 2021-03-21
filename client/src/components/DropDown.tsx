@@ -36,6 +36,7 @@ const DropDown: React.FC = ({ children }) => {
     onCompleted: (data) => {
       if (data.logout) {
         apolloClient.resetStore();
+        window.location.pathname = '/';
       }
     },
   });

@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 import { apolloClient } from '../utils/apolloClient';
 import Navbar from '../components/Navbar';
-import { MeDocument } from '../generated/graphql';
+import { MeDocument, useMeQuery } from '../generated/graphql';
+import Spinner from '../components-ui/Spinner';
 
 type PrivateRouteProps = RouteProps & {
   component: React.FC<RouteComponentProps>;
@@ -17,12 +18,15 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const { data, loading } = useMeQuery();
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <Route
       {...rest}
       render={(props) =>
-        me ? (
+        data && data.me ? (
           <>
             <Navbar />
             <div className='mt-20'>

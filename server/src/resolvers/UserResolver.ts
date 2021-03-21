@@ -79,7 +79,7 @@ export class UserResolver {
     const user = User.create({ username, email, password });
     errors = await validate(user);
     if (errors.length > 0) {
-      console.log(errors);
+      // console.log(errors);
       return { ok: false, errors: formatErrors(errors) };
     }
     try {

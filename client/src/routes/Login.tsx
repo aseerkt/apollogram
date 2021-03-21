@@ -5,81 +5,60 @@ import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
+import { Form, Formik } from 'formik';
 // import { FaFacebookSquare } from 'react-icons/fa';
 
 // document.title = 'Sign Up - Instagram';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const [errors, setErrors] = useState({ username: null, password: null });
-
-  const [login, { loading }] = useLoginMutation({
-    variables: { username, password },
-    update: (cache, result) => {
-      const user = result.data?.login.user;
-      if (user) {
-        cache.writeQuery({ query: MeDocument, data: { me: user } });
-        history.push('/');
-      }
-    },
-  });
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors({ username: null, password: null });
-    try {
-      const { data } = await login();
-      if (data?.login.errors) {
-        data.login.errors.forEach(({ path, message }) => {
-          setErrors((prev) => ({
-            ...prev,
-            [path]: message,
-          }));
-        });
-      }
-      if (data?.login.ok) {
-        setUsername('');
-        setPassword('');
-      }
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-  // console.log(errors);
+  const [login] = useLoginMutation();
 
   return (
     <FormWrapper title='Login'>
       <div className='p-4'>
-        <form onSubmit={onSubmit}>
-          <InputField
-            name='username'
-            error={errors.username}
-            label='Username'
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <InputField
-            name='password'
-            error={errors.password}
-            type='password'
-            value={password}
-            label='Password'
-            onChange={(e) => setPassword(e.target.value)}
-          />
+        <Formik
+          initialValues={{ username: '', password: '' }}
+          onSubmit={async ({ username, password }, { setFieldError }) => {
+            try {
+              const { data } = await login({
+                variables: { username, password },
+                update: (cache, result) => {
+                  const user = result.data?.login.user;
+                  if (user) {
+                    cache.writeQuery({ query: MeDocument, data: { me: user } });
+                    window.location.pathname = '/';
+                  }
+                },
+              });
+              if (data?.login.errors) {
+                data.login.errors.forEach(({ path, message }) => {
+                  setFieldError(path, message);
+                });
+              }
+              console.log(data);
+            } catch (err) {
+              console.log(err);
+            }
+          }}
+        >
+          {({ isSubmitting, values: { password, username } }) => (
+            <Form className='mb-3'>
+              <InputField name='username' label='Username' />
+              <InputField name='password' type='password' label='Password' />
 
-          <Button
-            className='my-3'
-            color='dark'
-            fullWidth
-            type='submit'
-            disabled={!username || !password || loading}
-          >
-            Login
-          </Button>
-        </form>
+              <Button
+                isLoading={isSubmitting}
+                className='my-3'
+                color='dark'
+                fullWidth
+                type='submit'
+                disabled={!username || !password}
+              >
+                Login
+              </Button>
+            </Form>
+          )}
+        </Formik>
         {/* <a
           href={`${process.env.REACT_APP_EXPRESS_URI!}/auth/facebook`}
           className='block px-3 py-1 my-1 text-center text-white uppercase bg-blue-800 rounded-lg'
@@ -89,7 +68,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
             Login With Facebook
           </span>
         </a> */}
-        <small className='mt-3'>
+        <small>
           Don't have an account?{' '}
           <Link to='/register' className='text-blue-500'>
             Sign Up

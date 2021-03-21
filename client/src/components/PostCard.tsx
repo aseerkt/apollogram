@@ -12,7 +12,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, useHistory } from 'react-router-dom';
 import { useRef } from 'react';
-import ImageLikeButton from './ImageLikeButton';
 
 dayjs.extend(relativeTime);
 
@@ -25,12 +24,17 @@ const PostCard: React.FC<PostCardProps> = ({
 }) => {
   // const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
+  const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     setTwoComments(
       comments.filter((_, index) => index === 0 || index === 1).reverse()
     );
   }, [comments, setTwoComments]);
+
+  useEffect(() => {
+    setLiked(userLike);
+  }, [liked, userLike]);
 
   const history = useHistory();
   const addCommentRef = useRef<HTMLInputElement>(null);
@@ -53,16 +57,14 @@ const PostCard: React.FC<PostCardProps> = ({
         </button>
       </div>
       {/* Media */}
-      <ImageLikeButton postId={id} liked={userLike}>
-        <img className='w-full' src={imgURL} alt='' />
-      </ImageLikeButton>
+      <img className='w-full' src={imgURL} alt='' />
       {/* Likes and comments */}
       <div className='h-full'>
         <div className='flex flex-col justify-between px-3 py-2'>
           {/* Like And Comment Button */}
           <div className='flex items-center pb-2'>
-            <LikeButton postId={id}>
-              {userLike ? (
+            <LikeButton postId={id} liked={liked} setLiked={setLiked}>
+              {liked ? (
                 <FaHeart
                   size='2em'
                   className='mr-2 text-red-600 duration-150 transform cursor-pointer active:scale-110'

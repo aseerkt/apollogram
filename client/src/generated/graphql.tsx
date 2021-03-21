@@ -108,7 +108,6 @@ export type LoginResponse = {
 export type Query = {
   __typename?: 'Query';
   getComments: Array<Comment>;
-  getFollowSuggestions: Array<User>;
   getPosts: Array<Post>;
   getSinglePost?: Maybe<Post>;
   me?: Maybe<User>;
@@ -134,11 +133,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   addComment?: Maybe<Comment>;
   deleteComment: Scalars['Boolean'];
-  toggleFollow: Scalars['Boolean'];
   toggleLike: Scalars['Boolean'];
   addPost: CreatePostResponse;
   changeProfilePhoto: Scalars['Boolean'];
-  removeProfilePhoto: Scalars['Boolean'];
+  removeProfilePhoto?: Maybe<Scalars['String']>;
   editProfile: EditProfileResponse;
   register: RegisterResponse;
   login: LoginResponse;
@@ -154,11 +152,6 @@ export type MutationAddCommentArgs = {
 
 export type MutationDeleteCommentArgs = {
   commentId: Scalars['String'];
-};
-
-
-export type MutationToggleFollowArgs = {
-  userId: Scalars['String'];
 };
 
 

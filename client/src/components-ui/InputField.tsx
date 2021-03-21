@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import cn from 'classnames';
+import { useField } from 'formik';
 
 type InterfaceProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
   name: string;
-  error: string | null;
   label: string;
+  error?: string;
   focusOnRender?: boolean;
   inline?: boolean;
   labelClassName?: string;
@@ -15,7 +16,6 @@ type InterfaceProps = React.DetailedHTMLProps<
 };
 
 const InputField: React.FC<InterfaceProps> = ({
-  error,
   label,
   focusOnRender,
   inline,
@@ -24,6 +24,7 @@ const InputField: React.FC<InterfaceProps> = ({
   ref,
   ...props
 }) => {
+  const [field, { touched, error }] = useField(props);
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (focusOnRender) {
@@ -47,6 +48,7 @@ const InputField: React.FC<InterfaceProps> = ({
       </label>
       <div>
         <input
+          {...field}
           className={cn('w-full px-2 mb-3 py-1  rounded-md  ', {
             'border-2 border-red-500 bg-red-100': !!error,
             'bg-blue-50 border border-gray-300 focus:border-gray-500': !error,

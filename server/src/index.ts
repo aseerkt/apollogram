@@ -10,14 +10,18 @@ import { buildSchema } from 'type-graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
 import { createClient } from 'redis';
 import connectRedis from 'connect-redis';
-import pg from 'pg';
-import connectPg from 'connect-pg-simple';
+import MongoStore from 'connect-mongo';
 // import passport from 'passport';
 import { COOKIE_NAME, __prod__ } from './constants';
 import { createUserLoader } from './utils/createUserLoader';
 import { createProfileLoader } from './utils/createProfileLoader';
 
-pg.defaults.ssl = { rejectUnauthorized: false };
+const sessionStore = __prod__
+  ? new MongoStore({ mongoUrl: process.env.MONGO_URI })
+  : new (connectRedis(session))({
+      client: createClient(),
+      disableTouch: true,
+    });
 
 const main = async () => {
   await createConnection();
@@ -30,6 +34,7 @@ const main = async () => {
       credentials: true,
     })
   );
+
   app.get('/', (_, res) =>
     res.send('Welcome to Backend Server of Apollo Instagram Clone')
   );
@@ -38,28 +43,16 @@ const main = async () => {
 
   // app.use(passport.initialize());
   // app.use(passport.session());
-
+  // app.set('trust proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,
-      store: __prod__
-        ? new (connectPg(session))({
-            conObject: {
-              connectionString: process.env.DATABASE_URL,
-              ssl: {
-                rejectUnauthorized: false,
-              },
-            },
-          })
-        : new (connectRedis(session))({
-            client: createClient(),
-            disableTouch: true,
-          }),
+      store: sessionStore,
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000,
         httpOnly: true,
         secure: __prod__,
-        sameSite: 'none',
+        sameSite: __prod__ ? 'none' : 'lax',
       },
       secret: __prod__ ? process.env.SESSION_SECRET! : 'secretForYa',
       resave: false,

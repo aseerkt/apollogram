@@ -54,6 +54,12 @@ const SinglePost = () => {
       imgURL,
     } = data.getSinglePost;
 
+    const [liked, setLiked] = React.useState(false);
+
+    React.useEffect(() => {
+      setLiked(userLike);
+    }, [setLiked, userLike]);
+
     return (
       <Container>
         <Card className='relative mb-10 min-h-450'>
@@ -145,7 +151,7 @@ const SinglePost = () => {
               {/* Like And Comment Button */}
               <div>
                 <div className='flex items-center px-3 py-2 border-t border-gray-300'>
-                  <LikeButton postId={id}>
+                  <LikeButton postId={id} liked={liked} setLiked={setLiked}>
                     {userLike ? (
                       <FaHeart
                         size='1.5em'

@@ -1,118 +1,76 @@
-import React, { useState } from 'react';
-
 import { Link, RouteComponentProps } from 'react-router-dom';
+import { Form, Formik } from 'formik';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { useRegisterMutation } from '../generated/graphql';
 
 const Register: React.FC<RouteComponentProps> = ({ history }) => {
-  const [formData, setFormData] = useState({
-    email: '',
-    username: '',
-    password: '',
-    password2: '',
-  });
-  const [errors, setErrors] = useState({
-    username: null as any,
-    password: null as any,
-    email: null as any,
-    password2: null as any,
-  });
-
-  const { email, username, password, password2 } = formData;
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const [register, { loading }] = useRegisterMutation({
-    variables: { email, username, password },
-  });
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setErrors({
-      username: null as any,
-      password: null as any,
-      email: null as any,
-      password2: null as any,
-    });
-    console.log('got here');
-    if (password !== password2) {
-      setErrors((prev) => ({ ...prev, password2: 'Password Mismatch' }));
-      return;
-    }
-    try {
-      const { data, errors } = await register();
-      console.log(errors);
-      console.log(data);
-      if (data?.register.errors) {
-        console.log(data.register.errors);
-        data.register.errors.forEach(({ path, message }) => {
-          setErrors((prev) => ({
-            ...prev,
-            [path]: message,
-          }));
-        });
-      }
-      if (data?.register.ok) {
-        history.push('/login');
-      }
-      console.log(data);
-    } catch (err) {
-      console.log(err?.networkError.result);
-    }
-  };
-  console.log(errors);
+  const [register] = useRegisterMutation();
 
   return (
     <FormWrapper title='Register'>
       <div className='p-4'>
-        <form onSubmit={onSubmit}>
-          <InputField
-            label='Email'
-            error={errors.email}
-            name='email'
-            value={email}
-            onChange={onChange}
-          />
+        <Formik
+          initialValues={{
+            username: '',
+            email: '',
+            password: '',
+            password2: '',
+          }}
+          onSubmit={async (values, { setFieldError }) => {
+            const { email, username, password, password2 } = values;
+            if (password !== password2) {
+              setFieldError('password2', 'Password Mismatch');
+              return;
+            }
+            try {
+              const res = await register({
+                variables: { email, username, password },
+              });
+              const errors = res.data?.register.errors;
+              const ok = res.data?.register.ok;
+              if (errors) {
+                errors.forEach(({ path, message }) => {
+                  setFieldError(path, message);
+                });
+              }
+              if (ok) {
+                history.push('/login');
+              }
+            } catch (err) {
+              console.log(err?.networkError.result);
+            }
+          }}
+        >
+          {({
+            isSubmitting,
+            values: { email, username, password, password2 },
+          }) => (
+            <Form className='mb-3'>
+              <InputField label='Email' name='email' />
+              <InputField label='Username' name='username' />
+              <InputField label='Password' type='password' name='password' />
+              <InputField
+                label='Confirm Password'
+                type='password'
+                name='password2'
+              />
+              <Button
+                className='my-3'
+                color='dark'
+                fullWidth
+                type='submit'
+                isLoading={isSubmitting}
+                disabled={!username || !password || !email || !password2}
+              >
+                Sign Up
+              </Button>
+            </Form>
+          )}
+        </Formik>
 
-          <InputField
-            label='Username'
-            error={errors.username}
-            name='username'
-            value={username}
-            onChange={onChange}
-          />
-
-          <InputField
-            label='Password'
-            error={errors.password}
-            type='password'
-            name='password'
-            value={password}
-            onChange={onChange}
-          />
-          <InputField
-            label='Confirm Password'
-            error={errors.password2}
-            type='password'
-            name='password2'
-            value={password2}
-            onChange={onChange}
-          />
-          <Button
-            className='my-3'
-            color='dark'
-            fullWidth
-            type='submit'
-            disabled={!username || !password || !email || !password2 || loading}
-          >
-            Sign Up
-          </Button>
-        </form>
-
-        <small className='mt-3'>
+        <small>
           Already an account?{' '}
           <Link to='/login' className='text-blue-500'>
             Log In
