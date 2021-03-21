@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
-// import { apolloClient } from '..';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
 import { Form, Formik } from 'formik';
 // import { FaFacebookSquare } from 'react-icons/fa';
-
-// document.title = 'Sign Up - Instagram';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [login] = useLoginMutation();

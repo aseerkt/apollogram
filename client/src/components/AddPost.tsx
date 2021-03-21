@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useAddPostMutation } from '../generated/graphql';
 import Button from '../components-ui/Button';
-import InputField from '../components-ui/InputField';
 import Card from '../components-ui/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 

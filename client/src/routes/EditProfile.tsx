@@ -6,7 +6,7 @@ import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 import { Field, Form, Formik } from 'formik';
 
 const EditProfile: React.FC = () => {
-  const { data, loading } = useMeQuery();
+  const { data } = useMeQuery();
   const [editProfile] = useEditProfileMutation();
 
   if (!data) return null;

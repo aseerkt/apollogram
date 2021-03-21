@@ -22,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       {...props}
+      disabled={props.disabled || isLoading}
       className={cn(
         'px-3 py-1 shadow rounded-md font-bold flex justify-center items-center focus:outline-none',
         {

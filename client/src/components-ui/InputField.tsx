@@ -24,7 +24,7 @@ const InputField: React.FC<InterfaceProps> = ({
   ref,
   ...props
 }) => {
-  const [field, { touched, error }] = useField(props);
+  const [field, { error }] = useField(props);
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (focusOnRender) {

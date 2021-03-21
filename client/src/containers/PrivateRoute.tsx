@@ -5,9 +5,8 @@ import {
   RouteComponentProps,
   RouteProps,
 } from 'react-router-dom';
-import { apolloClient } from '../utils/apolloClient';
 import Navbar from '../components/Navbar';
-import { MeDocument, useMeQuery } from '../generated/graphql';
+import { useMeQuery } from '../generated/graphql';
 import Spinner from '../components-ui/Spinner';
 
 type PrivateRouteProps = RouteProps & {
