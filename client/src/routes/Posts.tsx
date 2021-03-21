@@ -7,22 +7,61 @@ import Alert from '../components-ui/Alert';
 import ProfileRight from '../components/ProfileRight';
 
 const Posts: React.FC = () => {
-  const { data, loading, error } = useGetPostsQuery();
+  const [observedPost, setObservedPost] = React.useState('');
+  const { data, loading, error, fetchMore, variables } = useGetPostsQuery({
+    variables: { limit: 4 },
+  });
+  React.useEffect(() => {
+    console.log('useEffect');
+    if (data) {
+      const posts = data.getPosts.posts;
+      if (!posts || posts.length === 0) return;
+
+      const id = posts[posts.length - 1].id;
+
+      if (id !== observedPost) {
+        console.log('changed observing posts', posts.length);
+        setObservedPost(id);
+        observeElement(document.getElementById(id)!);
+      }
+    }
+  }, [data?.getPosts.posts]);
+
+  const observeElement = (element: HTMLElement) => {
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting === true) {
+          console.log('Reached bottom of post');
+          fetchMore({
+            variables: {
+              limit: variables?.limit,
+              offset: data?.getPosts.posts.length || 0,
+            },
+          });
+          observer.unobserve(element);
+        }
+      },
+      { threshold: 0.5 }
+    );
+    observer.observe(element);
+  };
   if (loading) {
     return <Spinner />;
   } else if (error) {
     return <Alert>{error.message}</Alert>;
   }
+
   return (
     <Container>
       <div className='flex flex-wrap justify-between w-full pt-15'>
         <div className='md:w-8/12 sm:w-full'>
           {data &&
-            data.getPosts.map((post) => (
+            data.getPosts.posts.map((post) => (
               <PostCard key={post.id} post={post as Post} />
             ))}
         </div>
-        <div className='relative flex-1 md:ml-4'>
+        <div className='relative flex-1 hidden md:block md:ml-4'>
           <ProfileRight />
         </div>
       </div>

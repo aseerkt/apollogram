@@ -79,6 +79,18 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
+export type PostResponse = {
+  __typename?: 'PostResponse';
+  post?: Maybe<Post>;
+  error?: Maybe<Scalars['String']>;
+};
+
+export type PaginatedPost = {
+  __typename?: 'PaginatedPost';
+  posts: Array<Post>;
+  hasMore: Scalars['Boolean'];
+};
+
 export type CreatePostResponse = {
   __typename?: 'CreatePostResponse';
   ok: Scalars['Boolean'];
@@ -108,7 +120,7 @@ export type LoginResponse = {
 export type Query = {
   __typename?: 'Query';
   getComments: Array<Comment>;
-  getPosts: Array<Post>;
+  getPosts: PaginatedPost;
   getSinglePost?: Maybe<Post>;
   me?: Maybe<User>;
   getUser?: Maybe<User>;
@@ -117,6 +129,12 @@ export type Query = {
 
 export type QueryGetCommentsArgs = {
   postId: Scalars['String'];
+};
+
+
+export type QueryGetPostsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -376,15 +394,22 @@ export type GetCommentsQuery = (
   )> }
 );
 
-export type GetPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetPostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
 
 
 export type GetPostsQuery = (
   { __typename?: 'Query' }
-  & { getPosts: Array<(
-    { __typename?: 'Post' }
-    & RegualarPostFragment
-  )> }
+  & { getPosts: (
+    { __typename?: 'PaginatedPost' }
+    & Pick<PaginatedPost, 'hasMore'>
+    & { posts: Array<(
+      { __typename?: 'Post' }
+      & RegualarPostFragment
+    )> }
+  ) }
 );
 
 export type GetSinglePostQueryVariables = Exact<{
@@ -831,9 +856,12 @@ export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
 export const GetPostsDocument = gql`
-    query GetPosts {
-  getPosts {
-    ...RegualarPost
+    query GetPosts($limit: Int!, $offset: Int) {
+  getPosts(limit: $limit, offset: $offset) {
+    posts {
+      ...RegualarPost
+    }
+    hasMore
   }
 }
     ${RegualarPostFragmentDoc}`;
@@ -850,10 +878,12 @@ export const GetPostsDocument = gql`
  * @example
  * const { data, loading, error } = useGetPostsQuery({
  *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
  *   },
  * });
  */
-export function useGetPostsQuery(baseOptions?: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+export function useGetPostsQuery(baseOptions: Apollo.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
         return Apollo.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
       }
 export function useGetPostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {

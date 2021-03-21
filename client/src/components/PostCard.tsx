@@ -20,7 +20,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({
-  post: { user, imgURL, caption, likeCount, userLike, comments, id, createdAt },
+  post: { id, user, imgURL, caption, likeCount, userLike, comments, createdAt },
 }) => {
   // const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
@@ -40,7 +40,7 @@ const PostCard: React.FC<PostCardProps> = ({
   const addCommentRef = useRef<HTMLInputElement>(null);
 
   return (
-    <Card className='mb-16'>
+    <Card id={id} className='w-full mb-16'>
       {/* header */}
       <div className='flex items-center justify-between px-3 border-b border-gray-300'>
         <div className='flex items-center'>

@@ -1,5 +1,8 @@
-query GetPosts {
-  getPosts {
-    ...RegualarPost
+query GetPosts($limit: Int!, $offset: Int) {
+  getPosts(limit: $limit, offset: $offset) {
+    posts {
+      ...RegualarPost
+    }
+    hasMore
   }
 }
