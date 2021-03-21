@@ -25,6 +25,7 @@ const Posts: React.FC = () => {
         observeElement(document.getElementById(id)!);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.getPosts.posts]);
 
   const observeElement = (element: HTMLElement) => {
