@@ -2,6 +2,14 @@
 
 > Instagram Clone | Social Media Application
 
+## Stacks Used
+
+| Frontend      | Backend             |
+| ------------- | ------------------- |
+| React         | GraphQL + Express   |
+| TailwindCSS   | TypeORM, PostgreSQL |
+| Apollo Client | Apollo Server       |
+
 ## Get Started
 
 ### Prerequisites
@@ -21,16 +29,35 @@
 - Go to server folder - `cd server`
 - Install dependencies - `yarn`
 - Make sure PostgreSQL and Redis/MongoDB databases are ready for connection.
-- Provide your database connection credentials in `ormconfig.js`
+- Create `.env` file with the command `cp .env.exmaple .env` and fill in necessary fields
+- Provide your PostgreSQL connection config in `ormconfig.js`
 - Start the development server - `yarn dev`
 - Go to url [http://localhost:5000/graphql](http://localhost:5000/graphql) for GraphQL playground.
+- Seed the db with mock data if needed. `yarn seed`
 
 ##### Setting up frontend
 
 - Go to client folder - `cd client`
 - Install dependencies - `yarn`
+- `cp .env.example .env` and fill the fields in the file `.env`
 - Start the react development server - `yarn start`
 - Go to url [http://localhost:3000](http://localhost:3000)
+
+## Roadmap
+
+- [x] Session Authentication
+- [x] Upload post with images and caption
+- [x] Like/Unlike post
+- [x] Comment on post
+- [x] Edit Profile Photo with Image Crop \*\*
+- [x] Edit Profile Credentials
+- [ ] Edit / Delete post
+- [ ] Smiley support for caption and comments
+- [ ] Hashtag support
+- [ ] Reduce image quality/size
+- [ ] Follow Suggestions
+- [ ] Mention poeples in caption and comments.
+- [ ] Notifications
 
 ## Authors
 
