@@ -1,5 +1,5 @@
 import path from 'path';
-import { createWriteStream, existsSync, mkdirSync } from 'fs';
+import fs, { createWriteStream, existsSync } from 'fs';
 import { FileUpload } from 'graphql-upload';
 
 export async function uploadFile(file: FileUpload, pathPrefix: string) {
@@ -8,7 +8,7 @@ export async function uploadFile(file: FileUpload, pathPrefix: string) {
   const pathName = `public/images/${pathPrefix}/${uploadTime}_${filename}`;
   const dirname = path.dirname(pathName);
   if (!existsSync(dirname)) {
-    mkdirSync(dirname, { recursive: true });
+    await fs.promises.mkdir(dirname, { recursive: true });
   }
   const imgURL = pathName.replace('public/', '');
   const writeStream = createWriteStream(pathName);

@@ -12,11 +12,11 @@ type ButtonProps = React.DetailedHTMLProps<
 };
 
 const Button: React.FC<ButtonProps> = ({
-  color = 'light',
   children,
-  fullWidth = false,
   className,
-  isLoading,
+  color = 'light',
+  fullWidth = false,
+  isLoading = false,
   ...props
 }) => {
   return (

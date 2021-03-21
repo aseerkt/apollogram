@@ -21,6 +21,7 @@ import { isAuth } from '../middlewares/isAuth';
 import { validate } from 'class-validator';
 import { formatErrors } from '../utils/formatErrors';
 import { getManager } from 'typeorm';
+import { unlinkSync } from 'fs';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -82,6 +83,9 @@ export class ProfileResolver {
     }
     const profile = await Profile.findOne({ where: { username } });
     if (profile && file) {
+      if (profile.imgURL.startsWith('images/')) {
+        unlinkSync(`public/${profile.imgURL}`);
+      }
       const { isUploaded, imgURL } = await uploadFile(file, 'profile');
       console.log(isUploaded);
       if (isUploaded) {
