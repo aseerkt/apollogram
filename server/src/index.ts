@@ -17,6 +17,8 @@ import { COOKIE_NAME, __prod__ } from './constants';
 import { createUserLoader } from './utils/createUserLoader';
 import { createProfileLoader } from './utils/createProfileLoader';
 
+pg.defaults.ssl = { rejectUnauthorized: false };
+
 const main = async () => {
   await createConnection();
 
@@ -27,6 +29,9 @@ const main = async () => {
       origin: process.env.FRONTEND_URL,
       credentials: true,
     })
+  );
+  app.get('/', (_, res) =>
+    res.send('Welcome to Backend Server of Apollo Instagram Clone')
   );
   app.use('/', express.static('public'));
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
@@ -39,7 +44,12 @@ const main = async () => {
       name: COOKIE_NAME,
       store: __prod__
         ? new (connectPg(session))({
-            pool: new pg.Pool({ connectionString: process.env.DATABASE_URL }),
+            conObject: {
+              connectionString: process.env.DATABASE_URL,
+              ssl: {
+                rejectUnauthorized: false,
+              },
+            },
           })
         : new (connectRedis(session))({
             client: createClient(),

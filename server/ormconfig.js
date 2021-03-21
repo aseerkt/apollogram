@@ -16,6 +16,12 @@ const urlConfig =
 module.exports = {
   type: 'postgres',
   ...urlConfig,
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? {
+          rejectUnauthorized: false,
+        }
+      : false,
   synchronize: false,
   logging: false,
   entities: ['dist/entities/**/*.js'],

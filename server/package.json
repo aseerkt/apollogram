@@ -12,7 +12,8 @@
       "dev": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server\" ",
       "dev2": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server2\" ",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
-      "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed"
+      "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
+      "heroku-postbuild": "yarn seed"
    },
    "dependencies": {
       "apollo-server-express": "^2.21.1",

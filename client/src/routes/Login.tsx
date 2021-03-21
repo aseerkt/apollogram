@@ -15,13 +15,13 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 
   const [errors, setErrors] = useState({ username: null, password: null });
 
-  const [login] = useLoginMutation({
+  const [login, { loading }] = useLoginMutation({
     variables: { username, password },
     update: (cache, result) => {
       const user = result.data?.login.user;
       if (user) {
         cache.writeQuery({ query: MeDocument, data: { me: user } });
-        history.push('/posts');
+        history.push('/');
       }
     },
   });
@@ -75,7 +75,7 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
             color='dark'
             fullWidth
             type='submit'
-            disabled={!username || !password}
+            disabled={!username || !password || loading}
           >
             Login
           </Button>

@@ -25,7 +25,7 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const [register] = useRegisterMutation({
+  const [register, { loading }] = useRegisterMutation({
     variables: { email, username, password },
   });
 
@@ -106,7 +106,7 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
             color='dark'
             fullWidth
             type='submit'
-            disabled={!username || !password || !email || !password2}
+            disabled={!username || !password || !email || !password2 || loading}
           >
             Sign Up
           </Button>
