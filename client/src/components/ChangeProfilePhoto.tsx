@@ -32,7 +32,10 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   const [fileName, setFileName] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  const [changeProfilePhoto] = useChangeProfilePhotoMutation();
+  const [
+    changeProfilePhoto,
+    { loading: UpdatingPhoto },
+  ] = useChangeProfilePhotoMutation();
 
   const onCropComplete = (
     _croppedAreaPercentage: any,
@@ -98,6 +101,8 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
               onCropComplete={onCropComplete}
             />
             <Button
+              disabled={submitting}
+              isLoading={submitting}
               className='absolute z-50 mt-2 transform -translate-x-1/2 -bottom-5 left-1/2'
               color='dark'
               onClick={setCroppedImage}

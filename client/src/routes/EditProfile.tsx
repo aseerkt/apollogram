@@ -1,75 +1,23 @@
-import { useEffect, useState } from 'react';
-import { apolloClient } from '../utils/apolloClient';
 import Button from '../components-ui/Button';
 import Container from '../components-ui/Container';
 import InputField from '../components-ui/InputField';
-import { MeDocument, useEditProfileMutation, User } from '../generated/graphql';
-// import { useRouteMatch } from 'react-router-dom';
+import { useEditProfileMutation, useMeQuery } from '../generated/graphql';
 import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
+import { Field, Form, Formik } from 'formik';
 
 const EditProfile: React.FC = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    website: '',
-    bio: '',
-    gender: '',
-    username: '',
-    email: '',
-  });
+  const { data, loading } = useMeQuery();
+  const [editProfile] = useEditProfileMutation();
 
-  // const match = useRouteMatch();
+  if (!data) return null;
 
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const {
+    username,
+    email,
+    profile: { name, bio, gender, website },
+  } = data.me!;
 
-  const user: User = me;
-
-  useEffect(() => {
-    setFormData({
-      ...formData,
-      name: user.profile.name,
-      website: user.profile.website,
-      bio: user.profile.bio,
-      gender: user.profile.gender,
-      username: user.username,
-      email: user.email,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [me]);
-
-  const { name, website, bio, gender, username, email } = formData;
-
-  const [formErrors, setFormErrors] = useState({
-    website: '',
-    username: '',
-    email: '',
-  });
-
-  const [editProfile] = useEditProfileMutation({
-    variables: { name, website, bio, gender, email, username },
-  });
-
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setFormErrors({} as any);
-    try {
-      const res = await editProfile();
-      if (res.data) {
-        const { errors } = res.data.editProfile;
-        if (errors) {
-          errors.forEach(({ path, message }) => {
-            setFormErrors((prev) => ({ ...prev, [path]: message }));
-          });
-        }
-      }
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  if (!username) return null;
 
   return (
     <Container>
@@ -88,76 +36,77 @@ const EditProfile: React.FC = () => {
           <div className='py-4'>
             <ChangeProfilePhoto username={username} />
           </div>
-          <form className='flex flex-col w-full' onSubmit={onSubmit}>
-            <InputField
-              inline
-              name='name'
-              label='Name'
-              error=''
-              helperText="Help people discover your account by using the name you're known by: either your full name, nickname, or business name."
-              value={name}
-              onChange={onChange}
-            />
-            <InputField
-              inline
-              name='username'
-              label='Username'
-              error={formErrors.username}
-              value={username}
-              onChange={onChange}
-            />
-            <InputField
-              inline
-              type='url'
-              name='website'
-              label='Website'
-              error={formErrors.website}
-              value={website}
-              onChange={onChange}
-            />
-            <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
-              <label htmlFor='bio' className='block font-bold md:text-right'>
-                Bio
-              </label>
-              <textarea
-                name='bio'
-                className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
-                value={bio}
-                onChange={(e) => {
-                  setFormData({ ...formData, bio: e.target.value });
-                }}
-              ></textarea>
-            </div>
+          <Formik
+            initialValues={{
+              name,
+              website,
+              bio,
+              gender,
+              username,
+              email,
+            }}
+            onSubmit={async (values, action) => {
+              try {
+                const res = await editProfile({
+                  variables: values,
+                });
+                if (res.data) {
+                  const { errors } = res.data.editProfile;
+                  if (errors) {
+                    errors.forEach(({ path, message }) => {
+                      action.setFieldError(path, message);
+                    });
+                  }
+                }
+                console.log(res);
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
+            {({ isSubmitting, values: { username, email } }) => (
+              <Form className='flex flex-col w-full mb-5'>
+                <InputField
+                  inline
+                  name='name'
+                  label='Name'
+                  error=''
+                  helperText="Help people discover your account by using the name you're known by: either your full name, nickname, or business name."
+                />
+                <InputField inline name='username' label='Username' />
+                <InputField inline type='url' name='website' label='Website' />
+                <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
+                  <label
+                    htmlFor='bio'
+                    className='block font-bold md:text-right'
+                  >
+                    Bio
+                  </label>
+                  <Field
+                    as='textarea'
+                    name='bio'
+                    className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
+                  ></Field>
+                </div>
 
-            <InputField
-              inline
-              name='email'
-              label='Email'
-              error={formErrors.email}
-              value={email}
-              onChange={onChange}
-            />
+                <InputField inline name='email' label='Email' />
 
-            <InputField
-              inline
-              name='gender'
-              label='Gender'
-              error=''
-              value={gender}
-              onChange={onChange}
-            />
-            <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
-              <div></div>
-              <Button
-                className='inline-block w-20 text-left'
-                disabled={!username}
-                color='dark'
-                type='submit'
-              >
-                Submit
-              </Button>
-            </div>
-          </form>
+                <InputField inline name='gender' label='Gender' error='' />
+                <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
+                  <div></div>
+                  <Button
+                    isLoading={isSubmitting}
+                    className='inline-block w-20 text-left'
+                    disabled={!username || !email}
+                    color='dark'
+                    type='submit'
+                  >
+                    Submit
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </Container>

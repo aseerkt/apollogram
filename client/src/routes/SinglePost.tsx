@@ -35,11 +35,16 @@ const scrollBarCss = `
 `;
 
 const SinglePost = () => {
+  const [liked, setLiked] = React.useState(false);
   const { postId }: any = useParams();
   const { data, loading } = useGetSinglePostQuery({ variables: { postId } });
 
   // const { me } = apolloClient.readQuery({ query: MeDocument });
   const addCommentRef = useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    setLiked(data?.getSinglePost?.userLike || false);
+  }, [setLiked, data]);
 
   if (loading) return <div>Loading...</div>;
   if (data && data.getSinglePost) {
@@ -53,12 +58,6 @@ const SinglePost = () => {
       createdAt,
       imgURL,
     } = data.getSinglePost;
-
-    const [liked, setLiked] = React.useState(false);
-
-    React.useEffect(() => {
-      setLiked(userLike);
-    }, [setLiked, userLike]);
 
     return (
       <Container>

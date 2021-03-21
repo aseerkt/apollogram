@@ -30,7 +30,8 @@ const Button: React.FC<ButtonProps> = ({
           'bg-white border border-grey-100 text-blue-700 hover:bg-gray-100':
             color === 'light',
           'bg-blue-500 text-white hover:bg-blue-700': color === 'dark',
-        }
+        },
+        className
       )}
     >
       {isLoading && <ButtonLoader />}
