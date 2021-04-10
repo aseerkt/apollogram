@@ -21,6 +21,7 @@ import { Post } from '../entities/Post';
 import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { FieldError, MyContext } from '../types';
+import { PaginatedPost } from '../types/postTypes';
 import { formatErrors } from '../utils/formatErrors';
 import { uploadFile } from '../utils/uploadFile';
 
@@ -62,13 +63,22 @@ export class PostResolver {
     });
   }
 
-  @Query(() => [Post])
+  @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
-  getPosts() {
+  async getPosts(
+    @Arg('limit', () => Int) limit: number,
+    @Arg('offset', () => Int, { nullable: true }) offset?: number
+  ): Promise<PaginatedPost> {
     // TODO: Pagination
-    return Post.find({
+    const posts = await Post.find({
       order: { createdAt: 'DESC' },
+      skip: offset ? offset : 0,
+      take: limit + 1,
     });
+    return {
+      posts: posts.slice(0, limit),
+      hasMore: posts.length === limit + 1,
+    };
   }
 
   // @Query(() => [Post])

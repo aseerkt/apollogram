@@ -2,6 +2,8 @@
 
 > Instagram Clone | Social Media Application
 
+![Instagram Clone Screenshot](/instagram_clone.png)
+
 ## Stacks Used
 
 | Frontend      | Backend             |
@@ -51,6 +53,7 @@
 - [x] Comment on post
 - [x] Edit Profile Photo with Image Crop \*\*
 - [x] Edit Profile Credentials
+- [x] Post pagination
 - [ ] Edit / Delete post
 - [ ] Smiley support for caption and comments
 - [ ] Hashtag support

@@ -1,11 +1,11 @@
-import React from 'react';
+import { useApolloClient } from '@apollo/client';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
 // import Button from '../components-ui/Button';
 import { MeDocument } from '../generated/graphql';
 
 const ProfileRight: React.FC = () => {
+  const apolloClient = useApolloClient();
   const { me } = apolloClient.readQuery({ query: MeDocument });
 
   return (

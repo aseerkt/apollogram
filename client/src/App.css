@@ -15,6 +15,8 @@ body {
   background-color: #fafafa;
 }
 
-button {
+button,
+a,
+input {
   outline: none !important;
 }

@@ -4,7 +4,6 @@ import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { MdMoreHoriz } from 'react-icons/md';
 import { RiChat1Line } from 'react-icons/ri';
 import { Link, useParams } from 'react-router-dom';
-// import { apolloClient } from '..';
 import Avatar from '../components-ui/Avatar';
 import Card from '../components-ui/Card';
 import Container from '../components-ui/Container';

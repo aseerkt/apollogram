@@ -43,7 +43,7 @@ const main = async () => {
 
   // app.use(passport.initialize());
   // app.use(passport.session());
-  // app.set('trust proxy', 1);
+  app.set('trust proxy', 1);
   app.use(
     session({
       name: COOKIE_NAME,

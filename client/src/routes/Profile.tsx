@@ -1,5 +1,4 @@
 import { Link, useParams } from 'react-router-dom';
-import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import Spinner from '../components-ui/Spinner';
@@ -8,8 +7,10 @@ import { AiOutlineTable, AiFillHeart } from 'react-icons/ai';
 import { RiChat3Fill } from 'react-icons/ri';
 import Button from '../components-ui/Button';
 import Alert from '../components-ui/Alert';
+import { useApolloClient } from '@apollo/client';
 
 const Profile: React.FC = () => {
+  const apolloClient = useApolloClient();
   const { me } = apolloClient.readQuery({ query: MeDocument });
 
   const params: any = useParams();

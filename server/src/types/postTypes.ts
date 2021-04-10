@@ -8,3 +8,12 @@ export class PostResponse {
   @Field({ nullable: true })
   error?: string;
 }
+
+@ObjectType()
+export class PaginatedPost {
+  @Field(() => [Post])
+  posts: Post[];
+
+  @Field()
+  hasMore: boolean;
+}

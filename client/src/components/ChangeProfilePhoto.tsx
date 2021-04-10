@@ -9,8 +9,8 @@ import {
 import Button from '../components-ui/Button';
 import { getCroppedImg } from '../utils/cropImage';
 import { dataURLtoFile } from '../utils/dataURLtoFile';
-import { apolloClient } from '../utils/apolloClient';
 import Spinner from '../components-ui/Spinner';
+import { useApolloClient } from '@apollo/client';
 
 interface ChangeProfilePhotoProps {
   username: string;
@@ -19,6 +19,7 @@ interface ChangeProfilePhotoProps {
 const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   username,
 }) => {
+  const apolloClient = useApolloClient();
   const { me } = apolloClient.readQuery({ query: MeDocument });
 
   const triggerFileSelectPopup = () => inputRef.current?.click();

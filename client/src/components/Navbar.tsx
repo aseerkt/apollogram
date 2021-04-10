@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '../utils/apolloClient';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import DropDown from './DropDown';
@@ -9,8 +8,10 @@ import { MdHome } from 'react-icons/md';
 import { FiPlusSquare } from 'react-icons/fi';
 import Modal from '../components-ui/Modal';
 import AddPost from './AddPost';
+import { useApolloClient } from '@apollo/client';
 
 const Navbar: React.FC = () => {
+  const apolloClient = useApolloClient();
   const [open, setOpen] = useState(false);
 
   const { me } = apolloClient.readQuery({ query: MeDocument });
