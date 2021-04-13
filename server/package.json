@@ -7,13 +7,11 @@
       "start": "node dist/index.js",
       "watch": "npx tsc -w",
       "server": "nodemon dist/index.js",
-      "server2": "TS_NODE=true nodemon --exec ts-node src/index.ts",
       "redis": "redis-server",
       "dev": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server\" ",
-      "dev2": "concurrently \"yarn watch\" \"yarn redis\" \"yarn server2\" ",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
       "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
-      "heroku-postbuild": "cd ../../client && yarn build"
+      "heroku-postbuild": "npx tsc && cd ../../client && yarn build"
    },
    "dependencies": {
       "apollo-server-express": "^2.21.1",
