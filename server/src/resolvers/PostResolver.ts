@@ -29,8 +29,10 @@ import { uploadFile } from '../utils/uploadFile';
 class CreatePostResponse {
   @Field()
   ok: boolean;
+
   @Field(() => Post, { nullable: true })
   post?: Post;
+
   @Field(() => FieldError, { nullable: true })
   error?: FieldError;
 }
