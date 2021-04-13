@@ -79,8 +79,12 @@ const main = async () => {
   const PORT = process.env.PORT || 5000;
 
   if (__prod__) {
-    app.get('*', (req, res) => {
-      res.sendFile(path);
+    app.use(express.static('../../client/build'));
+
+    app.get('*', (_req, res) => {
+      res.sendFile(
+        path.resolve(__dirname, '..', '..', 'client', 'build', 'index.html')
+      );
     });
   }
 
