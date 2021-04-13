@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import 'dotenv/config';
 import 'colors';
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
@@ -76,6 +77,12 @@ const main = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
 
   const PORT = process.env.PORT || 5000;
+
+  if (__prod__) {
+    app.get('*', (req, res) => {
+      res.sendFile(path);
+    });
+  }
 
   app.listen(PORT, () => {
     console.log(

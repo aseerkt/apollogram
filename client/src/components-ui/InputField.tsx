@@ -55,7 +55,7 @@ const InputField: React.FC<InterfaceProps> = ({
           })}
           {...props}
           ref={inputRef}
-          autoComplete={props.type === 'password' ? 'new-password' : ''}
+          autoComplete=''
         />
         <small className='block leading-4 text-gray-500'>{helperText}</small>
         <small className='my-1 text-red-700'>{error}</small>
