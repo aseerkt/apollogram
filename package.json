@@ -1,0 +1,17 @@
+{
+  "name": "apollo-graphql-instagram",
+  "version": "1.0.0",
+  "description": "Apollo Instagram Clone Root",
+  "main": "server/dist/index.js",
+  "repository": "https://github.com/aseerkt/apollo-instagram-clone.git",
+  "author": "Aseer KT <aseermiqdad@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server/dist/index.js",
+    "server-install": "cd server && yarn",
+    "server-tsc": "cd server && npx tsc",
+    "client-install": "cd client && yarn",
+    "client-build": "cd client && yarn build",
+    "heroku-postbuild": "yarn server-install && yarn server-tsc && yarn client-install && yarn client-build"
+  }
+}
