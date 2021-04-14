@@ -11,8 +11,8 @@ const Posts: React.FC = () => {
   const { data, loading, error, fetchMore, variables } = useGetPostsQuery({
     variables: { limit: 4 },
   });
+
   React.useEffect(() => {
-    console.log('useEffect');
     if (data) {
       const posts = data.getPosts.posts;
       if (!posts || posts.length === 0) return;
@@ -20,7 +20,6 @@ const Posts: React.FC = () => {
       const id = posts[posts.length - 1].id;
 
       if (id !== observedPost) {
-        console.log('changed observing posts', posts.length);
         setObservedPost(id);
         observeElement(document.getElementById(id)!);
       }
@@ -33,7 +32,7 @@ const Posts: React.FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting === true) {
-          console.log('Reached bottom of post');
+          // console.log('Reached bottom of post');
           fetchMore({
             variables: {
               limit: variables?.limit,
@@ -47,6 +46,7 @@ const Posts: React.FC = () => {
     );
     observer.observe(element);
   };
+
   if (loading) {
     return <Spinner />;
   } else if (error) {

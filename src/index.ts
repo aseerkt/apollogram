@@ -3,7 +3,7 @@ import 'colors';
 import 'dotenv/config';
 import path from 'path';
 import express from 'express';
-// import cors from 'cors';
+import cors from 'cors';
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
@@ -18,20 +18,19 @@ const main = async () => {
 
   const app = express();
 
-  // app.use(
-  //   cors({
-  //     origin: process.env.FRONTEND_URL,
-  //     credentials: true,
-  //   })
-  // );
+  if (!__prod__) {
+    app.use(
+      cors({
+        origin: process.env.FRONTEND_URL,
+        credentials: true,
+      })
+    );
+  }
 
-  // app.get('/', (_, res) =>
-  //   res.send('Welcome to Backend Server of Apollo Instagram Clone')
-  // );
   app.use(cookieParser());
   app.use('/', express.static('public'));
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
-  // app.set('trust proxy', 1);
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [`${__dirname}/resolvers/**/*.{ts,js}`],

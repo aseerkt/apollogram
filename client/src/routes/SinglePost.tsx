@@ -11,28 +11,6 @@ import AddComment from '../components/AddComment';
 import LikeButton from '../components/LikeButton';
 import { useGetSinglePostQuery } from '../generated/graphql';
 
-const scrollBarCss = `
-::-webkit-scrollbar {
-  width: 5px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 8px;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-`;
-
 const SinglePost = () => {
   const [liked, setLiked] = React.useState(false);
   const { postId }: any = useParams();
@@ -88,7 +66,7 @@ const SinglePost = () => {
           <div className='static bottom-0 right-0 flex flex-col justify-between md:border-l md:border-gray-300 md:absolute top-20 md:w-80'>
             <div className='flex flex-col justify-between h-full pt-2'>
               {/* Post Caption */}
-              <div className='px-3 overflow-y-scroll min-h-48'>
+              <div className='px-3 overflow-y-auto min-h-48'>
                 <div className='flex mb-3'>
                   <Link
                     to={`/u/${user.username}`}
@@ -116,7 +94,7 @@ const SinglePost = () => {
                 </div>
 
                 {/* Comments */}
-                <div className='my-1'>
+                <div className='my-1 comments-container'>
                   {comments.map((c) => (
                     <div key={c.id} className='flex'>
                       <Link
@@ -184,7 +162,6 @@ const SinglePost = () => {
             </div>
           </div>
         </Card>
-        <style>{scrollBarCss}</style>
       </Container>
     );
   }

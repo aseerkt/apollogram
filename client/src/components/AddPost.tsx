@@ -18,8 +18,8 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
 
   const onDrop = useCallback(
     (files: File[]) => {
-      console.log('files dropped');
-      console.log(files);
+      // console.log('files dropped');
+      // console.log(files);
       setFile(files[0]);
     },
     [setFile]
@@ -45,7 +45,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     try {
       // console.log(file);
       const res = await addPost({ variables: { file, caption } });
-      console.log(res);
+      // console.log(res);
       if (res.data?.addPost.ok) {
         setFile(null as any);
         setCaption('');
