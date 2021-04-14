@@ -7,7 +7,7 @@
       "start": "node dist/index.js",
       "watch": "npx tsc -w",
       "server": "nodemon --ignore client/ dist/index.js",
-      "dev": "concurrently \"yarn watch\" \"yarn server\" -n tsc, server",
+      "dev": "concurrently \"yarn watch\" \"yarn server\" -n tsc,server",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
       "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
       "heroku-postbuild": "npx tsc && cd client && yarn && yarn build"
@@ -32,19 +32,19 @@
       "sharp": "^0.27.2",
       "type-graphql": "^1.1.1",
       "typeorm": "0.2.31",
-      "typeorm-seeding": "^1.6.1"
-   },
-   "devDependencies": {
+      "typeorm-seeding": "^1.6.1",
+      "npm-force-resolutions": "^0.0.10",
+      "ts-node": "9.1.1",
+      "typescript": "4.2.3",
       "@types/cookie-parser": "^1.4.2",
       "@types/express": "^4.17.11",
       "@types/graphql-upload": "^8.0.4",
       "@types/jsonwebtoken": "^8.5.1",
-      "@types/node": "^14.14.35",
+      "@types/node": "^14.14.35"
+   },
+   "devDependencies": {
       "concurrently": "^6.0.0",
-      "nodemon": "^2.0.7",
-      "npm-force-resolutions": "^0.0.10",
-      "ts-node": "9.1.1",
-      "typescript": "4.2.3"
+      "nodemon": "^2.0.7"
    },
    "license": "MIT",
    "resolutions": {
