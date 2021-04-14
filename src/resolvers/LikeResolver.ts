@@ -9,14 +9,14 @@ export class LikeResolver {
   @UseMiddleware(isAuth)
   async toggleLike(
     @Arg('postId') postId: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { res }: MyContext
   ): Promise<boolean> {
     try {
       let like = await Like.findOne({
-        where: { postId, username: req.session.username },
+        where: { postId, username: res.locals.username },
       });
       if (!like) {
-        await Like.create({ postId, username: req.session.username }).save();
+        await Like.create({ postId, username: res.locals.username }).save();
         return true;
       } else {
         await like.remove();

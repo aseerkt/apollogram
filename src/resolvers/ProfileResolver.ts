@@ -55,16 +55,16 @@ export class EditProfileResponse {
 @Resolver(Profile)
 export class ProfileResolver {
   @FieldResolver(() => String)
-  gender(@Root() profile: Profile, @Ctx() { req }: MyContext) {
-    if (req.session.username == profile.username) {
+  gender(@Root() profile: Profile, @Ctx() { res }: MyContext) {
+    if (res.locals.username == profile.username) {
       return profile.gender;
     }
     return '';
   }
 
   @FieldResolver(() => String)
-  name(@Root() profile: Profile, @Ctx() { req }: MyContext) {
-    if (req.session.username == profile.username) {
+  name(@Root() profile: Profile, @Ctx() { res }: MyContext) {
+    if (res.locals.username == profile.username) {
       return profile.name;
     }
     return '';
@@ -75,9 +75,9 @@ export class ProfileResolver {
   @Mutation(() => Boolean)
   async changeProfilePhoto(
     @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload,
-    @Ctx() { req }: MyContext
+    @Ctx() { res }: MyContext
   ) {
-    const { username } = req.session;
+    const { username } = res.locals;
     if (!username) {
       throw new AuthenticationError('Not Authorized');
     }
@@ -101,9 +101,9 @@ export class ProfileResolver {
 
   @Mutation(() => String, { nullable: true })
   @UseMiddleware(isAuth)
-  async removeProfilePhoto(@Ctx() { req }: MyContext) {
+  async removeProfilePhoto(@Ctx() { res }: MyContext) {
     const profile = await Profile.findOne({
-      where: { username: req.session.username },
+      where: { username: res.locals.username },
     });
     if (profile) {
       profile.imgURL = '/user.jpg';
@@ -119,10 +119,10 @@ export class ProfileResolver {
   @UseMiddleware(isAuth)
   async editProfile(
     @Args() { name, gender, website, bio, email, username }: EditProfileArgs,
-    @Ctx() { req }: MyContext
+    @Ctx() { res }: MyContext
   ): Promise<EditProfileResponse> {
     const user = await User.findOne({
-      where: { username: req.session.username },
+      where: { username: res.locals.username },
     });
     const profile = await Profile.findOne({ user });
 

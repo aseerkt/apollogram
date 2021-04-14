@@ -13,8 +13,8 @@ export class FieldError {
 }
 
 export interface MyContext {
-  req: Request & { session: { username: string } };
-  res: Response;
+  req: Request;
+  res: Response & { locals: { username: string } };
   userLoader: ReturnType<typeof createUserLoader>;
   profileLoader: ReturnType<typeof createProfileLoader>;
 }

@@ -24,6 +24,7 @@ export class CommentResolver {
   }
 
   @Query(() => [Comment])
+  @UseMiddleware(isAuth)
   getComments(@Arg('postId') postId: string) {
     return Comment.find({ where: { postId } });
   }
@@ -33,13 +34,13 @@ export class CommentResolver {
   async addComment(
     @Arg('postId') postId: string,
     @Arg('text') text: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { res }: MyContext
   ) {
     try {
       const comment = await Comment.create({
         postId,
         text,
-        username: req.session.username,
+        username: res.locals.username,
       }).save();
       return comment;
     } catch (err) {
@@ -52,11 +53,11 @@ export class CommentResolver {
   @UseMiddleware(isAuth)
   async deleteComment(
     @Arg('commentId') commentId: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { res }: MyContext
   ) {
     try {
       await Comment.delete({
-        username: req.session.username,
+        username: res.locals.username,
         id: commentId,
       });
       return true;

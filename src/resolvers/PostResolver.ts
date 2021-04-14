@@ -50,9 +50,10 @@ export class PostResolver {
   }
 
   @FieldResolver(() => Boolean)
-  async userLike(@Root() post: Post, @Ctx() { req }: MyContext) {
+  @UseMiddleware(isAuth)
+  async userLike(@Root() post: Post, @Ctx() { res }: MyContext) {
     const like = await Like.findOne({
-      where: { postId: post.id, username: req.session.username },
+      where: { postId: post.id, username: res.locals.username },
     });
     return like ? true : false;
   }
@@ -85,9 +86,9 @@ export class PostResolver {
 
   // @Query(() => [Post])
   // @UseMiddleware(isAuth)
-  // async getFeedPosts(@Ctx() { req }: MyContext) {
+  // async getFeedPosts(@Ctx() { res }: MyContext) {
   //   const followings = await Follow.find({
-  //     where: { username: req.session.username },
+  //     where: { username: res.locals.username },
   //     select: ['following'],
   //     relations: ['following.posts'],
   //   });
@@ -99,6 +100,7 @@ export class PostResolver {
   // }
 
   @Query(() => Post, { nullable: true })
+  @UseMiddleware(isAuth)
   getSinglePost(@Arg('postId') postId: string) {
     return Post.findOne({
       where: { id: postId },
@@ -108,11 +110,11 @@ export class PostResolver {
   @Mutation(() => CreatePostResponse)
   async addPost(
     @Arg('caption') caption: string,
-    @Ctx() { req }: MyContext,
+    @Ctx() { res }: MyContext,
     @Arg('file', () => GraphQLUpload)
     file: FileUpload
   ): Promise<CreatePostResponse> {
-    const user = await User.findOne({ username: req.session.username });
+    const user = await User.findOne({ username: res.locals.username });
     if (!user) {
       throw new AuthenticationError('Unauthorized');
     }

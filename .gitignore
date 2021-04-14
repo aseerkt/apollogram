@@ -1,3 +1,12 @@
-node_modules
+.idea/
+.vscode/
+node_modules/
 build/
+tmp/
+temp/
+.env
+.env.production
+yarn-error.log
+dump.rdb
 dist/
+public/images/
