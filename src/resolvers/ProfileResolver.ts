@@ -13,7 +13,6 @@ import {
 } from 'type-graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { FieldError, MyContext } from '../types';
-import { AuthenticationError } from 'apollo-server-express';
 import { uploadFile } from '../utils/uploadFile';
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
@@ -22,6 +21,7 @@ import { validate } from 'class-validator';
 import { formatErrors } from '../utils/formatErrors';
 import { getManager } from 'typeorm';
 import { unlinkSync } from 'fs';
+import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -75,13 +75,10 @@ export class ProfileResolver {
   @Mutation(() => Boolean)
   async changeProfilePhoto(
     @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload,
-    @Ctx() { res }: MyContext
+    @Ctx() ctx: MyContext
   ) {
-    const { username } = res.locals;
-    if (!username) {
-      throw new AuthenticationError('Not Authorized');
-    }
-    const profile = await Profile.findOne({ where: { username } });
+    const { user } = await checkUserFromCookie(ctx);
+    const profile = await Profile.findOne({ where: { user } });
     if (profile && file) {
       if (profile.imgURL.startsWith('images/')) {
         unlinkSync(`public/${profile.imgURL}`);

@@ -1,4 +1,3 @@
-import { AuthenticationError } from 'apollo-server-express';
 import { validate } from 'class-validator';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import {
@@ -22,6 +21,7 @@ import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
+import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
 import { uploadFile } from '../utils/uploadFile';
 
@@ -110,14 +110,11 @@ export class PostResolver {
   @Mutation(() => CreatePostResponse)
   async addPost(
     @Arg('caption') caption: string,
-    @Ctx() { res }: MyContext,
+    @Ctx() ctx: MyContext,
     @Arg('file', () => GraphQLUpload)
     file: FileUpload
   ): Promise<CreatePostResponse> {
-    const user = await User.findOne({ username: res.locals.username });
-    if (!user) {
-      throw new AuthenticationError('Unauthorized');
-    }
+    const { user } = await checkUserFromCookie(ctx);
     const { isUploaded, imgURL } = await uploadFile(file, 'posts');
     if (isUploaded) {
       const post = Post.create({ caption, imgURL, user });
