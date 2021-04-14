@@ -42,7 +42,10 @@ export async function uploadFile(
 
   // converting to jpg and minimising file
   try {
-    await sharp(buffer).resize(600).jpeg().toFile(pathName);
+    await sharp(buffer)
+      .resize(pathPrefix === 'profile' ? 50 : 600)
+      .jpeg()
+      .toFile(pathName);
 
     return { isUploaded: true, imgURL };
   } catch (err) {
