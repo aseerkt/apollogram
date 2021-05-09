@@ -7,7 +7,7 @@
       "start": "node dist/index.js",
       "watch": "npx tsc -w",
       "server": "nodemon --ignore client/ dist/index.js",
-      "dev": "concurrently \"yarn watch\" \"yarn server\" -n tsc,server",
+      "dev": "concurrently \"yarn watch\" \"yarn server\" -c blue.bold,yellow.bold -n TSC,SERVER",
       "typeorm": "ts-node ./node_modules/typeorm/cli.js",
       "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
       "heroku-postbuild": "npx tsc && cd client && yarn && yarn build"
