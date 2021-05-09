@@ -1,7 +1,6 @@
 import 'reflect-metadata';
 import 'colors';
 import 'dotenv/config';
-import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import { createConnection } from 'typeorm';
@@ -18,16 +17,15 @@ const main = async () => {
 
   const app = express();
 
-  if (!__prod__) {
-    app.use(
-      cors({
-        origin: process.env.FRONTEND_URL,
-        credentials: true,
-      })
-    );
-  }
+  app.use(
+    cors({
+      origin: process.env.FRONTEND_URL,
+      credentials: true,
+    })
+  );
 
   app.use(cookieParser());
+
   app.use('/', express.static('public'));
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
 
@@ -47,16 +45,6 @@ const main = async () => {
   apolloServer.applyMiddleware({ app, cors: false });
 
   const PORT = process.env.PORT || 5000;
-
-  if (__prod__) {
-    app.use(express.static('client/build'));
-
-    app.get('*', (_req, res) => {
-      res.sendFile(
-        path.resolve(__dirname, '..', 'client', 'build', 'index.html')
-      );
-    });
-  }
 
   app.listen(PORT, () => {
     console.log(
