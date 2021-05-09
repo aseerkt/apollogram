@@ -24,6 +24,8 @@ const main = async () => {
     })
   );
 
+  app.get('/', (_, res) => res.send('Welcome to Apollo Instagram API'));
+
   app.use(cookieParser());
 
   app.use('/', express.static('public'));
