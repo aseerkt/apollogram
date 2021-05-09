@@ -11,9 +11,8 @@ export const createTokenCookie = (user: User, res: Response) => {
     }),
     {
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/',
       httpOnly: true,
-      sameSite: 'strict',
+      sameSite: 'none',
       secure: __prod__,
     }
   );
