@@ -1,7 +1,7 @@
 import { IsUrl } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
 import { AfterLoad, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { EXPRESS_ENDPOINT } from '../constants';
+import { EXPRESS_ENDPOINT, GRAVATAR } from '../constants';
 import { BaseColumns } from './BaseColumns';
 import { User } from './User';
 
@@ -13,7 +13,7 @@ export class Profile extends BaseColumns {
     Object.assign(this, profile);
   }
   @Field()
-  @Column({ default: '/user.jpg' })
+  @Column({ default: '' })
   imgURL: string;
 
   @Field()
@@ -44,9 +44,10 @@ export class Profile extends BaseColumns {
 
   @AfterLoad()
   setProfilePhoto() {
-    this.imgURL =
-      this.imgURL.startsWith('images/') || this.imgURL.startsWith('/user.jpg')
-        ? `${EXPRESS_ENDPOINT}/${this.imgURL}`
-        : this.imgURL;
+    this.imgURL = this.imgURL.startsWith('images/')
+      ? `${EXPRESS_ENDPOINT}/${this.imgURL}`
+      : this.imgURL === ''
+      ? GRAVATAR
+      : this.imgURL;
   }
 }
