@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
   return (
     <nav className='fixed inset-x-0 top-0 z-50 bg-white border border-gray-200 h-14'>
       <Container className='flex items-center h-full px-2 md:px-0'>
-        <Link to='/'>
+        <Link aria-label='app icon' to='/'>
           <img
             className='object-contain w-auto h-8'
             src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'
@@ -28,11 +28,15 @@ const Navbar: React.FC = () => {
         {me && (
           <>
             <div className='flex items-center ml-auto'>
-              <Link to='/'>
+              <Link aria-label='home' to='/'>
                 <MdHome size='1.8em' className='mr-2' title='Home' />
               </Link>
-              <button className='mr-4' onClick={() => setOpen(true)}>
-                <FiPlusSquare size='1.8em' />
+              <button
+                aria-label='add post button'
+                className='mr-4'
+                onClick={() => setOpen(true)}
+              >
+                <FiPlusSquare aria-label='add post icon' size='1.8em' />
               </button>
               <DropDown>
                 <Avatar

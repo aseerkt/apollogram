@@ -14,6 +14,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [caption, setCaption] = useState('');
   const [file, setFile] = useState<File>(null as any);
   const inputRef = React.createRef<HTMLInputElement>();
+  const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const onDrop = useCallback(
@@ -21,6 +22,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
       // console.log('files dropped');
       // console.log(files);
       setFile(files[0]);
+      setImgSrc(URL.createObjectURL(files[0]));
     },
     [setFile]
   );
@@ -48,6 +50,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
       // console.log(res);
       if (res.data?.addPost.ok) {
         setFile(null as any);
+        setImgSrc(null);
         setCaption('');
         setIsOpen(false);
       }
@@ -79,6 +82,9 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
               Give your post a catchy caption
             </small>
             {/* <small className='my-1 text-red-700'>{error}</small> */}
+          </div>
+          <div className='mt-2'>
+            {imgSrc && <img src={imgSrc} alt='Upload preview' />}
           </div>
         </div>
         <div
