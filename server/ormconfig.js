@@ -1,29 +1,17 @@
 require('dotenv').config();
 
-const urlConfig =
-  process.env.NODE_ENV === 'production'
-    ? {
-        url: process.env.DATABASE_URL,
-      }
-    : {
-        host: 'localhost',
-        port: 5432,
-        username: 'postgres',
-        password: 'postgres',
-        database: 'insta-clone-1',
-      };
+const __prod__ = process.env.NODE_ENV === 'production';
 
 module.exports = {
   type: 'postgres',
-  ...urlConfig,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? {
-          rejectUnauthorized: false,
-        }
-      : false,
+  url: process.env.DATABASE_URL,
+  ssl: __prod__
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
   synchronize: false,
-  logging: false,
+  logging: !__prod__,
   entities: ['dist/entities/**/*.js'],
   migrations: ['dist/migrations/**/*.js'],
   subscribers: ['dist/subscribers/**/*.js'],

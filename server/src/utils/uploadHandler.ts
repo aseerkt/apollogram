@@ -14,15 +14,18 @@ export function generateUrl(
   selector: string,
   pathSuffix: 'profiles' | 'posts'
 ) {
-  const options: ImageTransformationOptions =
-    pathSuffix === 'posts'
+  const options: ImageTransformationOptions = {
+    format: 'webp',
+    quality: 'auto',
+    ...(pathSuffix === 'posts'
       ? {
           width: 600,
         }
       : {
-          width: 150,
-          height: 150,
-        };
+          width: 180,
+          height: 180,
+        }),
+  };
   return cloudinary.url(selector, options);
 }
 
@@ -40,6 +43,7 @@ export async function uploadToCloudinary(
       {
         public_id: fileName,
         folder: filePath,
+        format: 'webp',
       },
       (err, res) => {
         console.log(res);

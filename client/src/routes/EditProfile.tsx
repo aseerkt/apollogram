@@ -6,7 +6,7 @@ import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 import { Field, Form, Formik } from 'formik';
 
 const EditProfile: React.FC = () => {
-  const { data } = useMeQuery();
+  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
   const [editProfile] = useEditProfileMutation();
 
   if (!data) return null;
@@ -73,7 +73,7 @@ const EditProfile: React.FC = () => {
                   error=''
                   helperText="Help people discover your account by using the name you're known by: either your full name, nickname, or business name."
                 />
-                <InputField inline name='username' label='Username' />
+                <InputField inline name='username' disabled label='Username' />
                 <InputField inline type='url' name='website' label='Website' />
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
                   <label

@@ -14,7 +14,7 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { v2 as cloudinary } from 'cloudinary';
 import { FieldError, MyContext } from '../types';
-import { uploadToCloudinary } from '../utils/uploadHandler';
+import { generateUrl, uploadToCloudinary } from '../utils/uploadHandler';
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
@@ -69,6 +69,14 @@ export class ProfileResolver {
       return profile.name;
     }
     return '';
+  }
+
+  @FieldResolver(() => String)
+  imgURL(@Root() profile: Profile): string {
+    if (profile.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
+      return generateUrl(profile.imgURL, 'profiles');
+    }
+    return profile.imgURL;
   }
 
   // Change Profile Photo
