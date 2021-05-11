@@ -83,11 +83,11 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
             </small>
             {/* <small className='my-1 text-red-700'>{error}</small> */}
           </div>
-          <div className='mt-2 h-36'>
-            {imgSrc && (
+          {imgSrc && (
+            <div className='mt-2' style={{ height: 'calc(100vh - 400px)' }}>
               <img className='h-full' src={imgSrc} alt='Upload preview' />
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <div
           className='p-5 my-2 mb-5 text-gray-700 border border-blue-400 rounded cursor-pointer hover:bg-gray-100'
