@@ -1,9 +1,49 @@
 import path from 'path';
+import crypto from 'crypto';
 import fs, { existsSync } from 'fs';
 import sharp from 'sharp';
+import { v2 as cloudinary } from 'cloudinary';
 import { FileUpload } from 'graphql-upload';
+import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 
-const createBuffer = async (file: FileUpload) => {
+export function generateFileName() {
+  return crypto.randomBytes(15).toString('hex');
+}
+
+export async function uploadToCloudinary(
+  file: FileUpload,
+  pathSuffix?: 'profiles' | 'posts'
+) {
+  const { createReadStream } = await file;
+
+  return new Promise<{ url: string }>((resolve, reject) => {
+    const fileName = generateFileName();
+    const filePath = `${CLOUDINARY_ROOT_PATH}/${pathSuffix}`;
+
+    const stream = cloudinary.uploader.upload_stream(
+      {
+        public_id: fileName,
+        folder: filePath,
+        format: 'jpg',
+      },
+      (err, res) => {
+        console.log(res);
+        if (res) {
+          resolve({
+            url: cloudinary.url(`${filePath}/${fileName}`, { width: 600 }),
+          });
+        } else {
+          reject(err);
+        }
+      }
+    );
+    createReadStream()
+      .pipe(stream)
+      .on('error', (err) => reject(err));
+  });
+}
+
+async function createBuffer(file: FileUpload) {
   const { createReadStream } = await file;
   const buffers: Uint8Array[] = [];
   return await new Promise<Buffer | null>(async (res) =>
@@ -19,21 +59,18 @@ const createBuffer = async (file: FileUpload) => {
         res(null);
       })
   );
-};
+}
 
-export async function uploadFile(
+async function uploadFile(
   file: FileUpload,
-  pathPrefix: string
+  pathPrefix?: string
 ): Promise<{ isUploaded: boolean; imgURL: string }> {
   // Create buffer for minimising
   const buffer = await createBuffer(file);
   if (!buffer) return { isUploaded: false, imgURL: '' };
 
-  const { filename } = await file;
-
   // constructing file name to be saved
-  const uploadTime = new Date().toISOString();
-  const pathName = `public/images/${pathPrefix}/${uploadTime}_${filename}`;
+  const pathName = `public/images/${pathPrefix}/${generateFileName()}`;
   const dirname = path.dirname(pathName);
   if (!existsSync(dirname)) {
     await fs.promises.mkdir(dirname, { recursive: true });
@@ -53,3 +90,5 @@ export async function uploadFile(
     return { isUploaded: false, imgURL };
   }
 }
+
+export default uploadFile;

@@ -1,5 +1,8 @@
+import 'colors';
+import 'dotenv/config';
 import { Connection } from 'typeorm';
 import { Factory, Seeder } from 'typeorm-seeding';
+import { v2 as cloudinary } from 'cloudinary';
 import { User } from '../entities/User';
 import fakeUserData from './userData.json';
 import profileData from './profileData.json';
@@ -8,6 +11,8 @@ import { Profile } from '../entities/Profile';
 import { hash } from 'argon2';
 import 'dotenv/config';
 import { Post } from '../entities/Post';
+import setupCloundinary from '../config/setupCloundinary';
+import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 
 let hashedUserData: any[] = [];
 
@@ -19,6 +24,10 @@ export default class CreateMockData implements Seeder {
   public async run(_factory: Factory, connection: Connection): Promise<any> {
     await connection.dropDatabase();
     await connection.synchronize();
+
+    setupCloundinary();
+
+    await cloudinary.api.delete_resources_by_prefix(CLOUDINARY_ROOT_PATH);
 
     await connection
       .createQueryBuilder()

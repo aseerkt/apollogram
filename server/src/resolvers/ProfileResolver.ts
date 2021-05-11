@@ -13,7 +13,7 @@ import {
 } from 'type-graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { FieldError, MyContext } from '../types';
-import { uploadFile } from '../utils/uploadFile';
+import uploadFile from '../utils/uploadHandler';
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';

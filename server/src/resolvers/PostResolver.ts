@@ -13,8 +13,8 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
+import { __prod__ } from '../constants';
 import { Comment } from '../entities/Comment';
-// import { Follow } from '../entities/Follow';
 import { Like } from '../entities/Like';
 import { Post } from '../entities/Post';
 import { User } from '../entities/User';
@@ -23,7 +23,7 @@ import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
-import { uploadFile } from '../utils/uploadFile';
+import { uploadToCloudinary } from '../utils/uploadHandler';
 
 @ObjectType()
 class CreatePostResponse {
@@ -115,9 +115,12 @@ export class PostResolver {
     file: FileUpload
   ): Promise<CreatePostResponse> {
     const { user } = await checkUserFromCookie(ctx);
-    const { isUploaded, imgURL } = await uploadFile(file, 'posts');
-    if (isUploaded) {
-      const post = Post.create({ caption, imgURL, user });
+
+    // const { isUploaded, imgURL } = await uploadFile(file, 'posts');
+    const { url } = await uploadToCloudinary(file, 'posts');
+    // if (isUploaded) {
+    if (url) {
+      const post = Post.create({ caption, imgURL: url, user });
       const errors = await validate(post);
       if (errors.length > 0) {
         return { ok: false, error: formatErrors(errors)[0] };
