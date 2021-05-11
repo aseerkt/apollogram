@@ -12,16 +12,17 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
+import { v2 as cloudinary } from 'cloudinary';
 import { FieldError, MyContext } from '../types';
-import uploadFile from '../utils/uploadHandler';
+import { uploadToCloudinary } from '../utils/uploadHandler';
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
 import { validate } from 'class-validator';
 import { formatErrors } from '../utils/formatErrors';
 import { getManager } from 'typeorm';
-import { unlinkSync } from 'fs';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
+import { CLOUDINARY_ROOT_PATH } from '../constants';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -80,13 +81,15 @@ export class ProfileResolver {
     const { user } = await checkUserFromCookie(ctx);
     const profile = await Profile.findOne({ where: { user } });
     if (profile && file) {
-      if (profile.imgURL.startsWith('images/')) {
-        unlinkSync(`public/${profile.imgURL}`);
+      // if (profile.imgURL.startsWith('images/')) {
+      //   unlinkSync(`public/${profile.imgURL}`);
+      // }
+      if (profile.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
+        await cloudinary.uploader.destroy(profile.imgURL);
       }
-      const { isUploaded, imgURL } = await uploadFile(file, 'profile');
-      console.log(isUploaded);
-      if (isUploaded) {
-        profile.imgURL = imgURL;
+      const { url } = await uploadToCloudinary(file, 'profiles');
+      if (url) {
+        profile.imgURL = url;
         await profile.save();
         return true;
       }

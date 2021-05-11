@@ -28,10 +28,10 @@ const Navbar: React.FC = () => {
         {me && (
           <>
             <div className='flex items-center ml-auto'>
-              <Link to='/posts'>
+              <Link to='/'>
                 <MdHome size='1.8em' className='mr-2' title='Home' />
               </Link>
-              <button className='mr-2' onClick={() => setOpen(true)}>
+              <button className='mr-4' onClick={() => setOpen(true)}>
                 <FiPlusSquare size='1.8em' />
               </button>
               <DropDown>

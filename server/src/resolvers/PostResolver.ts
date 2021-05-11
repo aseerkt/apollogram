@@ -13,7 +13,7 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { __prod__ } from '../constants';
+import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
 import { Post } from '../entities/Post';
@@ -23,7 +23,7 @@ import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
-import { uploadToCloudinary } from '../utils/uploadHandler';
+import { uploadToCloudinary, generateUrl } from '../utils/uploadHandler';
 
 @ObjectType()
 class CreatePostResponse {
@@ -51,7 +51,10 @@ export class PostResolver {
 
   @FieldResolver(() => Boolean)
   @UseMiddleware(isAuth)
-  async userLike(@Root() post: Post, @Ctx() { res }: MyContext) {
+  async userLike(
+    @Root() post: Post,
+    @Ctx() { res }: MyContext
+  ): Promise<boolean> {
     const like = await Like.findOne({
       where: { postId: post.id, username: res.locals.username },
     });
@@ -64,6 +67,14 @@ export class PostResolver {
       where: { postId: post.id },
       order: { createdAt: 'DESC' },
     });
+  }
+
+  @FieldResolver(() => String)
+  imgURL(@Root() post: Post): string {
+    if (post.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
+      return generateUrl(post.imgURL, 'posts');
+    }
+    return post.imgURL;
   }
 
   @Query(() => PaginatedPost)
