@@ -3,20 +3,20 @@ import { Link } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import DropDown from './DropDown';
-import { MeDocument } from '../generated/graphql';
+import { useMeQuery } from '../generated/graphql';
 import { MdHome } from 'react-icons/md';
 import { FiPlusSquare } from 'react-icons/fi';
 import Modal from '../components-ui/Modal';
 import AddPost from './AddPost';
-import { useApolloClient } from '@apollo/client';
 
 const Navbar: React.FC = () => {
-  const apolloClient = useApolloClient();
   const [open, setOpen] = useState(false);
 
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const me = data?.me;
+
   return (
-    <nav className='fixed inset-x-0 top-0 z-10 bg-white border border-gray-200 h-14'>
+    <nav className='fixed inset-x-0 top-0 z-50 bg-white border border-gray-200 h-14'>
       <Container className='flex items-center h-full px-2 md:px-0'>
         <Link to='/'>
           <img
@@ -28,10 +28,10 @@ const Navbar: React.FC = () => {
         {me && (
           <>
             <div className='flex items-center ml-auto'>
-              <Link to='/posts'>
+              <Link to='/'>
                 <MdHome size='1.8em' className='mr-2' title='Home' />
               </Link>
-              <button className='mr-2' onClick={() => setOpen(true)}>
+              <button className='mr-4' onClick={() => setOpen(true)}>
                 <FiPlusSquare size='1.8em' />
               </button>
               <DropDown>
