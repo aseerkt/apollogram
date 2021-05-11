@@ -34,7 +34,7 @@ const PostCard: React.FC<PostCardProps> = ({
 
   useEffect(() => {
     setLiked(userLike);
-  }, [liked, userLike]);
+  }, [userLike]);
 
   const history = useHistory();
   const addCommentRef = useRef<HTMLInputElement>(null);
