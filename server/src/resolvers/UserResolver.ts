@@ -139,6 +139,7 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
+      console.log(extractDomainFromUrl(FRONTEND_URL!));
       res.clearCookie(COOKIE_NAME, {
         path: '/',
         domain: extractDomainFromUrl(FRONTEND_URL!),
