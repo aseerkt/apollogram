@@ -6,13 +6,14 @@ import { graphqlUploadExpress } from 'graphql-upload';
 import cookieParser from 'cookie-parser';
 import { createUserLoader } from './utils/createUserLoader';
 import { createProfileLoader } from './utils/createProfileLoader';
+import { FRONTEND_URL } from './constants';
 
 async function createApp() {
   const app = express();
 
   app.use(
     cors({
-      origin: process.env.FRONTEND_URL,
+      origin: FRONTEND_URL,
       credentials: true,
     })
   );

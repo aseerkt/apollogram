@@ -18,12 +18,13 @@ import {
   RegisterVars,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
-import { COOKIE_NAME } from '../constants';
+import { COOKIE_NAME, FRONTEND_URL, __prod__ } from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
+import { extractDomainFromUrl } from '../utils/extractDomainFromUrl';
 
 @Resolver(User)
 export class UserResolver {
@@ -138,7 +139,10 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
-      res.clearCookie(COOKIE_NAME, { path: '/' });
+      res.clearCookie(COOKIE_NAME, {
+        path: '/',
+        domain: extractDomainFromUrl(FRONTEND_URL!),
+      });
       resolve(true);
     });
   }
