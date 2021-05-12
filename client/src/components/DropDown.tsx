@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { apolloClient } from '../utils/apolloClient';
-import { MeDocument, useLogoutMutation } from '../generated/graphql';
+import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { CgProfile } from 'react-icons/cg';
 import { FiEdit } from 'react-icons/fi';
 import { HiOutlineLogout } from 'react-icons/hi';
@@ -30,12 +29,14 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 const DropDown: React.FC = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+
+  const me = data!.me!;
 
   const [logout] = useLogoutMutation({
     onCompleted: (data) => {
       if (data.logout) {
-        window.location.pathname = '/';
+        window.location.pathname = '/login';
       }
     },
   });
