@@ -17,7 +17,7 @@ const main = async () => {
 
   app.listen(PORT, () => {
     console.log(
-      `Graph API is running at http://localhost:${PORT}$/graphql`.blue.bold
+      `Graph API is running at http://localhost:${PORT}/graphql`.blue.bold
     );
   });
 };
