@@ -138,7 +138,10 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
-      res.clearCookie(COOKIE_NAME, { sameSite: __prod__ ? 'none' : 'lax' });
+      res.clearCookie(COOKIE_NAME, {
+        sameSite: __prod__ ? 'none' : 'lax',
+        secure: __prod__,
+      });
       resolve(true);
     });
   }
