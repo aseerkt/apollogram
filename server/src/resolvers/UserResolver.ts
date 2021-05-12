@@ -134,6 +134,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
+  @UseMiddleware(isUser)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
       res.clearCookie(COOKIE_NAME);

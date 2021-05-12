@@ -35,7 +35,6 @@ const DropDown: React.FC = ({ children }) => {
   const [logout] = useLogoutMutation({
     onCompleted: (data) => {
       if (data.logout) {
-        apolloClient.resetStore();
         window.location.pathname = '/';
       }
     },
