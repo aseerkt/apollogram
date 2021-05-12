@@ -23,6 +23,7 @@ import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
+import { isAuth } from '../middlewares/isAuth';
 
 @Resolver(User)
 export class UserResolver {
@@ -134,10 +135,10 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  @UseMiddleware(isUser)
+  @UseMiddleware(isAuth)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
-      res.clearCookie(COOKIE_NAME);
+      res.clearCookie(COOKIE_NAME, { path: '/' });
       resolve(true);
     });
   }
