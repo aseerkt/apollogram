@@ -141,6 +141,18 @@ export class PostResolver {
     }
     return { ok: false, error: { path: 'file', message: 'File Upload Fail' } };
   }
+
+  @Mutation(() => Boolean)
+  @UseMiddleware(isAuth)
+  async deletePost(@Arg('postId') postId: string, @Ctx() { res }: MyContext) {
+    try {
+      await Post.delete({ id: postId, username: res.locals.username });
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 }
 /*
  * curl 'http://localhost:5000/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:5000' --data-binary '{"query":"mutation AddPost($file: Upload!){\n  addPost(file)\n}"}' --compressed

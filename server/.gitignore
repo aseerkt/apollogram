@@ -10,3 +10,4 @@ yarn-error.log
 dump.rdb
 dist/
 public/images/
+src/migrations/*
