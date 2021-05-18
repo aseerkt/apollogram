@@ -4,10 +4,12 @@ import InputField from '../components-ui/InputField';
 import { useEditProfileMutation, useMeQuery } from '../generated/graphql';
 import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 import { Field, Form, Formik } from 'formik';
+import { useMessageCtx } from '../context/MessageContext';
 
 const EditProfile: React.FC = () => {
+  const { setMessage } = useMessageCtx();
   const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
-  const [editProfile] = useEditProfileMutation();
+  const [editProfile, { loading }] = useEditProfileMutation();
 
   if (!data) return null;
 
@@ -51,11 +53,14 @@ const EditProfile: React.FC = () => {
                   variables: values,
                 });
                 if (res.data) {
-                  const { errors } = res.data.editProfile;
+                  const { errors, ok } = res.data.editProfile;
                   if (errors) {
                     errors.forEach(({ path, message }) => {
                       action.setFieldError(path, message);
                     });
+                  }
+                  if (ok) {
+                    setMessage('Profile updated');
                   }
                 }
                 console.log(res);
@@ -95,7 +100,7 @@ const EditProfile: React.FC = () => {
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
                   <div></div>
                   <Button
-                    isLoading={isSubmitting}
+                    isLoading={loading}
                     className='inline-block w-20 text-left'
                     disabled={!username || !email}
                     color='dark'

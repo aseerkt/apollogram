@@ -5,12 +5,13 @@ import { FaCamera } from 'react-icons/fa';
 import {
   MeDocument,
   useChangeProfilePhotoMutation,
+  useMeQuery,
 } from '../generated/graphql';
 import Button from '../components-ui/Button';
 import { getCroppedImg } from '../utils/cropImage';
 import { dataURLtoFile } from '../utils/dataURLtoFile';
 import Spinner from '../components-ui/Spinner';
-import { useApolloClient } from '@apollo/client';
+import { useMessageCtx } from '../context/MessageContext';
 
 interface ChangeProfilePhotoProps {
   username: string;
@@ -19,8 +20,10 @@ interface ChangeProfilePhotoProps {
 const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   username,
 }) => {
-  const apolloClient = useApolloClient();
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const me = meData!.me!;
+
+  const { setMessage } = useMessageCtx();
 
   const triggerFileSelectPopup = () => inputRef.current?.click();
 
@@ -69,6 +72,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
       });
       if (res.data?.changeProfilePhoto) {
         setImage(null);
+        setMessage('Profile photo updated');
       } else {
         setSubmitting(false);
       }
