@@ -47,19 +47,20 @@
 
 ## Roadmap
 
-- [x] Session Authentication
-- [x] Upload post with images and caption
-- [x] Like/Unlike post
+- [x] JWT authentication
+- [x] Upload images to cloudinary
+- [x] Add, like or unlike post
 - [x] Comment on post
-- [x] Edit Profile Photo with Image Crop \*\*
+- [x] Edit Profile Photo with Image Crop
 - [x] Edit Profile Credentials
 - [x] Post pagination
 - [ ] Edit / Delete post
+- [ ] Post Feed
 - [ ] Smiley support for caption and comments
 - [ ] Hashtag support
 - [ ] Reduce image quality/size
 - [ ] Follow Suggestions
-- [ ] Mention poeples in caption and comments.
+- [ ] Mention poeples in caption and comments
 - [ ] Notifications
 
 ## Authors

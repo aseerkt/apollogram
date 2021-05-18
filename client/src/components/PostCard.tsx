@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react';
 import Avatar from '../components-ui/Avatar';
 import Card from '../components-ui/Card';
-import { Comment, Post } from '../generated/graphql';
+import {
+  Comment,
+  Post,
+  useMeQuery,
+  useDeletePostMutation,
+} from '../generated/graphql';
 import { MdMoreHoriz } from 'react-icons/md';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { RiChat1Line } from 'react-icons/ri';
@@ -12,6 +17,8 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link, useHistory } from 'react-router-dom';
 import { useRef } from 'react';
+import ActionModal from './ActionModal';
+import { useMessageCtx } from '../context/MessageContext';
 
 dayjs.extend(relativeTime);
 
@@ -22,9 +29,13 @@ interface PostCardProps {
 const PostCard: React.FC<PostCardProps> = ({
   post: { id, user, imgURL, caption, likeCount, userLike, comments, createdAt },
 }) => {
+  const { setMessage } = useMessageCtx();
   // const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
   const [liked, setLiked] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const [deletePost] = useDeletePostMutation();
 
   useEffect(() => {
     setTwoComments(
@@ -52,9 +63,39 @@ const PostCard: React.FC<PostCardProps> = ({
           </Link>
         </div>
         {/* TODO Icon Button */}
-        <button>
+        <div
+          className='cursor-pointer'
+          role='button'
+          onClick={(e) => setIsOpen(true)}
+        >
           <MdMoreHoriz size='1.5em' />
-        </button>
+          <ActionModal isOpen={isOpen} setIsOpen={setIsOpen}>
+            {meData && meData.me && meData.me.username === user.username && (
+              <>
+                <li
+                  className='red'
+                  onClick={async () => {
+                    await deletePost({
+                      variables: { postId: id },
+                      update: (cache, { data }) => {
+                        if (data?.deletePost) {
+                          cache.evict({ id: 'Post:' + id });
+                          setIsOpen(false);
+                          setMessage('Post removed successfully');
+                          history.push('/');
+                        }
+                      },
+                    });
+                  }}
+                >
+                  Delete Post
+                </li>
+                <li>Edit caption</li>
+              </>
+            )}
+            <li onClick={() => history.push(`/p/${id}`)}>Go to Post</li>
+          </ActionModal>
+        </div>
       </div>
       {/* Media */}
       <img className='w-full' src={imgURL} alt='' />

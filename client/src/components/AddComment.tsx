@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import { useState } from 'react';
 import Spinner from '../components-ui/Spinner';
+import { useMessageCtx } from '../context/MessageContext';
 import { useAddCommentMutation } from '../generated/graphql';
 
 interface AddCommentProps {
@@ -14,6 +15,7 @@ const AddComment: React.FC<AddCommentProps> = ({
   customRef,
   className,
 }) => {
+  const { setMessage } = useMessageCtx();
   const [text, setText] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
@@ -67,6 +69,7 @@ const AddComment: React.FC<AddCommentProps> = ({
             },
           },
         });
+        setMessage('Comment Added');
       }
     },
   });

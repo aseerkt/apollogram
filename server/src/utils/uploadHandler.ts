@@ -62,6 +62,14 @@ export async function uploadToCloudinary(
   });
 }
 
+export async function deleteCloudinaryFile(public_id: string) {
+  if (public_id.startsWith(CLOUDINARY_ROOT_PATH)) {
+    await cloudinary.uploader.destroy(public_id);
+    return true;
+  }
+  return false;
+}
+
 // async function createBuffer(file: FileUpload) {
 //   const { createReadStream } = await file;
 //   const buffers: Uint8Array[] = [];

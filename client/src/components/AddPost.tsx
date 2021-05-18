@@ -4,6 +4,7 @@ import { useAddPostMutation } from '../generated/graphql';
 import Button from '../components-ui/Button';
 import Card from '../components-ui/Card';
 import { FaCameraRetro } from 'react-icons/fa';
+import { useMessageCtx } from '../context/MessageContext';
 
 interface AddPostProps {
   className?: string;
@@ -11,6 +12,7 @@ interface AddPostProps {
 }
 
 const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
+  const { setMessage } = useMessageCtx();
   const [caption, setCaption] = useState('');
   const [file, setFile] = useState<File>(null as any);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -52,6 +54,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
         setFile(null as any);
         setImgSrc(null);
         setCaption('');
+        setMessage('Post uploaded successfully');
         setIsOpen(false);
       }
     } catch (err) {

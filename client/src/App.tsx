@@ -12,6 +12,8 @@ import PrivateRoute from './containers/PrivateRoute';
 import EditProfile from './routes/EditProfile';
 import Profile from './routes/Profile';
 import SinglePost from './routes/SinglePost';
+import MessageProvider from './context/MessageContext';
+import Message from './components-ui/Message';
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
@@ -25,14 +27,19 @@ const App: React.FC = () => {
 
   return (
     <BrowserRouter>
-      <Switch>
-        <PrivateRoute exact path='/' component={Posts} />
-        <Route exact path='/login' component={Login} />
-        <Route exact path='/register' component={Register} />
-        <PrivateRoute exact path='/p/:postId' component={SinglePost} />
-        <PrivateRoute exact path='/edit-profile' component={EditProfile} />
-        <PrivateRoute exact path='/u/:username' component={Profile} />
-      </Switch>
+      <MessageProvider>
+        <div className='mb-10'>
+          <Switch>
+            <PrivateRoute exact path='/' component={Posts} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/register' component={Register} />
+            <PrivateRoute exact path='/p/:postId' component={SinglePost} />
+            <PrivateRoute exact path='/edit-profile' component={EditProfile} />
+            <PrivateRoute exact path='/u/:username' component={Profile} />
+          </Switch>
+        </div>
+        <Message />
+      </MessageProvider>
     </BrowserRouter>
   );
 };

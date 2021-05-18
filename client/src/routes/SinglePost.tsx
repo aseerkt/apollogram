@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaHeart, FaRegHeart } from 'react-icons/fa';
 import { MdMoreHoriz } from 'react-icons/md';
 import { RiChat1Line } from 'react-icons/ri';
@@ -12,16 +12,20 @@ import LikeButton from '../components/LikeButton';
 import { useGetSinglePostQuery } from '../generated/graphql';
 
 const SinglePost = () => {
-  const [liked, setLiked] = React.useState(false);
+  const [liked, setLiked] = useState(false);
   const { postId }: any = useParams();
   const { data, loading } = useGetSinglePostQuery({ variables: { postId } });
 
   // const { me } = apolloClient.readQuery({ query: MeDocument });
   const addCommentRef = useRef<HTMLInputElement>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setLiked(data?.getSinglePost?.userLike || false);
   }, [setLiked, data]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, []);
 
   if (loading) return <div>Loading...</div>;
   if (data && data.getSinglePost) {

@@ -5,6 +5,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  ID,
   Int,
   Mutation,
   ObjectType,
@@ -23,7 +24,11 @@ import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
-import { uploadToCloudinary, generateUrl } from '../utils/uploadHandler';
+import {
+  uploadToCloudinary,
+  generateUrl,
+  deleteCloudinaryFile,
+} from '../utils/uploadHandler';
 
 @ObjectType()
 class CreatePostResponse {
@@ -144,9 +149,20 @@ export class PostResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
-  async deletePost(@Arg('postId') postId: string, @Ctx() { res }: MyContext) {
+  async deletePost(
+    @Arg('postId', () => ID) postId: string,
+    @Ctx() { res }: MyContext
+  ) {
     try {
-      await Post.delete({ id: postId, username: res.locals.username });
+      const post = await Post.findOne({
+        where: { id: postId, username: res.locals.username },
+      });
+      if (!post) return false;
+      if (post.imgURL.startsWith(CLOUDINARY_ROOT_PATH)) {
+        const isImageDeleted = await deleteCloudinaryFile(post.imgURL);
+        if (!isImageDeleted) return false;
+      }
+      await post.remove();
       return true;
     } catch (err) {
       console.log(err);
