@@ -1,0 +1,27 @@
+.action-modal-list {
+  width: 100%;
+  list-style: none;
+  padding-left: 0;
+}
+
+.action-modal-list li {
+  height: 3.5rem;
+  width: 100%;
+  border-bottom: 0.5px solid lightgray;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.action-modal-list li:last-child {
+  border-bottom: none;
+}
+
+.action-modal-list li:active {
+  background-color: #f4f4f4;
+}
+
+.action-modal-list li.red {
+  color: #f34242;
+  font-weight: bold;
+}

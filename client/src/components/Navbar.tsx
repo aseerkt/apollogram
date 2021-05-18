@@ -48,7 +48,7 @@ const Navbar: React.FC = () => {
             </div>
             {/* Add Post Modal */}
             <Modal isOpen={open} setIsOpen={setOpen}>
-              <AddPost setIsOpen={setOpen} className='' />
+              <AddPost setIsOpen={setOpen} />
             </Modal>
           </>
         )}
