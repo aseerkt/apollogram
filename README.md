@@ -2,7 +2,7 @@
 
 > Instagram Clone | Social Media Application
 
-![Instagram Clone Screenshot](/instagram_clone.png)
+![Instagram Clone Screenshot](/instagram_clone.png) ![Instagram Clone Moto G4 Screenshot](/instagram_clone_moto_g4.png)
 
 ## Stacks Used
 
