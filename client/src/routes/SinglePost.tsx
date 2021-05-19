@@ -1,18 +1,16 @@
 import dayjs from 'dayjs';
-import React, { useEffect, useRef, useState } from 'react';
-import { FaHeart, FaRegHeart } from 'react-icons/fa';
-import { MdMoreHoriz } from 'react-icons/md';
-import { RiChat1Line } from 'react-icons/ri';
+import React, { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
 import Card from '../components-ui/Card';
 import Container from '../components-ui/Container';
+import Spinner from '../components-ui/Spinner';
 import AddComment from '../components/AddComment';
-import LikeButton from '../components/LikeButton';
-import { useGetSinglePostQuery } from '../generated/graphql';
+import PostActions from '../components/PostActions';
+import PostOptions from '../components/PostOptions';
+import { Post, useGetSinglePostQuery } from '../generated/graphql';
 
 const SinglePost = () => {
-  const [liked, setLiked] = useState(false);
   const { postId }: any = useParams();
   const { data, loading } = useGetSinglePostQuery({ variables: { postId } });
 
@@ -20,14 +18,10 @@ const SinglePost = () => {
   const addCommentRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setLiked(data?.getSinglePost?.userLike || false);
-  }, [setLiked, data]);
-
-  useEffect(() => {
     window.scrollTo({ top: 0 });
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Spinner />;
   if (data && data.getSinglePost) {
     const {
       id,
@@ -55,9 +49,7 @@ const SinglePost = () => {
               </Link>
             </div>
             {/* TODO Icon Button */}
-            <button>
-              <MdMoreHoriz size='1.5em' />
-            </button>
+            <PostOptions post={data.getSinglePost as Post} />
           </header>
           {/* Media */}
           <div className='md:h-full md:mr-80'>
@@ -130,30 +122,16 @@ const SinglePost = () => {
               </div>
               {/* Like And Comment Button */}
               <div>
-                <div className='flex items-center px-3 py-2 border-t border-gray-300'>
-                  <LikeButton postId={id} liked={liked} setLiked={setLiked}>
-                    {userLike ? (
-                      <FaHeart
-                        size='1.5em'
-                        className='mr-2 text-red-600 duration-150 transform cursor-pointer active:scale-110'
-                      />
-                    ) : (
-                      <FaRegHeart
-                        size='1.5em'
-                        className='mr-2 duration-150 transform cursor-pointer active:scale-110'
-                      />
-                    )}
-                  </LikeButton>
-                  <RiChat1Line
-                    size='1.6em'
-                    onClick={() => {
-                      addCommentRef.current?.focus();
-                    }}
-                    className='cursor-pointer'
-                  />
-                </div>
+                <PostActions
+                  className='p-3'
+                  postId={id}
+                  addCommentRef={addCommentRef}
+                  userLike={userLike}
+                />
                 {/* Like Count */}
-                <p className='px-3 font-semibold'>{likeCount} likes</p>
+                <p className='px-3 font-semibold'>
+                  {likeCount} like{likeCount === 1 ? '' : 's'}
+                </p>
                 {/* TimeStamp */}
                 <Link
                   to={`/p/${id}`}

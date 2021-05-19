@@ -8,12 +8,14 @@ interface PostActionsProps {
   postId: string;
   userLike: boolean;
   addCommentRef: React.RefObject<HTMLInputElement>;
+  className?: string;
 }
 
 const PostActions: React.FC<PostActionsProps> = ({
   postId,
   userLike,
   addCommentRef,
+  className,
 }) => {
   const [liked, setLiked] = useState(false);
 
@@ -24,7 +26,7 @@ const PostActions: React.FC<PostActionsProps> = ({
   const history = useHistory();
   const location = useLocation();
   return (
-    <div className='flex items-center pb-2'>
+    <div className={`flex items-center pb-2 ${className}`}>
       <LikeButton postId={postId} liked={liked} setLiked={setLiked}>
         {liked ? (
           <FaHeart
