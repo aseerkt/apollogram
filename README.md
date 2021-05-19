@@ -2,7 +2,9 @@
 
 > Instagram Clone | Social Media Application
 
-![Instagram Clone Screenshot](/instagram_clone.png) ![Instagram Clone Moto G4 Screenshot](/instagram_clone_moto_g4.png)
+<div>
+<img src="/instagram_clone.png/"  style="object-fit:contain; width: 60%" /> <img src="/instagram_clone_moto_g4.png" style="width:30%" />
+</div>
 
 ## Stacks Used
 
@@ -54,7 +56,7 @@
 - [x] Edit Profile Photo with Image Crop
 - [x] Edit Profile Credentials
 - [x] Post pagination
-- [ ] Edit / Delete post
+- [x] Edit / Delete post
 - [ ] Post Feed
 - [ ] Smiley support for caption and comments
 - [ ] Hashtag support
