@@ -28,7 +28,7 @@ const App: React.FC = () => {
   return (
     <BrowserRouter>
       <MessageProvider>
-        <div className='mb-10'>
+        <div className='pb-10'>
           <Switch>
             <PrivateRoute exact path='/' component={Posts} />
             <Route exact path='/login' component={Login} />

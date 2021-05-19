@@ -8,6 +8,7 @@ import Spinner from '../components-ui/Spinner';
 import AddComment from '../components/AddComment';
 import PostActions from '../components/PostActions';
 import PostOptions from '../components/PostOptions';
+import UserPosts from '../components/UserPosts';
 import { Post, useGetSinglePostQuery } from '../generated/graphql';
 
 const SinglePost = () => {
@@ -61,9 +62,9 @@ const SinglePost = () => {
           </div>
           <div className='static bottom-0 right-0 flex flex-col justify-between md:border-l md:border-gray-300 md:absolute top-20 md:w-80'>
             <div className='flex flex-col justify-between h-full pt-2'>
-              {/* Post Caption */}
               <div className='px-3 overflow-y-auto min-h-48'>
-                <div className='flex mb-3'>
+                {/* Post Caption */}
+                <div className='flex pb-2 mb-3 border-b'>
                   <Link
                     to={`/u/${user.username}`}
                     className='mr-2 font-semibold '
@@ -144,6 +145,18 @@ const SinglePost = () => {
             </div>
           </div>
         </Card>
+        <section className='pt-10 mt-10 border-t'>
+          <h3 className='mb-3 font-bold text-gray-500'>
+            More posts from
+            <Link
+              to={`/u/${user.username}`}
+              className='ml-1 font-semibold text-black hover:underline'
+            >
+              {user.username}
+            </Link>
+          </h3>
+          <UserPosts username={user.username} />
+        </section>
       </Container>
     );
   }
