@@ -155,6 +155,7 @@ export type Mutation = {
   toggleLike: Scalars['Boolean'];
   addPost: CreatePostResponse;
   deletePost: Scalars['Boolean'];
+  editCaption?: Maybe<Scalars['String']>;
   changeProfilePhoto: Scalars['Boolean'];
   removeProfilePhoto?: Maybe<Scalars['String']>;
   editProfile: EditProfileResponse;
@@ -187,6 +188,12 @@ export type MutationAddPostArgs = {
 
 
 export type MutationDeletePostArgs = {
+  postId: Scalars['ID'];
+};
+
+
+export type MutationEditCaptionArgs = {
+  caption: Scalars['String'];
   postId: Scalars['ID'];
 };
 
@@ -316,6 +323,17 @@ export type DeletePostMutationVariables = Exact<{
 export type DeletePostMutation = (
   { __typename?: 'Mutation' }
   & Pick<Mutation, 'deletePost'>
+);
+
+export type EditCaptionMutationVariables = Exact<{
+  postId: Scalars['ID'];
+  caption: Scalars['String'];
+}>;
+
+
+export type EditCaptionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'editCaption'>
 );
 
 export type EditProfileMutationVariables = Exact<{
@@ -688,6 +706,38 @@ export function useDeletePostMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
 export type DeletePostMutationResult = Apollo.MutationResult<DeletePostMutation>;
 export type DeletePostMutationOptions = Apollo.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const EditCaptionDocument = gql`
+    mutation EditCaption($postId: ID!, $caption: String!) {
+  editCaption(postId: $postId, caption: $caption)
+}
+    `;
+export type EditCaptionMutationFn = Apollo.MutationFunction<EditCaptionMutation, EditCaptionMutationVariables>;
+
+/**
+ * __useEditCaptionMutation__
+ *
+ * To run a mutation, you first call `useEditCaptionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useEditCaptionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [editCaptionMutation, { data, loading, error }] = useEditCaptionMutation({
+ *   variables: {
+ *      postId: // value for 'postId'
+ *      caption: // value for 'caption'
+ *   },
+ * });
+ */
+export function useEditCaptionMutation(baseOptions?: Apollo.MutationHookOptions<EditCaptionMutation, EditCaptionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCaptionMutation, EditCaptionMutationVariables>(EditCaptionDocument, options);
+      }
+export type EditCaptionMutationHookResult = ReturnType<typeof useEditCaptionMutation>;
+export type EditCaptionMutationResult = Apollo.MutationResult<EditCaptionMutation>;
+export type EditCaptionMutationOptions = Apollo.BaseMutationOptions<EditCaptionMutation, EditCaptionMutationVariables>;
 export const EditProfileDocument = gql`
     mutation EditProfile($name: String!, $website: String!, $bio: String!, $gender: String!, $email: String!, $username: String!) {
   editProfile(

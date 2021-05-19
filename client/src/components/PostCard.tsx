@@ -19,6 +19,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { useRef } from 'react';
 import ActionModal from './ActionModal';
 import { useMessageCtx } from '../context/MessageContext';
+import Modal from '../components-ui/Modal';
+import EditCaption from './EditCaption';
 
 dayjs.extend(relativeTime);
 
@@ -30,10 +32,12 @@ const PostCard: React.FC<PostCardProps> = ({
   post: { id, user, imgURL, caption, likeCount, userLike, comments, createdAt },
 }) => {
   const { setMessage } = useMessageCtx();
-  // const { me } = apolloClient.readQuery({ query: MeDocument });
   const [twoComments, setTwoComments] = useState<any>([]);
   const [liked, setLiked] = useState(false);
+
   const [isOpen, setIsOpen] = useState(false);
+  const [openEditCaption, setOpenEditCaption] = useState(false);
+
   const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
   const [deletePost] = useDeletePostMutation();
 
@@ -90,11 +94,30 @@ const PostCard: React.FC<PostCardProps> = ({
                 >
                   Delete Post
                 </li>
-                <li>Edit caption</li>
+                <li
+                  onClick={() => {
+                    setOpenEditCaption(true);
+                    setIsOpen(false);
+                  }}
+                >
+                  Edit caption
+                </li>
               </>
             )}
             <li onClick={() => history.push(`/p/${id}`)}>Go to Post</li>
           </ActionModal>
+          {/* Edit Caption Modal */}
+          <Modal isOpen={openEditCaption} setIsOpen={setOpenEditCaption}>
+            <EditCaption
+              postCaption={caption}
+              postId={id}
+              postImage={imgURL}
+              close={() => {
+                setOpenEditCaption(false);
+                setIsOpen(false);
+              }}
+            />
+          </Modal>
         </div>
       </div>
       {/* Media */}

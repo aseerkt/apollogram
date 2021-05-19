@@ -169,6 +169,28 @@ export class PostResolver {
       return false;
     }
   }
+
+  @Mutation(() => String, { nullable: true })
+  @UseMiddleware(isAuth)
+  async editCaption(
+    @Arg('postId', () => ID) postId: string,
+    @Arg('caption') caption: string,
+    @Ctx() { res }: MyContext
+  ) {
+    try {
+      const post = await Post.findOne({
+        where: { id: postId, username: res.locals.username },
+      });
+      if (!post) return null;
+      if (post.caption === caption) return null;
+      post.caption = caption;
+      await post.save();
+      return post.caption;
+    } catch (err) {
+      console.log(err);
+      return null;
+    }
+  }
 }
 /*
  * curl 'http://localhost:5000/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:5000' --data-binary '{"query":"mutation AddPost($file: Upload!){\n  addPost(file)\n}"}' --compressed

@@ -1,0 +1,3 @@
+mutation EditCaption($postId: ID!, $caption: String!) {
+  editCaption(postId: $postId, caption: $caption)
+}
