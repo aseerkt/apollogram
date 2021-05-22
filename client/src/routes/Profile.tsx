@@ -2,21 +2,26 @@ import { Link, useParams } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import Spinner from '../components-ui/Spinner';
-import { useGetUserQuery, useMeQuery } from '../generated/graphql';
+import { useGetUserQuery, useMeQuery, User } from '../generated/graphql';
 import { AiOutlineTable } from 'react-icons/ai';
 import Button from '../components-ui/Button';
 import Alert from '../components-ui/Alert';
 import UserPosts from '../components/UserPosts';
+import useToggleFollowHook from '../utils/useToggleFollowHook';
+import { FaCheck, FaUser } from 'react-icons/fa';
 
 const Profile: React.FC = () => {
   const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
   const me = meData!.me!;
 
-  const params: any = useParams();
+  const params = useParams<{ username: string }>();
 
   const { data, loading, error } = useGetUserQuery({
-    variables: { username: params.username as string },
+    variables: { username: params.username },
   });
+
+  const { onToggle, toggling } = useToggleFollowHook(data?.getUser as User);
+
   if (loading) {
     return <Spinner />;
   } else if (error) {
@@ -27,7 +32,8 @@ const Profile: React.FC = () => {
     const {
       username,
       posts,
-      profile: { imgURL, name, bio, website },
+      isFollowing,
+      profile: { imgURL, name, bio, website, followersCount, followingsCount },
     } = data.getUser;
     return (
       <Container>
@@ -40,10 +46,32 @@ const Profile: React.FC = () => {
           />
           <div className='flex flex-col col-start-2 pr-3 -ml-10 md:order-2 md:ml-3 md:items-center md:flex-row'>
             <p className='text-3xl font-normal'>{username}</p>
-            {me.username === username && (
+            {me.username === username ? (
               <Link to='/edit-profile'>
                 <Button className='mt-3 md:ml-4 md:mt-0'>Edit Profile</Button>
               </Link>
+            ) : isFollowing ? (
+              <Button
+                className='mt-3 md:ml-4 md:mt-0'
+                isLoading={toggling}
+                onClick={onToggle}
+              >
+                {!toggling && (
+                  <span className='flex items-center py-1'>
+                    <FaUser className='mr-1' />
+                    <FaCheck />
+                  </span>
+                )}
+              </Button>
+            ) : (
+              <Button
+                color='dark'
+                className='mt-3 md:ml-4 md:mt-0'
+                isLoading={toggling}
+                onClick={onToggle}
+              >
+                {!toggling && 'Follow'}
+              </Button>
             )}
           </div>
           <div className='col-span-2 col-start-1 p-3 mt-3 md:order-4 md:col-start-2'>
@@ -64,11 +92,11 @@ const Profile: React.FC = () => {
               <p className='text-gray-600 md:text-black'>posts</p>
             </div>
             <div className='md:flex'>
-              <strong className='md:mr-1'>20</strong>
+              <strong className='md:mr-1'>{followersCount}</strong>
               <p className='text-gray-600 md:text-black'>followers</p>
             </div>
             <div className='md:flex'>
-              <strong className='md:mr-1'>100</strong>
+              <strong className='md:mr-1'>{followingsCount}</strong>
               <p className='text-gray-600 md:text-black'>following</p>
             </div>
           </main>

@@ -1,0 +1,5 @@
+query GetFollowSuggestions {
+  getFollowSuggestions {
+    ...UserWithProfile
+  }
+}

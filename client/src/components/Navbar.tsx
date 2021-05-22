@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
 import DropDown from './DropDown';
@@ -8,10 +8,11 @@ import { MdHome } from 'react-icons/md';
 import { FiPlusSquare } from 'react-icons/fi';
 import Modal from '../components-ui/Modal';
 import AddPost from './AddPost';
+import { AiOutlineHome } from 'react-icons/ai';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
-
+  const location = useLocation();
   const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
   const me = data?.me;
 
@@ -29,7 +30,11 @@ const Navbar: React.FC = () => {
           <>
             <div className='flex items-center ml-auto'>
               <Link aria-label='home' to='/'>
-                <MdHome size='1.8em' className='mr-2' title='Home' />
+                {location.pathname === '/' ? (
+                  <MdHome size='1.8em' className='mr-2' title='Home' />
+                ) : (
+                  <AiOutlineHome size='1.8em' className='mr-2' title='Home' />
+                )}
               </Link>
               <button
                 aria-label='add post button'

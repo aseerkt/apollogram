@@ -21,8 +21,8 @@
 - `node v^14.5`
 - `yarn v^1.22.5` - required for file upload feature to work on backend
 - `git` - version control
-- PostgreSQL - for storing data
-- Redis / MongoDB - for session authentication
+- PostgreSQL - Database
+- Cloudinary Account
 
 ### Installing
 
@@ -49,7 +49,7 @@
 
 ## Roadmap
 
-- [x] JWT authentication
+- [x] JWT cookie based authentication
 - [x] Upload images to cloudinary
 - [x] Add, like or unlike post
 - [x] Comment on post
@@ -57,11 +57,11 @@
 - [x] Edit Profile Credentials
 - [x] Post pagination
 - [x] Edit / Delete post
-- [ ] Post Feed
-- [ ] Smiley support for caption and comments
-- [ ] Hashtag support
-- [ ] Reduce image quality/size
+- [ ] Follow / Unfollow Feature
 - [ ] Follow Suggestions
+- [ ] Post Feed
+- [ ] Hashtag support
+- [ ] Smiley support for caption and comments
 - [ ] Mention poeples in caption and comments
 - [ ] Notifications
 

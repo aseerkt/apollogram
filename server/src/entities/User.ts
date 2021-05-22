@@ -13,6 +13,7 @@ import {
 import { Post } from './Post';
 import { BaseColumns } from './BaseColumns';
 import { Profile } from './Profile';
+// import { Follow } from './Follow';
 
 @ObjectType()
 @Entity('users')
@@ -43,13 +44,11 @@ export class User extends BaseColumns {
   @OneToOne(() => Profile, (profile) => profile.user)
   profile: Profile;
 
-  // @Field(() => [Follow])
-  // @OneToMany(() => Follow, (follow) => follow.following)
-  // followers: Follow[];
-
-  // @Field(() => [Follow])
   // @OneToMany(() => Follow, (follow) => follow.user)
   // followings: Follow[];
+
+  // @OneToMany(() => Follow, (follow) => follow.following)
+  // followers: Follow[];
 
   // Methods
   @BeforeInsert()

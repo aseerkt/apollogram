@@ -61,6 +61,8 @@ export type Profile = {
   website: Scalars['String'];
   bio: Scalars['String'];
   gender: Scalars['String'];
+  followersCount: Scalars['Int'];
+  followingsCount: Scalars['Int'];
 };
 
 export type User = {
@@ -72,6 +74,13 @@ export type User = {
   email: Scalars['String'];
   posts: Array<Post>;
   profile: Profile;
+  isFollowing: Scalars['Boolean'];
+};
+
+export type Follow = {
+  __typename?: 'Follow';
+  username: Scalars['String'];
+  followingUsername: Scalars['String'];
 };
 
 export type FieldError = {
@@ -121,6 +130,7 @@ export type LoginResponse = {
 export type Query = {
   __typename?: 'Query';
   getComments: Array<Comment>;
+  getFollowSuggestions: Array<User>;
   getPosts: PaginatedPost;
   getSinglePost?: Maybe<Post>;
   me?: Maybe<User>;
@@ -152,6 +162,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addComment?: Maybe<Comment>;
   deleteComment: Scalars['Boolean'];
+  toggleFollow: Scalars['Boolean'];
   toggleLike: Scalars['Boolean'];
   addPost: CreatePostResponse;
   deletePost: Scalars['Boolean'];
@@ -173,6 +184,11 @@ export type MutationAddCommentArgs = {
 
 export type MutationDeleteCommentArgs = {
   commentId: Scalars['String'];
+};
+
+
+export type MutationToggleFollowArgs = {
+  followingUsername: Scalars['ID'];
 };
 
 
@@ -249,12 +265,12 @@ export type RegualarPostFragment = (
 
 export type RegularProfileFragment = (
   { __typename?: 'Profile' }
-  & Pick<Profile, 'id' | 'name' | 'website' | 'bio' | 'gender' | 'imgURL'>
+  & Pick<Profile, 'id' | 'name' | 'website' | 'bio' | 'gender' | 'imgURL' | 'followersCount' | 'followingsCount'>
 );
 
 export type UserFieldFragment = (
   { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email'>
+  & Pick<User, 'id' | 'username' | 'email' | 'isFollowing'>
 );
 
 export type UserWithProfileFragment = (
@@ -406,6 +422,16 @@ export type RegisterMutation = (
   ) }
 );
 
+export type ToggleFollowMutationVariables = Exact<{
+  followingUsername: Scalars['ID'];
+}>;
+
+
+export type ToggleFollowMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'toggleFollow'>
+);
+
 export type ToggleLikeMutationVariables = Exact<{
   postId: Scalars['String'];
 }>;
@@ -426,6 +452,17 @@ export type GetCommentsQuery = (
   & { getComments: Array<(
     { __typename?: 'Comment' }
     & RegularCommentFragment
+  )> }
+);
+
+export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetFollowSuggestionsQuery = (
+  { __typename?: 'Query' }
+  & { getFollowSuggestions: Array<(
+    { __typename?: 'User' }
+    & UserWithProfileFragment
   )> }
 );
 
@@ -511,6 +548,7 @@ export const UserFieldFragmentDoc = gql`
   id
   username
   email
+  isFollowing
 }
     `;
 export const RegularProfileFragmentDoc = gql`
@@ -521,6 +559,8 @@ export const RegularProfileFragmentDoc = gql`
   bio
   gender
   imgURL
+  followersCount
+  followingsCount
 }
     `;
 export const UserWithProfileFragmentDoc = gql`
@@ -897,6 +937,37 @@ export function useRegisterMutation(baseOptions?: Apollo.MutationHookOptions<Reg
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const ToggleFollowDocument = gql`
+    mutation ToggleFollow($followingUsername: ID!) {
+  toggleFollow(followingUsername: $followingUsername)
+}
+    `;
+export type ToggleFollowMutationFn = Apollo.MutationFunction<ToggleFollowMutation, ToggleFollowMutationVariables>;
+
+/**
+ * __useToggleFollowMutation__
+ *
+ * To run a mutation, you first call `useToggleFollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useToggleFollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [toggleFollowMutation, { data, loading, error }] = useToggleFollowMutation({
+ *   variables: {
+ *      followingUsername: // value for 'followingUsername'
+ *   },
+ * });
+ */
+export function useToggleFollowMutation(baseOptions?: Apollo.MutationHookOptions<ToggleFollowMutation, ToggleFollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ToggleFollowMutation, ToggleFollowMutationVariables>(ToggleFollowDocument, options);
+      }
+export type ToggleFollowMutationHookResult = ReturnType<typeof useToggleFollowMutation>;
+export type ToggleFollowMutationResult = Apollo.MutationResult<ToggleFollowMutation>;
+export type ToggleFollowMutationOptions = Apollo.BaseMutationOptions<ToggleFollowMutation, ToggleFollowMutationVariables>;
 export const ToggleLikeDocument = gql`
     mutation ToggleLike($postId: String!) {
   toggleLike(postId: $postId)
@@ -963,6 +1034,40 @@ export function useGetCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export const GetFollowSuggestionsDocument = gql`
+    query GetFollowSuggestions {
+  getFollowSuggestions {
+    ...UserWithProfile
+  }
+}
+    ${UserWithProfileFragmentDoc}`;
+
+/**
+ * __useGetFollowSuggestionsQuery__
+ *
+ * To run a query within a React component, call `useGetFollowSuggestionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowSuggestionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowSuggestionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetFollowSuggestionsQuery(baseOptions?: Apollo.QueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, options);
+      }
+export function useGetFollowSuggestionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>(GetFollowSuggestionsDocument, options);
+        }
+export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollowSuggestionsQuery>;
+export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
+export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;
 export const GetPostsDocument = gql`
     query GetPosts($limit: Int!, $offset: Int) {
   getPosts(limit: $limit, offset: $offset) {
