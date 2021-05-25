@@ -57,9 +57,9 @@
 - [x] Edit Profile Credentials
 - [x] Post pagination
 - [x] Edit / Delete post
-- [ ] Follow / Unfollow Feature
-- [ ] Follow Suggestions
-- [ ] Post Feed
+- [x] Follow / Unfollow Feature
+- [x] Follow Suggestions
+- [x] Post Feed based on followings
 - [ ] Hashtag support
 - [ ] Smiley support for caption and comments
 - [ ] Mention poeples in caption and comments
