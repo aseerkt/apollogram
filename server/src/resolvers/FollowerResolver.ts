@@ -4,6 +4,7 @@ import {
   ID,
   Mutation,
   Query,
+  registerEnumType,
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
@@ -13,8 +14,89 @@ import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
 
+enum FollowEnum {
+  Followers,
+  Followings,
+}
+
+registerEnumType(FollowEnum, { name: 'FollowEnum' });
+
 @Resolver()
 export class FollowerResolver {
+  // QUERIES
+
+  @Query(() => [User])
+  @UseMiddleware(isAuth)
+  async getFollowSuggestions(@Ctx() { res }: MyContext): Promise<User[]> {
+    const suggestions = await getConnection().query(
+      `
+        SELECT 
+          "u"."id",
+          "u"."username",
+          "u"."email",
+          "u"."createdAt",
+          "u"."updatedAt"
+        FROM "users" "u"
+        LEFT JOIN "follows" "f"
+        ON "f"."followingUsername" = "u"."username" 
+        WHERE ("f"."username" != $1 OR "f"."username" IS NULL) AND "u"."username" != $1
+        LIMIT 5;
+      `,
+      [res.locals.username]
+    );
+
+    // "f"."followingUsername" != "u"."username"
+
+    return suggestions;
+  }
+
+  @Query(() => [User])
+  @UseMiddleware(isAuth)
+  async getFollows(
+    @Arg('username') username: string,
+    @Arg('selector', () => FollowEnum) selector: FollowEnum
+  ) {
+    if (selector === FollowEnum.Followers) {
+      const followers = await getConnection().query(
+        `
+        SELECT 
+          "u"."id",
+          "u"."username",
+          "u"."email",
+          "u"."createdAt",
+          "u"."updatedAt"
+        FROM "users" "u"
+        LEFT JOIN "follows" "f"
+        ON "f"."username" = "u"."username"
+        WHERE "f"."followingUsername" = $1
+        LIMIT 10
+      `,
+        [username]
+      );
+      return followers;
+    } else {
+      const followings = await getConnection().query(
+        `
+        SELECT 
+          "u"."id",
+          "u"."username",
+          "u"."email",
+          "u"."createdAt",
+          "u"."updatedAt"
+        FROM "users" "u"
+        LEFT JOIN "follows" "f"
+        ON "f"."followingUsername" = "u"."username"
+        WHERE "f"."username" = $1
+        LIMIT 10
+      `,
+        [username]
+      );
+      return followings;
+    }
+  }
+
+  // MUTATIONS
+
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async toggleFollow(
@@ -38,30 +120,5 @@ export class FollowerResolver {
       console.log(err);
       return false;
     }
-  }
-
-  @Query(() => [User])
-  @UseMiddleware(isAuth)
-  async getFollowSuggestions(@Ctx() { res }: MyContext): Promise<User[]> {
-    const suggestions = await getConnection().query(
-      `
-        SELECT 
-          "u"."id",
-          "u"."username",
-          "u"."email", 
-          "u"."createdAt", 
-          "u"."updatedAt"
-        FROM "users" "u" 
-        LEFT JOIN "follows" "f" 
-        ON "f"."followingUsername" = "u"."username"
-        WHERE "u"."username" != $1
-        LIMIT 5
-      `,
-      [res.locals.username]
-    );
-
-    // "f"."followingUsername" != "u"."username"
-
-    return suggestions;
   }
 }

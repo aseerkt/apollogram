@@ -37,12 +37,11 @@ export class CommentResolver {
     @Ctx() { res }: MyContext
   ) {
     try {
-      const comment = await Comment.create({
+      return await Comment.create({
         postId,
         text,
         username: res.locals.username,
       }).save();
-      return comment;
     } catch (err) {
       console.log(err);
       return false;

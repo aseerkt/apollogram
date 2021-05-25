@@ -9,11 +9,9 @@ import { Link } from 'react-router-dom';
 
 const Posts: React.FC = () => {
   const [observedPost, setObservedPost] = React.useState('');
-  const { data, loading, error, fetchMore, variables, networkStatus } =
-    useGetPostsQuery({
-      variables: { limit: 4 },
-      notifyOnNetworkStatusChange: true,
-    });
+  const { data, loading, error, fetchMore, variables } = useGetPostsQuery({
+    variables: { limit: 4 },
+  });
 
   React.useEffect(() => {
     if (data) {
@@ -66,7 +64,6 @@ const Posts: React.FC = () => {
               {data.getPosts.posts.map((post) => (
                 <PostCard key={post.id} post={post as Post} />
               ))}
-              {networkStatus === 7 && <Spinner />}
             </div>
             <div className='relative flex-1 hidden md:block md:ml-4'>
               {data && data.getPosts.posts.length > 0 && <ProfileRight />}

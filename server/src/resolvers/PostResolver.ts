@@ -14,6 +14,7 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
+import { getConnection } from 'typeorm';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 import { Comment } from '../entities/Comment';
 import { Like } from '../entities/Like';
@@ -85,35 +86,54 @@ export class PostResolver {
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
   async getPosts(
+    @Ctx() { res }: MyContext,
     @Arg('limit', () => Int) limit: number,
     @Arg('offset', () => Int, { nullable: true }) offset?: number
   ): Promise<PaginatedPost> {
-    // TODO: Pagination
-    const posts = await Post.find({
-      order: { createdAt: 'DESC' },
-      skip: offset ? offset : 0,
-      take: limit + 1,
-    });
+    const params = [res.locals.username, limit + 1];
+    if (offset) params.push(offset);
+    // Get posts from followed peoples only
+    const posts: Post[] = await getConnection().query(
+      `
+      SELECT 
+        "p"."id", 
+        "p"."createdAt", 
+        "p"."updatedAt", 
+        "p"."caption", 
+        "p"."imgURL", 
+        "p"."username" 
+      FROM "posts" "p" 
+      LEFT JOIN "follows" "f" 
+      ON "f"."followingUsername" = "p"."username" 
+      WHERE "f"."username" = $1 
+      ORDER BY "p"."createdAt" DESC 
+      LIMIT $2 ${offset ? 'OFFSET $3' : ''};
+    `,
+      params
+    );
     return {
       posts: posts.slice(0, limit),
       hasMore: posts.length === limit + 1,
     };
   }
 
-  // @Query(() => [Post])
-  // @UseMiddleware(isAuth)
-  // async getFeedPosts(@Ctx() { res }: MyContext) {
-  //   const followings = await Follow.find({
-  //     where: { username: res.locals.username },
-  //     select: ['following'],
-  //     relations: ['following.posts'],
-  //   });
-  //   const feedPosts: Post[] = [];
-  //   followings.forEach((f) => {
-  //     feedPosts.push(...f.following.posts);
-  //   });
-  //   return feedPosts;
-  // }
+  @Query(() => PaginatedPost)
+  @UseMiddleware(isAuth)
+  async getExplorePosts(
+    @Arg('limit', () => Int) limit: number,
+    @Arg('offset', () => Int, { nullable: true }) offset?: number
+  ): Promise<PaginatedPost> {
+    const posts = await Post.find({
+      order: { createdAt: 'DESC' },
+      skip: offset ? offset : 0,
+      take: limit + 1,
+    });
+
+    return {
+      posts: posts.slice(0, limit),
+      hasMore: posts.length === limit + 1,
+    };
+  }
 
   @Query(() => Post, { nullable: true })
   @UseMiddleware(isAuth)
@@ -196,3 +216,5 @@ export class PostResolver {
  * curl 'http://localhost:5000/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:5000' --data-binary '{"query":"mutation AddPost($file: Upload!){\n  addPost(file)\n}"}' --compressed
  *
  */
+
+// SELECT "p"."id", "p"."createdAt", "p"."updatedAt", "p"."caption", "p"."imgURL", "p"."username" FROM "posts" "p" LEFT JOIN "follows" "f" ON "f"."followingUsername" = "p"."username" WHERE "f"."username" = 'bob' ORDER BY "p"."createdAt" DESC LIMIT 6 OFFSET 10;
