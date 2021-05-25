@@ -14,6 +14,7 @@ import Profile from './routes/Profile';
 import SinglePost from './routes/SinglePost';
 import MessageProvider from './context/MessageContext';
 import Message from './components-ui/Message';
+import Explore from './routes/Explore';
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
@@ -31,6 +32,7 @@ const App: React.FC = () => {
         <div className='pb-10'>
           <Switch>
             <PrivateRoute exact path='/' component={Posts} />
+            <PrivateRoute exact path='/explore' component={Explore} />
             <Route exact path='/login' component={Login} />
             <Route exact path='/register' component={Register} />
             <PrivateRoute exact path='/p/:postId' component={SinglePost} />

@@ -9,6 +9,8 @@ import Alert from '../components-ui/Alert';
 import UserPosts from '../components/UserPosts';
 import useToggleFollowHook from '../utils/useToggleFollowHook';
 import { FaCheck, FaUser } from 'react-icons/fa';
+import FollowersModal from '../components/FollowersModal';
+import FollowingsModal from '../components/FollowingsModal';
 
 const Profile: React.FC = () => {
   const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
@@ -91,14 +93,14 @@ const Profile: React.FC = () => {
               <strong className='md:mr-1'>{posts.length}</strong>
               <p className='text-gray-600 md:text-black'>posts</p>
             </div>
-            <div className='md:flex'>
-              <strong className='md:mr-1'>{followersCount}</strong>
-              <p className='text-gray-600 md:text-black'>followers</p>
-            </div>
-            <div className='md:flex'>
-              <strong className='md:mr-1'>{followingsCount}</strong>
-              <p className='text-gray-600 md:text-black'>following</p>
-            </div>
+            <FollowersModal
+              followersCount={followersCount}
+              username={username}
+            />
+            <FollowingsModal
+              followingsCount={followingsCount}
+              username={username}
+            />
           </main>
         </header>
         {/* Tab | Posts */}

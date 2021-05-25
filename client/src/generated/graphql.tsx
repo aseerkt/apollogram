@@ -131,7 +131,9 @@ export type Query = {
   __typename?: 'Query';
   getComments: Array<Comment>;
   getFollowSuggestions: Array<User>;
+  getFollows: Array<User>;
   getPosts: PaginatedPost;
+  getExplorePosts: PaginatedPost;
   getSinglePost?: Maybe<Post>;
   me?: Maybe<User>;
   getUser?: Maybe<User>;
@@ -143,7 +145,19 @@ export type QueryGetCommentsArgs = {
 };
 
 
+export type QueryGetFollowsArgs = {
+  selector: FollowEnum;
+  username: Scalars['String'];
+};
+
+
 export type QueryGetPostsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryGetExplorePostsArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit: Scalars['Int'];
 };
@@ -157,6 +171,11 @@ export type QueryGetSinglePostArgs = {
 export type QueryGetUserArgs = {
   username: Scalars['String'];
 };
+
+export enum FollowEnum {
+  Followers = 'Followers',
+  Followings = 'Followings'
+}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -455,12 +474,44 @@ export type GetCommentsQuery = (
   )> }
 );
 
+export type GetExplorePostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  offset?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type GetExplorePostsQuery = (
+  { __typename?: 'Query' }
+  & { getExplorePosts: (
+    { __typename?: 'PaginatedPost' }
+    & Pick<PaginatedPost, 'hasMore'>
+    & { posts: Array<(
+      { __typename?: 'Post' }
+      & RegualarPostFragment
+    )> }
+  ) }
+);
+
 export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetFollowSuggestionsQuery = (
   { __typename?: 'Query' }
   & { getFollowSuggestions: Array<(
+    { __typename?: 'User' }
+    & UserWithProfileFragment
+  )> }
+);
+
+export type GetFollowsQueryVariables = Exact<{
+  selector: FollowEnum;
+  username: Scalars['String'];
+}>;
+
+
+export type GetFollowsQuery = (
+  { __typename?: 'Query' }
+  & { getFollows: Array<(
     { __typename?: 'User' }
     & UserWithProfileFragment
   )> }
@@ -1034,6 +1085,45 @@ export function useGetCommentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type GetCommentsQueryHookResult = ReturnType<typeof useGetCommentsQuery>;
 export type GetCommentsLazyQueryHookResult = ReturnType<typeof useGetCommentsLazyQuery>;
 export type GetCommentsQueryResult = Apollo.QueryResult<GetCommentsQuery, GetCommentsQueryVariables>;
+export const GetExplorePostsDocument = gql`
+    query GetExplorePosts($limit: Int!, $offset: Int) {
+  getExplorePosts(limit: $limit, offset: $offset) {
+    posts {
+      ...RegualarPost
+    }
+    hasMore
+  }
+}
+    ${RegualarPostFragmentDoc}`;
+
+/**
+ * __useGetExplorePostsQuery__
+ *
+ * To run a query within a React component, call `useGetExplorePostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetExplorePostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetExplorePostsQuery({
+ *   variables: {
+ *      limit: // value for 'limit'
+ *      offset: // value for 'offset'
+ *   },
+ * });
+ */
+export function useGetExplorePostsQuery(baseOptions: Apollo.QueryHookOptions<GetExplorePostsQuery, GetExplorePostsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetExplorePostsQuery, GetExplorePostsQueryVariables>(GetExplorePostsDocument, options);
+      }
+export function useGetExplorePostsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetExplorePostsQuery, GetExplorePostsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetExplorePostsQuery, GetExplorePostsQueryVariables>(GetExplorePostsDocument, options);
+        }
+export type GetExplorePostsQueryHookResult = ReturnType<typeof useGetExplorePostsQuery>;
+export type GetExplorePostsLazyQueryHookResult = ReturnType<typeof useGetExplorePostsLazyQuery>;
+export type GetExplorePostsQueryResult = Apollo.QueryResult<GetExplorePostsQuery, GetExplorePostsQueryVariables>;
 export const GetFollowSuggestionsDocument = gql`
     query GetFollowSuggestions {
   getFollowSuggestions {
@@ -1068,6 +1158,42 @@ export function useGetFollowSuggestionsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollowSuggestionsQuery>;
 export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
 export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;
+export const GetFollowsDocument = gql`
+    query GetFollows($selector: FollowEnum!, $username: String!) {
+  getFollows(selector: $selector, username: $username) {
+    ...UserWithProfile
+  }
+}
+    ${UserWithProfileFragmentDoc}`;
+
+/**
+ * __useGetFollowsQuery__
+ *
+ * To run a query within a React component, call `useGetFollowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowsQuery({
+ *   variables: {
+ *      selector: // value for 'selector'
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useGetFollowsQuery(baseOptions: Apollo.QueryHookOptions<GetFollowsQuery, GetFollowsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowsQuery, GetFollowsQueryVariables>(GetFollowsDocument, options);
+      }
+export function useGetFollowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowsQuery, GetFollowsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowsQuery, GetFollowsQueryVariables>(GetFollowsDocument, options);
+        }
+export type GetFollowsQueryHookResult = ReturnType<typeof useGetFollowsQuery>;
+export type GetFollowsLazyQueryHookResult = ReturnType<typeof useGetFollowsLazyQuery>;
+export type GetFollowsQueryResult = Apollo.QueryResult<GetFollowsQuery, GetFollowsQueryVariables>;
 export const GetPostsDocument = gql`
     query GetPosts($limit: Int!, $offset: Int) {
   getPosts(limit: $limit, offset: $offset) {

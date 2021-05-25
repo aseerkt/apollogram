@@ -1,0 +1,8 @@
+query GetExplorePosts($limit: Int!, $offset: Int) {
+  getExplorePosts(limit: $limit, offset: $offset) {
+    posts {
+      ...RegualarPost
+    }
+    hasMore
+  }
+}

@@ -1,12 +1,16 @@
 import { gql } from '@apollo/client';
 import { useCallback } from 'react';
+import { useMessageCtx } from '../context/MessageContext';
 import {
+  GetExplorePostsDocument,
+  GetPostsDocument,
   useMeQuery,
   User,
   useToggleFollowMutation,
 } from '../generated/graphql';
 
 const useToggleFollowHook = (user?: User) => {
+  const { setMessage } = useMessageCtx();
   const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
   const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
   const me = meData!.me!;
@@ -24,6 +28,10 @@ const useToggleFollowHook = (user?: User) => {
 
         await toggleFollow({
           variables: { followingUsername: username },
+          refetchQueries: [
+            { query: GetPostsDocument, variables: { limit: 4 } },
+            { query: GetExplorePostsDocument, variables: { limit: 12 } },
+          ],
           update: (cache, { data }) => {
             if (data?.toggleFollow) {
               // Update isFollowing
@@ -64,6 +72,11 @@ const useToggleFollowHook = (user?: User) => {
                 },
                 broadcast: false,
               });
+              setMessage(
+                `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`
+              );
+              // cache.evict({ fieldName: 'getPosts' });
+              // cache.evict({ fieldName: 'getExplorePosts' });
             }
           },
         });

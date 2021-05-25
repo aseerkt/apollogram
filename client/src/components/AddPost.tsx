@@ -32,6 +32,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     update: (cache, { data }) => {
       if (data?.addPost.post) {
         cache.evict({ fieldName: 'getPosts' });
+        cache.evict({ fieldName: 'getExplorePosts' });
       }
     },
   });

@@ -15,6 +15,9 @@ const Suggestions = () => {
         data.getFollowSuggestions.map((s) => (
           <SuggestionItem key={s.username + s.id} s={s as User} />
         ))}
+      {!data ||
+        !data.getFollowSuggestions ||
+        (data.getFollowSuggestions.length < 1 && <p>No Suggestions</p>)}
     </div>
   );
 };
