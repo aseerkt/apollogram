@@ -7,10 +7,9 @@ import { Post, useGetExplorePostsQuery } from '../generated/graphql';
 
 const Explore = () => {
   const [observedPost, setObservedPost] = useState('');
-  const { data, loading, error, fetchMore, variables, networkStatus } =
+  const { data, loading, error, fetchMore, variables } =
     useGetExplorePostsQuery({
       variables: { limit: 12 },
-      notifyOnNetworkStatusChange: true,
     });
 
   useEffect(() => {
@@ -59,7 +58,6 @@ const Explore = () => {
       {data?.getExplorePosts.posts && (
         <PostsGrid posts={data.getExplorePosts.posts as Post[]} />
       )}
-      {networkStatus === 7 && <Spinner />}
     </Container>
   );
 };
