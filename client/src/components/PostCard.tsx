@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-import Avatar from '../components-ui/Avatar';
-import Card from '../components-ui/Card';
-import { Comment, Post } from '../generated/graphql';
-import AddComment from './AddComment';
+import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
-import { useRef } from 'react';
+import { Comment, Post } from '../generated/graphql';
+import Avatar from '../components-ui/Avatar';
+import Card from '../components-ui/Card';
+import AddComment from './AddComment';
 import PostOptions from './PostOptions';
 import PostActions from './PostActions';
 
@@ -27,7 +26,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     comments,
     createdAt,
   } = post;
-  const [twoComments, setTwoComments] = useState<any>([]);
+  const [twoComments, setTwoComments] = useState<Comment[]>([]);
 
   useEffect(() => {
     setTwoComments(

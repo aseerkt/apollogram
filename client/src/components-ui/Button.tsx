@@ -35,7 +35,7 @@ const Button: React.FC<ButtonProps> = ({
         className
       )}
     >
-      {isLoading && <ButtonLoader />}
+      {isLoading && <ButtonLoader color={color} />}
       <div>{children}</div>
     </button>
   );

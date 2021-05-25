@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useMeQuery } from '../generated/graphql';
+import AddPost from './AddPost';
+import DropDown from './DropDown';
 import Avatar from '../components-ui/Avatar';
 import Container from '../components-ui/Container';
-import DropDown from './DropDown';
-import { useMeQuery } from '../generated/graphql';
-import { MdHome } from 'react-icons/md';
-import { FiPlusSquare } from 'react-icons/fi';
 import Modal from '../components-ui/Modal';
-import AddPost from './AddPost';
+import { FiPlusSquare } from 'react-icons/fi';
+import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
+import { IoIosCompass } from 'react-icons/io';
+import { ImCompass2 } from 'react-icons/im';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
-
+  const location = useLocation();
   const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
   const me = data?.me;
 
@@ -28,10 +30,22 @@ const Navbar: React.FC = () => {
         {me && (
           <>
             <div className='flex items-center ml-auto'>
-              <Link aria-label='home' to='/'>
-                <MdHome size='1.8em' className='mr-2' title='Home' />
+              <Link title='Home' aria-label='home' to='/'>
+                {location.pathname === '/' ? (
+                  <AiFillHome size='1.7em' className='mr-3' />
+                ) : (
+                  <AiOutlineHome size='1.7em' className='mr-3' />
+                )}
+              </Link>
+              <Link title='Explore' aria-label='explore' to='/explore'>
+                {location.pathname === '/explore' ? (
+                  <IoIosCompass size='2.1em' className='mr-3' />
+                ) : (
+                  <ImCompass2 size='1.7em' className='mr-3' />
+                )}
               </Link>
               <button
+                title='Add Post'
                 aria-label='add post button'
                 className='mr-4'
                 onClick={() => setOpen(true)}

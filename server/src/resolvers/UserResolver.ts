@@ -25,12 +25,14 @@ import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
 import { extractDomainFromUrl } from '../utils/extractDomainFromUrl';
+import { Follow } from '../entities/Follow';
 
 @Resolver(User)
 export class UserResolver {
-  // Email Field Resolver
+  // Field Resolvers
+
   @FieldResolver(() => String)
-  email(@Root() user: User, @Ctx() { res }: MyContext) {
+  email(@Root() user: User, @Ctx() { res }: MyContext): string {
     if (res.locals.username === user.username) {
       return user.email;
     }
@@ -38,15 +40,35 @@ export class UserResolver {
   }
 
   @FieldResolver(() => Profile)
-  profile(@Root() user: User, @Ctx() { profileLoader }: MyContext) {
+  profile(
+    @Root() user: User,
+    @Ctx() { profileLoader }: MyContext
+  ): Promise<Profile> {
     return profileLoader.load(user.username);
   }
 
   @FieldResolver(() => [Post])
   @UseMiddleware(isUser)
-  posts(@Root() user: User) {
+  posts(@Root() user: User): Promise<Post[]> {
     return Post.find({ where: { username: user.username } });
   }
+
+  @FieldResolver(() => Boolean)
+  @UseMiddleware(isUser)
+  async isFollowing(
+    @Root() user: User,
+    @Ctx() { res }: MyContext
+  ): Promise<boolean> {
+    const count = await Follow.count({
+      where: {
+        username: res.locals.username,
+        followingUsername: user.username,
+      },
+    });
+    return count === 1;
+  }
+
+  // QUERIES
 
   @Query(() => User, { nullable: true })
   @UseMiddleware(isUser)

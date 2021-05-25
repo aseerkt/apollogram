@@ -5,6 +5,7 @@ import {
   Ctx,
   Field,
   FieldResolver,
+  Int,
   Mutation,
   ObjectType,
   Resolver,
@@ -23,6 +24,7 @@ import { formatErrors } from '../utils/formatErrors';
 import { getManager } from 'typeorm';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { CLOUDINARY_ROOT_PATH } from '../constants';
+import { Follow } from '../entities/Follow';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -55,8 +57,10 @@ export class EditProfileResponse {
 
 @Resolver(Profile)
 export class ProfileResolver {
+  // FIELD RESOLVERS
+
   @FieldResolver(() => String)
-  gender(@Root() profile: Profile, @Ctx() { res }: MyContext) {
+  gender(@Root() profile: Profile, @Ctx() { res }: MyContext): string {
     if (res.locals.username == profile.username) {
       return profile.gender;
     }
@@ -64,7 +68,7 @@ export class ProfileResolver {
   }
 
   @FieldResolver(() => String)
-  name(@Root() profile: Profile, @Ctx() { res }: MyContext) {
+  name(@Root() profile: Profile, @Ctx() { res }: MyContext): string {
     if (res.locals.username == profile.username) {
       return profile.name;
     }
@@ -78,6 +82,18 @@ export class ProfileResolver {
     }
     return profile.imgURL;
   }
+
+  @FieldResolver(() => Int)
+  followersCount(@Root() profile: Profile): Promise<number> {
+    return Follow.count({ where: { followingUsername: profile.username } });
+  }
+
+  @FieldResolver(() => Int)
+  followingsCount(@Root() profile: Profile): Promise<number> {
+    return Follow.count({ where: { username: profile.username } });
+  }
+
+  // MUTATIONS
 
   // Change Profile Photo
 

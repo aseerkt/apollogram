@@ -1,33 +1,37 @@
-// import {
-//   BaseEntity,
-//   Entity,
-//   JoinColumn,
-//   ManyToOne,
-//   PrimaryColumn,
-// } from 'typeorm';
-// import { User } from './User';
+import { Field, ObjectType } from 'type-graphql';
+import {
+  BaseEntity,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
+import { User } from './User';
 
-// // User following who
+// User following who
 
-// @Entity('follows')
-// export class Follow extends BaseEntity {
-//   @PrimaryColumn()
-//   username: string;
+@ObjectType()
+@Entity('follows')
+export class Follow extends BaseEntity {
+  @Field()
+  @PrimaryColumn()
+  username: string;
 
-//   @PrimaryColumn()
-//   followingUsername: string;
+  @Field()
+  @PrimaryColumn()
+  followingUsername: string;
 
-//   @ManyToOne(() => User, (user) => user.followings, {
-//     eager: true,
-//     onDelete: 'CASCADE',
-//   })
-//   @JoinColumn({ name: 'usename', referencedColumnName: 'username' })
-//   user: User;
+  @ManyToOne(() => User, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
+  user: User;
 
-//   @ManyToOne(() => User, (user) => user.followers, {
-//     eager: true,
-//     onDelete: 'CASCADE',
-//   })
-//   @JoinColumn({ name: 'followingUsername', referencedColumnName: 'username' })
-//   following: User;
-// }
+  @ManyToOne(() => User, {
+    eager: true,
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'followingUsername', referencedColumnName: 'username' })
+  following: User;
+}

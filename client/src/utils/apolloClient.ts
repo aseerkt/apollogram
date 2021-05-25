@@ -30,6 +30,23 @@ export const apolloClient = new ApolloClient({
               }
             },
           },
+          getExplorePosts: {
+            keyArgs: false,
+            merge(
+              existing: PaginatedPost | undefined,
+              incoming: PaginatedPost,
+              { args }
+            ) {
+              if (args) {
+                const offset = args.offset || 0;
+                const mergedPosts = existing ? existing.posts.slice(0) : [];
+                for (let i = 0; i < incoming.posts.length; ++i) {
+                  mergedPosts[offset + i] = incoming.posts[i];
+                }
+                return { ...incoming, posts: mergedPosts };
+              }
+            },
+          },
         },
       },
     },

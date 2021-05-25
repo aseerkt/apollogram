@@ -1,8 +1,8 @@
 import { useApolloClient } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
-// import Button from '../components-ui/Button';
 import { MeDocument } from '../generated/graphql';
+import Suggestions from './Suggestions';
 
 const ProfileRight: React.FC = () => {
   const apolloClient = useApolloClient();
@@ -30,29 +30,7 @@ const ProfileRight: React.FC = () => {
         <p className='font-semibold text-gray-800 cursor-pointer'>See All</p>
       </div>
       <div className='flex flex-col'>
-        <h2>Upcoming</h2>
-        {/* {data && data.getFollowSuggestions ? (
-          data.getFollowSuggestions.map(({ username, profile: { imgURL } }) => (
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center'>
-                <Avatar className='mx-3' src={imgURL} alt='Profile Picture' />
-                <div className='flex flex-col justify-center'>
-                  <Link to={`/u/${username}`}>
-                    <span className='text-sm font-semibold hover:underline'>
-                      {username}
-                    </span>
-                  </Link>
-                  <p className='text-sm text-gray-400'>Suggested for you</p>
-                </div>
-              </div>
-              <button className='text-sm font-semibold text-blue-500 border-none shadow-none'>
-                Follow
-              </button>
-            </div>
-          ))
-        ) : (
-          <p>No Suggestions</p>
-        )} */}
+        <Suggestions />
       </div>
     </>
   );
