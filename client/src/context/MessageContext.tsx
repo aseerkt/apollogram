@@ -5,10 +5,7 @@ interface MessageType {
   setMessage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const MessageContext = createContext<MessageType>({
-  message: null,
-  setMessage: () => {},
-});
+const MessageContext = createContext<MessageType>({} as any);
 
 const MessageProvider: React.FC = ({ children }) => {
   const [message, setMessage] = useState<string | null>(null);
