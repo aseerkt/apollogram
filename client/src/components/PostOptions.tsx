@@ -18,12 +18,8 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
   const history = useHistory();
 
   return (
-    <div
-      className='cursor-pointer'
-      role='button'
-      onClick={(e) => setIsOpen(true)}
-    >
-      <MdMoreHoriz size='1.5em' />
+    <div className='cursor-pointer' role='button'>
+      <MdMoreHoriz size='1.5em' onClick={(e) => setIsOpen(true)} />
       <ActionModal isOpen={isOpen} setIsOpen={setIsOpen}>
         {meData && meData.me && meData.me.username === user.username && (
           <>

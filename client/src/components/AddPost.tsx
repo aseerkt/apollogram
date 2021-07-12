@@ -5,6 +5,7 @@ import Button from '../components-ui/Button';
 import Card from '../components-ui/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 import { useMessageCtx } from '../context/MessageContext';
+import { useHistory } from 'react-router-dom';
 
 interface AddPostProps {
   className?: string;
@@ -18,6 +19,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const inputRef = React.createRef<HTMLInputElement>();
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const history = useHistory();
 
   const onDrop = useCallback(
     (files: File[]) => {
@@ -33,6 +35,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
       if (data?.addPost.post) {
         cache.evict({ fieldName: 'getPosts' });
         cache.evict({ fieldName: 'getExplorePosts' });
+        history.push(`/p/${data.addPost.post.id}`);
       }
     },
   });
