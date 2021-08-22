@@ -1,5 +1,5 @@
 import { ApolloCache, gql } from '@apollo/client';
-import { ToggleLikeMutation } from '../generated/graphql';
+import { ToggleLikeMutation } from '@/generated/graphql';
 
 export default function useToggleLikeInCache() {
   return (cache: ApolloCache<ToggleLikeMutation>, postId: string) => {

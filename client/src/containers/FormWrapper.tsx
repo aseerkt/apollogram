@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaInstagram } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import Card from '../components-ui/Card';
+import Card from '@/components-ui/Card';
 
 interface FormWrapperProps {
   title: string;

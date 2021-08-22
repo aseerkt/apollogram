@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client';
 import { useCallback } from 'react';
-import { useMessageCtx } from '../context/MessageContext';
+import { useMessageCtx } from '@/context/MessageContext';
 import {
   GetExplorePostsDocument,
   GetPostsDocument,
   useMeQuery,
   User,
   useToggleFollowMutation,
-} from '../generated/graphql';
+} from '@/generated/graphql';
 
 const useToggleFollowHook = (user?: User) => {
   const { setMessage } = useMessageCtx();

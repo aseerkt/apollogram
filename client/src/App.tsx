@@ -1,19 +1,21 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Login from './routes/Login';
 import './App.css';
-import Register from './routes/Register';
 import { MeDocument, useMeQuery } from './generated/graphql';
-import Posts from './routes/Posts';
 import Alert from './components-ui/Alert';
 import { apolloClient } from './utils/apolloClient';
 import Spinner from './components-ui/Spinner';
+import Message from './components-ui/Message';
 import PrivateRoute from './containers/PrivateRoute';
+
+// Routes
+import Login from './routes/Login';
+import Register from './routes/Register';
+import Posts from './routes/Posts';
 import EditProfile from './routes/EditProfile';
 import Profile from './routes/Profile';
 import SinglePost from './routes/SinglePost';
 import MessageProvider from './context/MessageContext';
-import Message from './components-ui/Message';
 import Explore from './routes/Explore';
 
 const App: React.FC = () => {
