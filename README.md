@@ -2,9 +2,9 @@
 
 > Instagram Clone | Social Media Application
 
-<div style="display: flex; justify-content: space-between;">
-<img src="/instagram_clone.png/"  style="object-fit:contain; width: 70%;"  /> <img src="/instagram_clone_moto_g4.png" style="width:30%; height: auto;" />
-</div>
+| Web UI                                        | Mobile UI                                                |
+| --------------------------------------------- | -------------------------------------------------------- |
+| ![web-screenshot](assets/instagram_clone.png) | ![mobile-screenshot](assets/instagram_clone_moto_g4.png) |
 
 ## Stacks Used
 
