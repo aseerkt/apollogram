@@ -36,15 +36,10 @@ export class FollowerResolver {
           "u"."email",
           "u"."createdAt",
           "u"."updatedAt"
-        FROM "users" "u"
-        WHERE u.username != $1 AND NOT Exists
-        (
-          SELECT 1
-          FROM follows f
-          INNER JOIN users u2
-          ON f.username = u2.username
-          WHERE u.username = f."followingUsername" AND u.username != $1
-        )
+        FROM users u
+        WHERE username != 'bob'
+        AND username not in
+          (SELECT "followingUsername" FROM follows where username = $1);
       `,
       [res.locals.username]
     );
