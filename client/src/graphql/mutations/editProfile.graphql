@@ -4,14 +4,12 @@ mutation EditProfile(
   $bio: String!
   $gender: String!
   $email: String!
-  $username: String!
 ) {
   editProfile(
     name: $name
     website: $website
     bio: $bio
     gender: $gender
-    username: $username
     email: $email
   ) {
     ok

@@ -137,7 +137,6 @@ export type MutationChangeProfilePhotoArgs = {
 
 export type MutationEditProfileArgs = {
   name: Scalars['String'];
-  username: Scalars['String'];
   email: Scalars['String'];
   website: Scalars['String'];
   bio: Scalars['String'];
@@ -315,7 +314,6 @@ export type EditProfileMutationVariables = Exact<{
   bio: Scalars['String'];
   gender: Scalars['String'];
   email: Scalars['String'];
-  username: Scalars['String'];
 }>;
 
 
@@ -648,13 +646,12 @@ export type EditCaptionMutationHookResult = ReturnType<typeof useEditCaptionMuta
 export type EditCaptionMutationResult = Apollo.MutationResult<EditCaptionMutation>;
 export type EditCaptionMutationOptions = Apollo.BaseMutationOptions<EditCaptionMutation, EditCaptionMutationVariables>;
 export const EditProfileDocument = gql`
-    mutation EditProfile($name: String!, $website: String!, $bio: String!, $gender: String!, $email: String!, $username: String!) {
+    mutation EditProfile($name: String!, $website: String!, $bio: String!, $gender: String!, $email: String!) {
   editProfile(
     name: $name
     website: $website
     bio: $bio
     gender: $gender
-    username: $username
     email: $email
   ) {
     ok
@@ -685,7 +682,6 @@ export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation,
  *      bio: // value for 'bio'
  *      gender: // value for 'gender'
  *      email: // value for 'email'
- *      username: // value for 'username'
  *   },
  * });
  */

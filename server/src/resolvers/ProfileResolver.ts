@@ -32,9 +32,6 @@ export class EditProfileArgs {
   name: string;
 
   @Field()
-  username: string;
-
-  @Field()
   email: string;
 
   @Field()
@@ -142,7 +139,7 @@ export class ProfileResolver {
   @Mutation(() => EditProfileResponse)
   @UseMiddleware(isAuth)
   async editProfile(
-    @Args() { name, gender, website, bio, email, username }: EditProfileArgs,
+    @Args() { name, gender, website, bio, email }: EditProfileArgs,
     @Ctx() { res }: MyContext
   ): Promise<EditProfileResponse> {
     const user = await User.findOne({
@@ -152,7 +149,6 @@ export class ProfileResolver {
 
     if (profile && user) {
       user.email = email;
-      user.username = username;
       profile.gender = gender;
       profile.website = website;
       profile.name = name;

@@ -19,7 +19,7 @@ const EditProfile: React.FC = () => {
     profile: { name, bio, gender, website },
   } = data.me!;
 
-  if (!username) return null;
+  if (!username || !email) return null;
 
   return (
     <Container>
@@ -44,7 +44,6 @@ const EditProfile: React.FC = () => {
               website,
               bio,
               gender,
-              username,
               email,
             }}
             onSubmit={async (values, action) => {
@@ -69,7 +68,7 @@ const EditProfile: React.FC = () => {
               }
             }}
           >
-            {({ isSubmitting, values: { username, email } }) => (
+            {({ isSubmitting, values: { email } }) => (
               <Form className='flex flex-col w-full mb-5'>
                 <InputField
                   inline
@@ -78,7 +77,6 @@ const EditProfile: React.FC = () => {
                   error=''
                   helperText="Help people discover your account by using the name you're known by: either your full name, nickname, or business name."
                 />
-                {/* <InputField inline name='username' disabled label='Username' /> */}
                 <InputField inline type='url' name='website' label='Website' />
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
                   <label
@@ -95,14 +93,13 @@ const EditProfile: React.FC = () => {
                 </div>
 
                 <InputField inline name='email' label='Email' />
-
                 <InputField inline name='gender' label='Gender' error='' />
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
                   <div></div>
                   <Button
-                    isLoading={loading}
+                    isLoading={isSubmitting || loading}
                     className='inline-block w-20 text-left'
-                    disabled={!username || !email}
+                    disabled={!email}
                     color='dark'
                     type='submit'
                   >
