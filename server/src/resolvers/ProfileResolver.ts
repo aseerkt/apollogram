@@ -46,8 +46,8 @@ export class EditProfileArgs {
 
 @ObjectType()
 export class EditProfileResponse {
-  @Field()
-  ok: boolean;
+  @Field(() => User, { nullable: true })
+  user?: User;
   @Field(() => [FieldError], { nullable: true })
   errors?: FieldError[];
 }
@@ -158,13 +158,13 @@ export class ProfileResolver {
         const profileErrors = await validate(profile);
         if (userErrors.length > 0 || profileErrors.length > 0) {
           const errors = formatErrors([...userErrors, ...profileErrors]);
-          return { ok: false, errors };
+          return { errors };
         }
         await getManager().transaction(async (tem) => {
           await tem.save(user);
           await tem.save(profile);
         });
-        return { ok: true };
+        return { user };
       } catch (err) {
         console.log(err);
       }
@@ -172,7 +172,6 @@ export class ProfileResolver {
       console.log(profile, user);
     }
     return {
-      ok: false,
       errors: [{ path: 'unknown', message: 'Server Error' }],
     };
   }

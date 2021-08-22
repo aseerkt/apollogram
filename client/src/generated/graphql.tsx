@@ -46,7 +46,7 @@ export type CreatePostResponse = {
 
 export type EditProfileResponse = {
   __typename?: 'EditProfileResponse';
-  ok: Scalars['Boolean'];
+  user?: Maybe<User>;
   errors?: Maybe<Array<FieldError>>;
 };
 
@@ -317,7 +317,7 @@ export type EditProfileMutationVariables = Exact<{
 }>;
 
 
-export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
+export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileResponse', user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }>, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -654,14 +654,16 @@ export const EditProfileDocument = gql`
     gender: $gender
     email: $email
   ) {
-    ok
+    user {
+      ...UserWithProfile
+    }
     errors {
       path
       message
     }
   }
 }
-    `;
+    ${UserWithProfileFragmentDoc}`;
 export type EditProfileMutationFn = Apollo.MutationFunction<EditProfileMutation, EditProfileMutationVariables>;
 
 /**

@@ -1,7 +1,11 @@
 import Button from '../components-ui/Button';
 import Container from '../components-ui/Container';
 import InputField from '../components-ui/InputField';
-import { useEditProfileMutation, useMeQuery } from '../generated/graphql';
+import {
+  MeDocument,
+  useEditProfileMutation,
+  useMeQuery,
+} from '../generated/graphql';
 import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 import { Field, Form, Formik } from 'formik';
 import { useMessageCtx } from '../context/MessageContext';
@@ -42,18 +46,21 @@ const EditProfile: React.FC = () => {
             }}
             onSubmit={async (values, action) => {
               try {
-                const res = await editProfile({
+                await editProfile({
                   variables: values,
                   update: (cache, { data }) => {
                     if (data) {
-                      const { errors, ok } = data.editProfile;
+                      const { errors, user } = data.editProfile;
                       if (errors) {
                         errors.forEach(({ path, message }) => {
                           action.setFieldError(path, message);
                         });
                       }
-                      if (ok) {
-                        cache.evict({ id: cache.identify(user) });
+                      if (user) {
+                        cache.writeQuery({
+                          query: MeDocument,
+                          data: { me: user },
+                        });
                         setMessage('Profile updated');
                       }
                     }

@@ -1,6 +1,0 @@
-fragment UserWithProfile on User {
-  ...UserField
-  profile {
-    ...RegularProfile
-  }
-}

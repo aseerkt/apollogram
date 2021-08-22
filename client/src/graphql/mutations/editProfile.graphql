@@ -12,7 +12,9 @@ mutation EditProfile(
     gender: $gender
     email: $email
   ) {
-    ok
+    user {
+      ...UserWithProfile
+    }
     errors {
       path
       message
