@@ -37,12 +37,11 @@ const FollowModal: React.FC<FollowModalProps> = ({
             onClick={() => setIsOpen(false)}
           />
         </header>
-        <div className='px-3'>
-          {data?.getFollows.map((u) => (
+        <div className='px-3 overflow-auto'>
+          {data?.getFollows?.map((u) => (
             <SuggestionItem darkFollowButton s={u as User} />
           ))}
-          {!data ||
-            !data.getFollows ||
+          {!data?.getFollows ||
             (data.getFollows.length === 0 && (
               <p className='py-3'>You have no {modalTitle.toLowerCase()}</p>
             ))}
