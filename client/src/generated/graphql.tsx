@@ -25,7 +25,6 @@ export type BaseColumns = {
   updatedAt: Scalars['DateTime'];
 };
 
-
 export type Comment = {
   __typename?: 'Comment';
   id: Scalars['ID'];
@@ -37,50 +36,18 @@ export type Comment = {
   user: User;
 };
 
-export type Post = {
-  __typename?: 'Post';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  caption: Scalars['String'];
-  imgURL: Scalars['String'];
-  username: Scalars['String'];
-  user: User;
-  likeCount: Scalars['Int'];
-  userLike: Scalars['Boolean'];
-  comments: Array<Comment>;
+export type CreatePostResponse = {
+  __typename?: 'CreatePostResponse';
+  ok: Scalars['Boolean'];
+  post?: Maybe<Post>;
+  error?: Maybe<FieldError>;
 };
 
-export type Profile = {
-  __typename?: 'Profile';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  imgURL: Scalars['String'];
-  name: Scalars['String'];
-  website: Scalars['String'];
-  bio: Scalars['String'];
-  gender: Scalars['String'];
-  followersCount: Scalars['Int'];
-  followingsCount: Scalars['Int'];
-};
 
-export type User = {
-  __typename?: 'User';
-  id: Scalars['ID'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
-  username: Scalars['String'];
-  email: Scalars['String'];
-  posts: Array<Post>;
-  profile: Profile;
-  isFollowing: Scalars['Boolean'];
-};
-
-export type Follow = {
-  __typename?: 'Follow';
-  username: Scalars['String'];
-  followingUsername: Scalars['String'];
+export type EditProfileResponse = {
+  __typename?: 'EditProfileResponse';
+  ok: Scalars['Boolean'];
+  errors?: Maybe<Array<FieldError>>;
 };
 
 export type FieldError = {
@@ -89,36 +56,16 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
-export type PostResponse = {
-  __typename?: 'PostResponse';
-  post?: Maybe<Post>;
-  error?: Maybe<Scalars['String']>;
+export type Follow = {
+  __typename?: 'Follow';
+  username: Scalars['String'];
+  followingUsername: Scalars['String'];
 };
 
-export type PaginatedPost = {
-  __typename?: 'PaginatedPost';
-  posts: Array<Post>;
-  hasMore: Scalars['Boolean'];
-};
-
-export type CreatePostResponse = {
-  __typename?: 'CreatePostResponse';
-  ok: Scalars['Boolean'];
-  post?: Maybe<Post>;
-  error?: Maybe<FieldError>;
-};
-
-export type EditProfileResponse = {
-  __typename?: 'EditProfileResponse';
-  ok: Scalars['Boolean'];
-  errors?: Maybe<Array<FieldError>>;
-};
-
-export type RegisterResponse = {
-  __typename?: 'RegisterResponse';
-  ok: Scalars['Boolean'];
-  errors?: Maybe<Array<FieldError>>;
-};
+export enum FollowEnum {
+  Followers = 'Followers',
+  Followings = 'Followings'
+}
 
 export type LoginResponse = {
   __typename?: 'LoginResponse';
@@ -126,56 +73,6 @@ export type LoginResponse = {
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
-
-export type Query = {
-  __typename?: 'Query';
-  getComments: Array<Comment>;
-  getFollowSuggestions: Array<User>;
-  getFollows: Array<User>;
-  getPosts: PaginatedPost;
-  getExplorePosts: PaginatedPost;
-  getSinglePost?: Maybe<Post>;
-  me?: Maybe<User>;
-  getUser?: Maybe<User>;
-};
-
-
-export type QueryGetCommentsArgs = {
-  postId: Scalars['String'];
-};
-
-
-export type QueryGetFollowsArgs = {
-  selector: FollowEnum;
-  username: Scalars['String'];
-};
-
-
-export type QueryGetPostsArgs = {
-  offset?: Maybe<Scalars['Int']>;
-  limit: Scalars['Int'];
-};
-
-
-export type QueryGetExplorePostsArgs = {
-  offset?: Maybe<Scalars['Int']>;
-  limit: Scalars['Int'];
-};
-
-
-export type QueryGetSinglePostArgs = {
-  postId: Scalars['String'];
-};
-
-
-export type QueryGetUserArgs = {
-  username: Scalars['String'];
-};
-
-export enum FollowEnum {
-  Followers = 'Followers',
-  Followings = 'Followings'
-}
 
 export type Mutation = {
   __typename?: 'Mutation';
@@ -260,46 +157,119 @@ export type MutationLoginArgs = {
   username: Scalars['String'];
 };
 
+export type PaginatedPost = {
+  __typename?: 'PaginatedPost';
+  posts: Array<Post>;
+  hasMore: Scalars['Boolean'];
+};
 
-export type RegularCommentFragment = (
-  { __typename?: 'Comment' }
-  & Pick<Comment, 'id' | 'text' | 'username' | 'createdAt' | 'updatedAt'>
-  & { user: (
-    { __typename?: 'User' }
-    & UserWithProfileFragment
-  ) }
-);
+export type Post = {
+  __typename?: 'Post';
+  id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  caption: Scalars['String'];
+  imgURL: Scalars['String'];
+  username: Scalars['String'];
+  user: User;
+  likeCount: Scalars['Int'];
+  userLike: Scalars['Boolean'];
+  comments: Array<Comment>;
+};
 
-export type RegualarPostFragment = (
-  { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'caption' | 'imgURL' | 'likeCount' | 'userLike' | 'createdAt' | 'updatedAt'>
-  & { user: (
-    { __typename?: 'User' }
-    & UserWithProfileFragment
-  ), comments: Array<(
-    { __typename?: 'Comment' }
-    & RegularCommentFragment
-  )> }
-);
+export type PostResponse = {
+  __typename?: 'PostResponse';
+  post?: Maybe<Post>;
+  error?: Maybe<Scalars['String']>;
+};
 
-export type RegularProfileFragment = (
-  { __typename?: 'Profile' }
-  & Pick<Profile, 'id' | 'name' | 'website' | 'bio' | 'gender' | 'imgURL' | 'followersCount' | 'followingsCount'>
-);
+export type Profile = {
+  __typename?: 'Profile';
+  id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  imgURL: Scalars['String'];
+  name: Scalars['String'];
+  website: Scalars['String'];
+  bio: Scalars['String'];
+  gender: Scalars['String'];
+  followersCount: Scalars['Int'];
+  followingsCount: Scalars['Int'];
+};
 
-export type UserFieldFragment = (
-  { __typename?: 'User' }
-  & Pick<User, 'id' | 'username' | 'email' | 'isFollowing'>
-);
+export type Query = {
+  __typename?: 'Query';
+  getComments: Array<Comment>;
+  getFollowSuggestions: Array<User>;
+  getFollows: Array<User>;
+  getPosts: PaginatedPost;
+  getExplorePosts: PaginatedPost;
+  getSinglePost?: Maybe<Post>;
+  me?: Maybe<User>;
+  getUser?: Maybe<User>;
+};
 
-export type UserWithProfileFragment = (
-  { __typename?: 'User' }
-  & { profile: (
-    { __typename?: 'Profile' }
-    & RegularProfileFragment
-  ) }
-  & UserFieldFragment
-);
+
+export type QueryGetCommentsArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type QueryGetFollowsArgs = {
+  selector: FollowEnum;
+  username: Scalars['String'];
+};
+
+
+export type QueryGetPostsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryGetExplorePostsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit: Scalars['Int'];
+};
+
+
+export type QueryGetSinglePostArgs = {
+  postId: Scalars['String'];
+};
+
+
+export type QueryGetUserArgs = {
+  username: Scalars['String'];
+};
+
+export type RegisterResponse = {
+  __typename?: 'RegisterResponse';
+  ok: Scalars['Boolean'];
+  errors?: Maybe<Array<FieldError>>;
+};
+
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['ID'];
+  createdAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTime'];
+  username: Scalars['String'];
+  email: Scalars['String'];
+  posts: Array<Post>;
+  profile: Profile;
+  isFollowing: Scalars['Boolean'];
+};
+
+export type RegularCommentFragment = { __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } };
+
+export type RegualarPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> };
+
+export type RegularProfileFragment = { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number };
+
+export type UserFieldFragment = { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean };
+
+export type UserWithProfileFragment = { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } };
 
 export type AddCommentMutationVariables = Exact<{
   text: Scalars['String'];
@@ -307,13 +277,7 @@ export type AddCommentMutationVariables = Exact<{
 }>;
 
 
-export type AddCommentMutation = (
-  { __typename?: 'Mutation' }
-  & { addComment?: Maybe<(
-    { __typename?: 'Comment' }
-    & RegularCommentFragment
-  )> }
-);
+export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> };
 
 export type AddPostMutationVariables = Exact<{
   file: Scalars['Upload'];
@@ -321,44 +285,21 @@ export type AddPostMutationVariables = Exact<{
 }>;
 
 
-export type AddPostMutation = (
-  { __typename?: 'Mutation' }
-  & { addPost: (
-    { __typename?: 'CreatePostResponse' }
-    & Pick<CreatePostResponse, 'ok'>
-    & { post?: Maybe<(
-      { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'username'>
-      ) }
-    )>, error?: Maybe<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'path' | 'message'>
-    )> }
-  ) }
-);
+export type AddPostMutation = { __typename?: 'Mutation', addPost: { __typename?: 'CreatePostResponse', ok: boolean, post?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', username: string } }>, error?: Maybe<{ __typename?: 'FieldError', path: string, message: string }> } };
 
 export type ChangeProfilePhotoMutationVariables = Exact<{
   file?: Maybe<Scalars['Upload']>;
 }>;
 
 
-export type ChangeProfilePhotoMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'changeProfilePhoto'>
-);
+export type ChangeProfilePhotoMutation = { __typename?: 'Mutation', changeProfilePhoto: boolean };
 
 export type DeletePostMutationVariables = Exact<{
   postId: Scalars['ID'];
 }>;
 
 
-export type DeletePostMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'deletePost'>
-);
+export type DeletePostMutation = { __typename?: 'Mutation', deletePost: boolean };
 
 export type EditCaptionMutationVariables = Exact<{
   postId: Scalars['ID'];
@@ -366,10 +307,7 @@ export type EditCaptionMutationVariables = Exact<{
 }>;
 
 
-export type EditCaptionMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'editCaption'>
-);
+export type EditCaptionMutation = { __typename?: 'Mutation', editCaption?: Maybe<string> };
 
 export type EditProfileMutationVariables = Exact<{
   name: Scalars['String'];
@@ -381,17 +319,7 @@ export type EditProfileMutationVariables = Exact<{
 }>;
 
 
-export type EditProfileMutation = (
-  { __typename?: 'Mutation' }
-  & { editProfile: (
-    { __typename?: 'EditProfileResponse' }
-    & Pick<EditProfileResponse, 'ok'>
-    & { errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'path' | 'message'>
-    )>> }
-  ) }
-);
+export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -399,28 +327,12 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = (
-  { __typename?: 'Mutation' }
-  & { login: (
-    { __typename?: 'LoginResponse' }
-    & Pick<LoginResponse, 'ok'>
-    & { errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'path' | 'message'>
-    )>>, user?: Maybe<(
-      { __typename?: 'User' }
-      & UserFieldFragment
-    )> }
-  ) }
-);
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
-export type LogoutMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'logout'>
-);
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
@@ -429,50 +341,28 @@ export type RegisterMutationVariables = Exact<{
 }>;
 
 
-export type RegisterMutation = (
-  { __typename?: 'Mutation' }
-  & { register: (
-    { __typename?: 'RegisterResponse' }
-    & Pick<RegisterResponse, 'ok'>
-    & { errors?: Maybe<Array<(
-      { __typename?: 'FieldError' }
-      & Pick<FieldError, 'path' | 'message'>
-    )>> }
-  ) }
-);
+export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
 
 export type ToggleFollowMutationVariables = Exact<{
   followingUsername: Scalars['ID'];
 }>;
 
 
-export type ToggleFollowMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'toggleFollow'>
-);
+export type ToggleFollowMutation = { __typename?: 'Mutation', toggleFollow: boolean };
 
 export type ToggleLikeMutationVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type ToggleLikeMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<Mutation, 'toggleLike'>
-);
+export type ToggleLikeMutation = { __typename?: 'Mutation', toggleLike: boolean };
 
 export type GetCommentsQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type GetCommentsQuery = (
-  { __typename?: 'Query' }
-  & { getComments: Array<(
-    { __typename?: 'Comment' }
-    & RegularCommentFragment
-  )> }
-);
+export type GetCommentsQuery = { __typename?: 'Query', getComments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> };
 
 export type GetExplorePostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -480,28 +370,12 @@ export type GetExplorePostsQueryVariables = Exact<{
 }>;
 
 
-export type GetExplorePostsQuery = (
-  { __typename?: 'Query' }
-  & { getExplorePosts: (
-    { __typename?: 'PaginatedPost' }
-    & Pick<PaginatedPost, 'hasMore'>
-    & { posts: Array<(
-      { __typename?: 'Post' }
-      & RegualarPostFragment
-    )> }
-  ) }
-);
+export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> }> } };
 
 export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetFollowSuggestionsQuery = (
-  { __typename?: 'Query' }
-  & { getFollowSuggestions: Array<(
-    { __typename?: 'User' }
-    & UserWithProfileFragment
-  )> }
-);
+export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }> };
 
 export type GetFollowsQueryVariables = Exact<{
   selector: FollowEnum;
@@ -509,13 +383,7 @@ export type GetFollowsQueryVariables = Exact<{
 }>;
 
 
-export type GetFollowsQuery = (
-  { __typename?: 'Query' }
-  & { getFollows: Array<(
-    { __typename?: 'User' }
-    & UserWithProfileFragment
-  )> }
-);
+export type GetFollowsQuery = { __typename?: 'Query', getFollows: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }> };
 
 export type GetPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -523,76 +391,26 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = (
-  { __typename?: 'Query' }
-  & { getPosts: (
-    { __typename?: 'PaginatedPost' }
-    & Pick<PaginatedPost, 'hasMore'>
-    & { posts: Array<(
-      { __typename?: 'Post' }
-      & RegualarPostFragment
-    )> }
-  ) }
-);
+export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> }> } };
 
 export type GetSinglePostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type GetSinglePostQuery = (
-  { __typename?: 'Query' }
-  & { getSinglePost?: Maybe<(
-    { __typename?: 'Post' }
-    & RegualarPostFragment
-  )> }
-);
+export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } } }> }> };
 
 export type GetUserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = (
-  { __typename?: 'Query' }
-  & { getUser?: Maybe<(
-    { __typename?: 'User' }
-    & { posts: Array<(
-      { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'caption' | 'imgURL' | 'createdAt' | 'updatedAt' | 'likeCount'>
-      & { user: (
-        { __typename?: 'User' }
-        & Pick<User, 'username'>
-        & { profile: (
-          { __typename?: 'Profile' }
-          & Pick<Profile, 'imgURL'>
-        ) }
-      ), comments: Array<(
-        { __typename?: 'Comment' }
-        & Pick<Comment, 'text' | 'username'>
-        & { user: (
-          { __typename?: 'User' }
-          & { profile: (
-            { __typename?: 'Profile' }
-            & Pick<Profile, 'imgURL'>
-          ) }
-        ) }
-      )> }
-    )> }
-    & UserWithProfileFragment
-  )> }
-);
+export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, likeCount: number, user: { __typename?: 'User', username: string, profile: { __typename?: 'Profile', imgURL: string } }, comments: Array<{ __typename?: 'Comment', text: string, username: string, user: { __typename?: 'User', profile: { __typename?: 'Profile', imgURL: string } } }> }>, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = (
-  { __typename?: 'Query' }
-  & { me?: Maybe<(
-    { __typename?: 'User' }
-    & UserWithProfileFragment
-  )> }
-);
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followersCount: number, followingsCount: number } }> };
 
 export const UserFieldFragmentDoc = gql`
     fragment UserField on User {
