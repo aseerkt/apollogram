@@ -37,10 +37,14 @@ export class FollowerResolver {
           "u"."createdAt",
           "u"."updatedAt"
         FROM "users" "u"
-        LEFT JOIN "follows" "f"
-        ON "f"."followingUsername" = "u"."username" 
-        WHERE ("f"."username" != $1 OR "f"."username" IS NULL) AND "u"."username" != $1
-        LIMIT 5;
+        WHERE u.username != $1 AND NOT Exists
+        (
+          SELECT 1
+          FROM follows f
+          INNER JOIN users u2
+          ON f.username = u2.username
+          WHERE u.username = f."followingUsername" AND u.username != $1
+        )
       `,
       [res.locals.username]
     );
