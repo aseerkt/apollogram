@@ -23,7 +23,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
 
   return isOpen ? (
     <div className='fixed top-0 left-0 z-50 w-screen h-screen bg-black bg-opacity-70'>
-      {/* Modal Close button */}
       <button
         className='absolute text-white top-5 right-10'
         onClick={() => setIsOpen(false)}
@@ -32,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
       </button>
       <div
         ref={modalRef}
-        className='absolute w-full max-h-screen overflow-y-auto transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 md:w-5/12'
+        className='absolute w-full transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 md:w-5/12'
       >
         {children}
       </div>
