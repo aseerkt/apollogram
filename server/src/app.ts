@@ -35,8 +35,9 @@ async function createApp() {
       userLoader: createUserLoader(),
       profileLoader: createProfileLoader(),
     }),
-    uploads: false,
   });
+
+  await apolloServer.start();
 
   apolloServer.applyMiddleware({ app, cors: false });
   return { app };
