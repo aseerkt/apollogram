@@ -50,7 +50,10 @@ export class UserResolver {
   @FieldResolver(() => [Post])
   @UseMiddleware(isUser)
   posts(@Root() user: User): Promise<Post[]> {
-    return Post.find({ where: { username: user.username } });
+    return Post.find({
+      where: { username: user.username },
+      order: { createdAt: 'DESC' },
+    });
   }
 
   @FieldResolver(() => Boolean)
