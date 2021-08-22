@@ -32,6 +32,7 @@ export class UserResolver {
   // Field Resolvers
 
   @FieldResolver(() => String)
+  @UseMiddleware(isUser)
   email(@Root() user: User, @Ctx() { res }: MyContext): string {
     if (res.locals.username === user.username) {
       return user.email;

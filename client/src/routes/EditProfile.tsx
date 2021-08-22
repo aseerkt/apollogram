@@ -13,13 +13,7 @@ const EditProfile: React.FC = () => {
 
   if (!data) return null;
 
-  const {
-    username,
-    email,
-    profile: { name, bio, gender, website },
-  } = data.me!;
-
-  if (!username || !email) return null;
+  const user = data.me!;
 
   return (
     <Container>
@@ -36,33 +30,35 @@ const EditProfile: React.FC = () => {
         </div>
         <div className='flex flex-col w-full p-5 md:mx-20'>
           <div className='py-4'>
-            <ChangeProfilePhoto username={username} />
+            <ChangeProfilePhoto username={user.username} />
           </div>
           <Formik
             initialValues={{
-              name,
-              website,
-              bio,
-              gender,
-              email,
+              name: user.profile.name,
+              website: user.profile.website,
+              bio: user.profile.bio,
+              gender: user.profile.gender,
+              email: user.email,
             }}
             onSubmit={async (values, action) => {
               try {
                 const res = await editProfile({
                   variables: values,
+                  update: (cache, { data }) => {
+                    if (data) {
+                      const { errors, ok } = data.editProfile;
+                      if (errors) {
+                        errors.forEach(({ path, message }) => {
+                          action.setFieldError(path, message);
+                        });
+                      }
+                      if (ok) {
+                        cache.evict({ id: cache.identify(user) });
+                        setMessage('Profile updated');
+                      }
+                    }
+                  },
                 });
-                if (res.data) {
-                  const { errors, ok } = res.data.editProfile;
-                  if (errors) {
-                    errors.forEach(({ path, message }) => {
-                      action.setFieldError(path, message);
-                    });
-                  }
-                  if (ok) {
-                    setMessage('Profile updated');
-                  }
-                }
-                console.log(res);
               } catch (err) {
                 console.log(err);
               }
