@@ -37,7 +37,7 @@ const FollowModal: React.FC<FollowModalProps> = ({
             onClick={() => setIsOpen(false)}
           />
         </header>
-        <div className='px-3 overflow-auto'>
+        <div className='px-3 overflow-y-auto max-h-96 h-96'>
           {data?.getFollows?.map((u) => (
             <SuggestionItem darkFollowButton s={u as User} />
           ))}
