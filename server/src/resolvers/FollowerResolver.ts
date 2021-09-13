@@ -68,7 +68,6 @@ export class FollowerResolver {
         LEFT JOIN "follows" "f"
         ON "f"."username" = "u"."username"
         WHERE "f"."followingUsername" = $1
-        LIMIT 10
       `,
         [username]
       );
@@ -86,7 +85,6 @@ export class FollowerResolver {
         LEFT JOIN "follows" "f"
         ON "f"."followingUsername" = "u"."username"
         WHERE "f"."username" = $1
-        LIMIT 10
       `,
         [username]
       );
