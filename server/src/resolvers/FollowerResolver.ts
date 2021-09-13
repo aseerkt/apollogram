@@ -37,7 +37,7 @@ export class FollowerResolver {
           "u"."createdAt",
           "u"."updatedAt"
         FROM users u
-        WHERE username != '$1'
+        WHERE username != $1
         AND username not in
           (SELECT "followingUsername" FROM follows where username = $1);
       `,

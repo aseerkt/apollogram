@@ -24,22 +24,18 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
               setFieldError('password2', 'Password Mismatch');
               return;
             }
-            try {
-              const res = await register({
-                variables: { email, username, password },
+            const res = await register({
+              variables: { email, username, password },
+            });
+            const errors = res.data?.register.errors;
+            const ok = res.data?.register.ok;
+            if (errors) {
+              errors.forEach(({ path, message }) => {
+                setFieldError(path, message);
               });
-              const errors = res.data?.register.errors;
-              const ok = res.data?.register.ok;
-              if (errors) {
-                errors.forEach(({ path, message }) => {
-                  setFieldError(path, message);
-                });
-              }
-              if (ok) {
-                history.push('/login');
-              }
-            } catch (err) {
-              console.log(err?.networkError.result);
+            }
+            if (ok) {
+              history.push('/login');
             }
           }}
         >

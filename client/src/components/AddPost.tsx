@@ -50,20 +50,17 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     e.preventDefault();
     if (!file) return alert('No file selected');
     setSubmitting(true);
-    try {
-      // console.log(file);
-      const res = await addPost({ variables: { file, caption } });
-      // console.log(res);
-      if (res.data?.addPost.ok) {
-        setFile(null as any);
-        setImgSrc(null);
-        setCaption('');
-        setMessage('Post uploaded successfully');
-        setIsOpen(false);
-      }
-    } catch (err) {
-      console.log(err.message);
+    // console.log(file);
+    const res = await addPost({ variables: { file, caption } });
+    // console.log(res);
+    if (res.data?.addPost.ok) {
+      setFile(null as any);
+      setImgSrc(null);
+      setCaption('');
+      setMessage('Post uploaded successfully');
+      setIsOpen(false);
     }
+
     setSubmitting(false);
   };
 
