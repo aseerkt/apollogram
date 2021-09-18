@@ -96,7 +96,7 @@ export class PostResolver {
     if (offset) params.push(offset);
     // Get posts from followed peoples only
     const posts: Post[] = await getConnection().query(
-      `
+      /*sql*/ `
       SELECT 
         p.* 
       FROM posts p 

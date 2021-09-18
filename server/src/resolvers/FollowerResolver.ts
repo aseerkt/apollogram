@@ -4,7 +4,6 @@ import {
   ID,
   Mutation,
   Query,
-  registerEnumType,
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
@@ -14,13 +13,6 @@ import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
 
-enum FollowEnum {
-  followers,
-  followings,
-}
-
-registerEnumType(FollowEnum, { name: 'FollowEnum' });
-
 @Resolver()
 export class FollowerResolver {
   // QUERIES
@@ -29,16 +21,12 @@ export class FollowerResolver {
   @UseMiddleware(isAuth)
   async getFollowSuggestions(@Ctx() { res }: MyContext): Promise<User[]> {
     const suggestions = await getConnection().query(
-      `
+      /*sql*/ `
         SELECT 
-          "u"."id",
-          "u"."username",
-          "u"."email",
-          "u"."createdAt",
-          "u"."updatedAt"
+          u.*
         FROM users u
         WHERE username != $1
-        AND username not in
+        AND username NOT IN
           (SELECT "followingUsername" FROM follows where username = $1);
       `,
       [res.locals.username]
