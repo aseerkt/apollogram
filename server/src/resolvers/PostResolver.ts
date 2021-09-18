@@ -104,7 +104,7 @@ export class PostResolver {
       ON f."followingUsername" = p.username 
       WHERE f.username = $1 
       ORDER BY p."createdAt" DESC 
-      LIMIT $2 ${offset && 'OFFSET $3'};
+      LIMIT $2 ${offset ? 'OFFSET $3' : ''};
     `,
       params
     );
