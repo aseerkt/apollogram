@@ -52,6 +52,30 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
               >
                 Login
               </Button>
+              <Button
+                isLoading={isSubmitting}
+                className='my-3'
+                fullWidth
+                color='dark'
+                type='button'
+                onClick={() =>
+                  login({
+                    variables: { username: 'bob', password: 'bob123' },
+                    update: (cache, result) => {
+                      const user = result.data?.login.user;
+                      if (user) {
+                        cache.writeQuery({
+                          query: MeDocument,
+                          data: { me: user },
+                        });
+                        window.location.pathname = '/';
+                      }
+                    },
+                  })
+                }
+              >
+                Login as Guest
+              </Button>
             </Form>
           )}
         </Formik>

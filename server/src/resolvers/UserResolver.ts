@@ -149,6 +149,7 @@ export class UserResolver {
         };
       }
       createTokenCookie(user, res);
+      res.locals.username = user.username;
       return { ok: true, user };
     } catch (err) {
       return { ok: false };
