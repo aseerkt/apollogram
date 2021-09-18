@@ -46,7 +46,7 @@ const PostActions: React.FC<PostActionsProps> = ({
       <RiChat1Line
         size='2.3em'
         onClick={() => {
-          if (location.pathname === '/posts') {
+          if (location.pathname === '/') {
             history.push(`/p/${postId}`);
           } else {
             addCommentRef.current?.focus();
