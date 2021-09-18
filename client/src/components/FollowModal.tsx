@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import Modal from '../components-ui/Modal';
 import Spinner from '../components-ui/Spinner';
 import { useGetUserQuery, User } from '../generated/graphql';
-import SuggestionItem from './SuggestionItem';
+import FollowItem from './FollowItem';
 
 interface FollowModalProps {
   modalTitle: 'Followers' | 'Followings';
@@ -55,7 +55,7 @@ const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
           </header>
           <div className='px-3 overflow-y-auto max-h-96 h-96'>
             {follows?.map((u) => (
-              <SuggestionItem
+              <FollowItem
                 key={`follow_${u.id}`}
                 darkFollowButton
                 s={u as User}

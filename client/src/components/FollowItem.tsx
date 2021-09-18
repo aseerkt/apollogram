@@ -9,7 +9,7 @@ interface SuggestionItemProps {
   darkFollowButton?: boolean;
 }
 
-const SuggestionItem: React.FC<SuggestionItemProps> = ({
+const FollowItem: React.FC<SuggestionItemProps> = ({
   s,
   darkFollowButton = false,
 }) => {
@@ -54,4 +54,4 @@ const SuggestionItem: React.FC<SuggestionItemProps> = ({
   );
 };
 
-export default SuggestionItem;
+export default FollowItem;
