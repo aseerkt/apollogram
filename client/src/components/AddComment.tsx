@@ -20,9 +20,8 @@ const AddComment: React.FC<AddCommentProps> = ({
 }) => {
   const { setMessage } = useMessageCtx();
   const [text, setText] = useState('');
-  const [submitting, setSubmitting] = useState(false);
 
-  const [addComment] = useAddCommentMutation({
+  const [addComment, { loading: submitting }] = useAddCommentMutation({
     variables: { postId, text },
     update: (cache, { data }) => {
       const newComment = data?.addComment;
@@ -34,8 +33,10 @@ const AddComment: React.FC<AddCommentProps> = ({
             comments(existingCommentRefs = [], { readField }) {
               const newCommentRef = cache.writeFragment<RegularCommentFragment>(
                 {
+                  fragmentName: 'RegularComment',
                   data: newComment,
                   fragment: RegularCommentFragmentDoc,
+                  broadcast: false,
                 }
               );
 
@@ -53,6 +54,7 @@ const AddComment: React.FC<AddCommentProps> = ({
             },
           },
         });
+        setText('');
         setMessage('Comment Added');
       }
     },
@@ -61,17 +63,10 @@ const AddComment: React.FC<AddCommentProps> = ({
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setSubmitting(true);
       if (!text) throw new Error('Comment Text is Empty');
-      const res = await addComment();
-      if (res) {
-        setSubmitting(false);
-      }
-      if (res.data?.addComment) setText('');
-      console.log(res);
+      await addComment();
     } catch (err) {
       console.log(err);
-      setSubmitting(false);
     }
   };
 
