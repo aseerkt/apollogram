@@ -35,7 +35,7 @@ const LikeButton: React.FC<LikeButtonProps> = ({
       if (res.data && res.data?.toggleLike) {
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 

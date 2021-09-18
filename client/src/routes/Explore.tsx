@@ -32,7 +32,7 @@ const Explore = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting === true) {
-          console.log('Reached bottom of post');
+          // console.log('Reached bottom of post');
           fetchMore({
             variables: {
               limit: variables?.limit,

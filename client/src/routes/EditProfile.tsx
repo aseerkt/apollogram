@@ -67,7 +67,7 @@ const EditProfile: React.FC = () => {
                   },
                 });
               } catch (err) {
-                console.log(err);
+                // console.log(err);
               }
             }}
           >

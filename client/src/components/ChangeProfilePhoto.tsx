@@ -79,7 +79,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
       // console.log(res);
     } catch (err) {
       setSubmitting(false);
-      console.log(err);
+      // console.log(err);
     }
   };
 

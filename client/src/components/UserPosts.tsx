@@ -10,7 +10,7 @@ const UserPosts: React.FC<{ username: string }> = ({ username }) => {
   if (loading) {
     return <Spinner />;
   } else if (error) {
-    console.log(error);
+    // console.log(error);
     <Alert severity='danger'>{JSON.stringify(error)}</Alert>;
   }
   const { posts } = data!.getUser!;

@@ -31,9 +31,9 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                   setFieldError(path, message);
                 });
               }
-              console.log(data);
+              // console.log(data);
             } catch (err) {
-              console.log(err);
+              // console.log(err);
             }
           }}
         >

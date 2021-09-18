@@ -11,7 +11,6 @@ const ActionModal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
           {children}
           <li
             onClick={() => {
-              console.log('cancel clicked');
               setIsOpen(false);
             }}
           >

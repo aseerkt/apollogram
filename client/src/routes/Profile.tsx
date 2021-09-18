@@ -26,7 +26,7 @@ const Profile: React.FC = () => {
   if (loading) {
     return <Spinner />;
   } else if (error) {
-    console.log(error);
+    // console.log(error);
     <Alert severity='danger'>{JSON.stringify(error)}</Alert>;
   }
   if (data && data.getUser) {

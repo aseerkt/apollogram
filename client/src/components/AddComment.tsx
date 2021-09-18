@@ -66,7 +66,7 @@ const AddComment: React.FC<AddCommentProps> = ({
       if (!text) throw new Error('Comment Text is Empty');
       await addComment();
     } catch (err) {
-      console.log(err);
+      // console.log(err);
     }
   };
 
