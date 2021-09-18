@@ -84,6 +84,7 @@ export class PostResolver {
     return post.imgURL;
   }
 
+  // Feed posts
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
   async getPosts(
@@ -97,18 +98,13 @@ export class PostResolver {
     const posts: Post[] = await getConnection().query(
       `
       SELECT 
-        "p"."id", 
-        "p"."createdAt", 
-        "p"."updatedAt", 
-        "p"."caption", 
-        "p"."imgURL", 
-        "p"."username" 
-      FROM "posts" "p" 
-      LEFT JOIN "follows" "f" 
-      ON "f"."followingUsername" = "p"."username" 
-      WHERE "f"."username" = $1 
-      ORDER BY "p"."createdAt" DESC 
-      LIMIT $2 ${offset ? 'OFFSET $3' : ''};
+        p.* 
+      FROM posts p 
+      LEFT JOIN follows f 
+      ON f."followingUsername" = p.username 
+      WHERE f.username = $1 
+      ORDER BY p."createdAt" DESC 
+      LIMIT $2 ${offset && 'OFFSET $3'};
     `,
       params
     );
