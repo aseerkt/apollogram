@@ -13,7 +13,7 @@ mutation EditProfile(
     email: $email
   ) {
     user {
-      ...UserWithProfile
+      ...MinimalUser
     }
     errors {
       path

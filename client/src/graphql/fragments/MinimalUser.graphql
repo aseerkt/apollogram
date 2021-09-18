@@ -1,0 +1,9 @@
+fragment MinimalUser on User {
+  id
+  username
+  email
+  isFollowing
+  profile {
+    ...MinimalProfile
+  }
+}

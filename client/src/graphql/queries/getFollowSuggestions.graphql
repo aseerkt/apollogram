@@ -1,5 +1,5 @@
 query GetFollowSuggestions {
   getFollowSuggestions {
-    ...UserWithProfile
+    ...MinimalUser
   }
 }

@@ -1,0 +1,9 @@
+fragment RegularUser on User {
+  id
+  username
+  email
+  isFollowing
+  profile {
+    ...RegularProfile
+  }
+}

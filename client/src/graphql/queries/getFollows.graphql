@@ -1,5 +1,0 @@
-query GetFollows($selector: FollowEnum!, $username: String!) {
-  getFollows(selector: $selector, username: $username) {
-    ...UserWithProfile
-  }
-}

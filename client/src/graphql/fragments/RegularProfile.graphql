@@ -5,6 +5,10 @@ fragment RegularProfile on Profile {
   bio
   gender
   imgURL
-  followersCount
-  followingsCount
+  followers {
+    ...MinimalUser
+  }
+  followings {
+    ...MinimalUser
+  }
 }

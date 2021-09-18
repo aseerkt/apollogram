@@ -1,28 +1,8 @@
 query GetUser($username: String!) {
   getUser(username: $username) {
-    ...UserWithProfile
+    ...RegularUser
     posts {
-      id
-      caption
-      imgURL
-      createdAt
-      updatedAt
-      user {
-        username
-        profile {
-          imgURL
-        }
-      }
-      likeCount
-      comments {
-        text
-        username
-        user {
-          profile {
-            imgURL
-          }
-        }
-      }
+      ...RegularPost
     }
   }
 }

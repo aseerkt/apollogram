@@ -5,6 +5,6 @@ fragment RegularComment on Comment {
   createdAt
   updatedAt
   user {
-    ...UserWithProfile
+    ...MinimalUser
   }
 }

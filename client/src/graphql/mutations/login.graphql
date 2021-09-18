@@ -6,7 +6,7 @@ mutation Login($username: String!, $password: String!) {
       message
     }
     user {
-      ...UserField
+      ...MinimalUser
     }
   }
 }

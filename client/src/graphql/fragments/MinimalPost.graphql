@@ -1,0 +1,23 @@
+fragment MinimalPost on Post {
+  id
+  caption
+  imgURL
+  createdAt
+  updatedAt
+  user {
+    username
+    profile {
+      imgURL
+    }
+  }
+  likeCount
+  comments {
+    text
+    username
+    user {
+      profile {
+        imgURL
+      }
+    }
+  }
+}

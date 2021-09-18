@@ -1,4 +1,4 @@
-fragment RegualarPost on Post {
+fragment RegularPost on Post {
   id
   caption
   imgURL
@@ -7,7 +7,7 @@ fragment RegualarPost on Post {
   createdAt
   updatedAt
   user {
-    ...UserWithProfile
+    ...MinimalUser
   }
   comments {
     ...RegularComment
