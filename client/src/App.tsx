@@ -5,7 +5,6 @@ import { MeDocument, useMeQuery } from './generated/graphql';
 import Alert from './components-ui/Alert';
 import { apolloClient } from './utils/apolloClient';
 import Spinner from './components-ui/Spinner';
-import Message from './components-ui/Message';
 import PrivateRoute from './containers/PrivateRoute';
 
 // Routes
@@ -42,7 +41,6 @@ const App: React.FC = () => {
             <PrivateRoute exact path='/u/:username' component={Profile} />
           </Switch>
         </div>
-        <Message />
       </MessageProvider>
     </BrowserRouter>
   );
