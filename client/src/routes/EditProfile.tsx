@@ -12,7 +12,7 @@ import { useMessageCtx } from '../context/MessageContext';
 
 const EditProfile: React.FC = () => {
   const { setMessage } = useMessageCtx();
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useMeQuery();
   const [editProfile, { loading }] = useEditProfileMutation();
 
   if (!data) return null;

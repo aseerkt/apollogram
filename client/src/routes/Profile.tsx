@@ -12,7 +12,7 @@ import { FaCheck, FaUser } from 'react-icons/fa';
 import FollowModal from '../components/FollowModal';
 
 const Profile: React.FC = () => {
-  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data: meData } = useMeQuery();
   const me = meData!.me!;
 
   const params = useParams<{ username: string }>();

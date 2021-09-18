@@ -14,7 +14,7 @@ import { ImCompass2 } from 'react-icons/im';
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useMeQuery();
   const me = data?.me;
 
   return (

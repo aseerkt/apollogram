@@ -12,7 +12,7 @@ import {
 const useToggleFollowHook = (user?: User) => {
   const { setMessage } = useMessageCtx();
   const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
-  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data: meData } = useMeQuery();
   const me = meData!.me!;
 
   const onToggle = useCallback(

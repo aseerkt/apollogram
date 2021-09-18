@@ -18,7 +18,7 @@ import MessageProvider from './context/MessageContext';
 import Explore from './routes/Explore';
 
 const App: React.FC = () => {
-  const { loading, error } = useMeQuery({ fetchPolicy: 'network-only' });
+  const { loading, error } = useMeQuery();
 
   if (loading) {
     return <Spinner />;

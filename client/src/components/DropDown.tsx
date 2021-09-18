@@ -29,7 +29,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 const DropDown: React.FC = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
-  const { data } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data } = useMeQuery();
 
   const me = data!.me!;
 

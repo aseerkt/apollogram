@@ -17,7 +17,7 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({
   component: Component,
   ...rest
 }) => {
-  const { data, loading } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data, loading } = useMeQuery();
   if (loading) {
     return <Spinner />;
   }

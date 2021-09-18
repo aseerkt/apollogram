@@ -13,7 +13,7 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openEditCaption, setOpenEditCaption] = useState(false);
 
-  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
+  const { data: meData } = useMeQuery();
   const [deletePost] = useDeletePostMutation();
   const history = useHistory();
 
