@@ -1,5 +1,3 @@
-import React from 'react';
-
 type AvatarProps = React.DetailedHTMLProps<
   React.ImgHTMLAttributes<HTMLImageElement>,
   HTMLImageElement

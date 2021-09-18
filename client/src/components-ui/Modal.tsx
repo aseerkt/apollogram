@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { AiOutlineClose } from 'react-icons/ai';
 import { ModalProps } from '../prop-types/ModalProps';
 

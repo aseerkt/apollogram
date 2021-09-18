@@ -1,5 +1,3 @@
-import React from 'react';
-
 type CardProps = React.DetailedHTMLProps<
   React.HTMLAttributes<HTMLDivElement>,
   HTMLDivElement
