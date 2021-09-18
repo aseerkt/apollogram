@@ -15,8 +15,8 @@ import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
 
 enum FollowEnum {
-  Followers,
-  Followings,
+  followers,
+  followings,
 }
 
 registerEnumType(FollowEnum, { name: 'FollowEnum' });
@@ -49,56 +49,13 @@ export class FollowerResolver {
     return suggestions;
   }
 
-  @Query(() => [User])
-  @UseMiddleware(isAuth)
-  async getFollows(
-    @Arg('username') username: string,
-    @Arg('selector', () => FollowEnum) selector: FollowEnum
-  ) {
-    if (selector === FollowEnum.Followers) {
-      const followers = await getConnection().query(
-        `
-        SELECT 
-          "u"."id",
-          "u"."username",
-          "u"."email",
-          "u"."createdAt",
-          "u"."updatedAt"
-        FROM "users" "u"
-        LEFT JOIN "follows" "f"
-        ON "f"."username" = "u"."username"
-        WHERE "f"."followingUsername" = $1
-      `,
-        [username]
-      );
-      return followers;
-    } else {
-      const followings = await getConnection().query(
-        `
-        SELECT 
-          "u"."id",
-          "u"."username",
-          "u"."email",
-          "u"."createdAt",
-          "u"."updatedAt"
-        FROM "users" "u"
-        LEFT JOIN "follows" "f"
-        ON "f"."followingUsername" = "u"."username"
-        WHERE "f"."username" = $1
-      `,
-        [username]
-      );
-      return followings;
-    }
-  }
-
   // MUTATIONS
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async toggleFollow(
     @Arg('followingUsername', () => ID) followingUsername: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { res, followLoader }: MyContext
   ): Promise<boolean> {
     try {
       const following = await Follow.findOne({
@@ -106,12 +63,14 @@ export class FollowerResolver {
       });
       if (following) {
         await following.remove();
-        return true;
+      } else {
+        await Follow.create({
+          username: res.locals.username,
+          followingUsername,
+        }).save();
       }
-      await Follow.create({
-        username: res.locals.username,
-        followingUsername,
-      }).save();
+      followLoader.clear(res.locals.username);
+      followLoader.clear(followingUsername);
       return true;
     } catch (err) {
       console.log(err);

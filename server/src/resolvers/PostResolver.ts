@@ -17,7 +17,6 @@ import {
 import { getConnection } from 'typeorm';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 import { Comment } from '../entities/Comment';
-import { Like } from '../entities/Like';
 import { Post } from '../entities/Post';
 import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
@@ -51,28 +50,30 @@ export class PostResolver {
   }
 
   @FieldResolver(() => Int)
-  likeCount(@Root() post: Post): Promise<number> {
-    return Like.count({ where: { postId: post.id } });
+  async likeCount(
+    @Root() post: Post,
+    @Ctx() { likeLoader }: MyContext
+  ): Promise<number> {
+    const likes = await likeLoader.load(post.id);
+    return likes?.length || 0;
   }
 
   @FieldResolver(() => Boolean)
   @UseMiddleware(isAuth)
   async userLike(
     @Root() post: Post,
-    @Ctx() { res }: MyContext
+    @Ctx() { res, likeLoader }: MyContext
   ): Promise<boolean> {
-    const like = await Like.findOne({
-      where: { postId: post.id, username: res.locals.username },
-    });
-    return like ? true : false;
+    const likes = await likeLoader.load(post.id);
+    return likes?.some((l) => l.username === res.locals.username) || false;
   }
 
   @FieldResolver(() => [Comment])
-  comments(@Root() post: Post): Promise<Comment[]> {
-    return Comment.find({
-      where: { postId: post.id },
-      order: { createdAt: 'DESC' },
-    });
+  async comments(
+    @Root() post: Post,
+    @Ctx() { commentLoader }: MyContext
+  ): Promise<Comment[]> {
+    return await commentLoader.load(post.id);
   }
 
   @FieldResolver(() => String)

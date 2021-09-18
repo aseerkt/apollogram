@@ -5,7 +5,6 @@ import {
   Ctx,
   Field,
   FieldResolver,
-  Int,
   Mutation,
   ObjectType,
   Resolver,
@@ -24,7 +23,6 @@ import { formatErrors } from '../utils/formatErrors';
 import { getManager } from 'typeorm';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { CLOUDINARY_ROOT_PATH } from '../constants';
-import { Follow } from '../entities/Follow';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -65,14 +63,6 @@ export class ProfileResolver {
   }
 
   @FieldResolver(() => String)
-  name(@Root() profile: Profile, @Ctx() { res }: MyContext): string {
-    if (res.locals.username == profile.username) {
-      return profile.name;
-    }
-    return '';
-  }
-
-  @FieldResolver(() => String)
   imgURL(@Root() profile: Profile): string {
     if (profile.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
       return generateUrl(profile.imgURL, 'profiles');
@@ -80,14 +70,32 @@ export class ProfileResolver {
     return profile.imgURL;
   }
 
-  @FieldResolver(() => Int)
-  followersCount(@Root() profile: Profile): Promise<number> {
-    return Follow.count({ where: { followingUsername: profile.username } });
+  @FieldResolver(() => [User])
+  async followers(
+    @Root() profile: Profile,
+    @Ctx() { followLoader, userLoader }: MyContext
+  ): Promise<User[]> {
+    const followData = await followLoader.load(profile.username);
+
+    return await Promise.all(
+      followData
+        .filter((f) => f.state === 'follower')
+        .map((f) => userLoader.load(f.username))
+    );
   }
 
-  @FieldResolver(() => Int)
-  followingsCount(@Root() profile: Profile): Promise<number> {
-    return Follow.count({ where: { username: profile.username } });
+  @FieldResolver(() => [User])
+  async followings(
+    @Root() profile: Profile,
+    @Ctx() { followLoader, userLoader }: MyContext
+  ): Promise<User[]> {
+    const followData = await followLoader.load(profile.username);
+
+    return await Promise.all(
+      followData
+        .filter((f) => f.state === 'following')
+        .map((f) => userLoader.load(f.username))
+    );
   }
 
   // MUTATIONS

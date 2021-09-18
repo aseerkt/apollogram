@@ -19,12 +19,7 @@ const useToggleFollowHook = (user?: User) => {
     (user?: User) => async (e: React.MouseEvent<HTMLButtonElement>) => {
       if (!user) return;
       try {
-        const {
-          id: userId,
-          username,
-          isFollowing,
-          profile: { id: profileId, followersCount },
-        } = user;
+        const { id: userId, username, isFollowing, profile } = user;
 
         await toggleFollow({
           variables: { followingUsername: username },
@@ -45,32 +40,61 @@ const useToggleFollowHook = (user?: User) => {
                 data: { isFollowing: !isFollowing },
                 broadcast: false,
               });
-              // Update followers count for selected user
-              cache.writeFragment<{ followersCount: number }>({
-                fragment: gql`
-                  fragment FollowersCount on Profile {
-                    followersCount
-                  }
-                `,
-                id: 'Profile:' + profileId,
-                data: {
-                  followersCount: followersCount + (isFollowing ? -1 : 1),
-                },
+              // Update followers array
+              cache.modify({
+                id: cache.identify(profile),
                 broadcast: false,
+                fields: {
+                  followers(existingFollowersRefs = [], { readField }) {
+                    if (!isFollowing) {
+                      const newFollowerRef = cache.identify(me);
+
+                      // Quick safety check - if the new follower is already
+                      // present in the cache, we don't need to add it again.
+                      if (
+                        existingFollowersRefs.some(
+                          (ref: any) => readField('id', ref) === me.id
+                        )
+                      ) {
+                        return existingFollowersRefs;
+                      }
+
+                      return [newFollowerRef, ...existingFollowersRefs];
+                    } else {
+                      return existingFollowersRefs.filter(
+                        (ref: any) => readField('id', ref) !== me.id
+                      );
+                    }
+                  },
+                },
               });
-              // Update followings count for current user
-              cache.writeFragment<{ followingsCount: number }>({
-                fragment: gql`
-                  fragment FollowingsCount on Profile {
-                    followingsCount
-                  }
-                `,
-                id: 'Profile:' + me.profile.id,
-                data: {
-                  followingsCount:
-                    me.profile.followingsCount + (isFollowing ? -1 : +1),
-                },
+              // update followings array
+              cache.modify({
+                id: cache.identify(profile),
                 broadcast: false,
+                fields: {
+                  followings(existingFollowingsRefs = [], { readField }) {
+                    if (!isFollowing) {
+                      const newFollowingRef = cache.identify(user);
+
+                      // Quick safety check - if the new following is already
+                      // present in the cache, we don't need to add it again.
+                      if (
+                        existingFollowingsRefs.some(
+                          (ref: any) => readField('id', ref) === user.id
+                        )
+                      ) {
+                        return existingFollowingsRefs;
+                      }
+
+                      return [newFollowingRef, ...existingFollowingsRefs];
+                    } else {
+                      return existingFollowingsRefs.filter(
+                        (ref: any) => readField('id', ref) !== user.id
+                      );
+                    }
+                  },
+                },
               });
               setMessage(
                 `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`

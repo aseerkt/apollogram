@@ -25,14 +25,12 @@ import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
 import { extractDomainFromUrl } from '../utils/extractDomainFromUrl';
-import { Follow } from '../entities/Follow';
 
 @Resolver(User)
 export class UserResolver {
   // Field Resolvers
 
   @FieldResolver(() => String)
-  @UseMiddleware(isUser)
   email(@Root() user: User, @Ctx() { res }: MyContext): string {
     if (res.locals.username === user.username) {
       return user.email;
@@ -49,7 +47,6 @@ export class UserResolver {
   }
 
   @FieldResolver(() => [Post])
-  @UseMiddleware(isUser)
   posts(@Root() user: User): Promise<Post[]> {
     return Post.find({
       where: { username: user.username },
@@ -58,18 +55,14 @@ export class UserResolver {
   }
 
   @FieldResolver(() => Boolean)
-  @UseMiddleware(isUser)
   async isFollowing(
     @Root() user: User,
-    @Ctx() { res }: MyContext
+    @Ctx() { res, followLoader }: MyContext
   ): Promise<boolean> {
-    const count = await Follow.count({
-      where: {
-        username: res.locals.username,
-        followingUsername: user.username,
-      },
-    });
-    return count === 1;
+    const followData = await followLoader.load(res.locals.username);
+    return followData.some(
+      (f) => f.username === user.username && f.state === 'following'
+    );
   }
 
   // QUERIES
@@ -83,6 +76,7 @@ export class UserResolver {
   }
 
   @Query(() => User, { nullable: true })
+  @UseMiddleware(isUser)
   getUser(@Arg('username') username: string) {
     return User.findOne({
       where: { username },

@@ -1,8 +1,11 @@
-import { gql } from '@apollo/client';
 import { useState } from 'react';
 import Spinner from '../components-ui/Spinner';
 import { useMessageCtx } from '../context/MessageContext';
-import { useAddCommentMutation } from '../generated/graphql';
+import {
+  RegularCommentFragment,
+  RegularCommentFragmentDoc,
+  useAddCommentMutation,
+} from '../generated/graphql';
 
 interface AddCommentProps {
   postId: string;
@@ -29,31 +32,12 @@ const AddComment: React.FC<AddCommentProps> = ({
           broadcast: false,
           fields: {
             comments(existingCommentRefs = [], { readField }) {
-              const newCommentRef = cache.writeFragment({
-                data: newComment,
-                fragment: gql`
-                  fragment NewComment on Comment {
-                    id
-                    text
-                    username
-                    createdAt
-                    updatedAt
-                    user {
-                      id
-                      username
-                      email
-                      profile {
-                        id
-                        name
-                        website
-                        bio
-                        gender
-                        imgURL
-                      }
-                    }
-                  }
-                `,
-              });
+              const newCommentRef = cache.writeFragment<RegularCommentFragment>(
+                {
+                  data: newComment,
+                  fragment: RegularCommentFragmentDoc,
+                }
+              );
 
               // Quick safety check - if the new comment is already
               // present in the cache, we don't need to add it again.

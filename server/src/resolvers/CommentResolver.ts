@@ -2,7 +2,6 @@ import {
   Arg,
   Ctx,
   Mutation,
-  Query,
   UseMiddleware,
   Resolver,
   FieldResolver,
@@ -23,46 +22,42 @@ export class CommentResolver {
     return userLoader.load(comment.username);
   }
 
-  @Query(() => [Comment])
-  @UseMiddleware(isAuth)
-  getComments(@Arg('postId') postId: string) {
-    return Comment.find({ where: { postId } });
-  }
-
   @Mutation(() => Comment, { nullable: true })
   @UseMiddleware(isAuth)
   async addComment(
     @Arg('postId') postId: string,
     @Arg('text') text: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { res, commentLoader }: MyContext
   ) {
     try {
-      return await Comment.create({
+      const newComment = await Comment.create({
         postId,
         text,
         username: res.locals.username,
       }).save();
+      commentLoader.clear(postId);
+      return newComment;
     } catch (err) {
       console.log(err);
       return false;
     }
   }
 
-  @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
-  async deleteComment(
-    @Arg('commentId') commentId: string,
-    @Ctx() { res }: MyContext
-  ) {
-    try {
-      await Comment.delete({
-        username: res.locals.username,
-        id: commentId,
-      });
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
+  // @Mutation(() => Boolean)
+  // @UseMiddleware(isAuth)
+  // async deleteComment(
+  //   @Arg('commentId') commentId: string,
+  //   @Ctx() { res }: MyContext
+  // ) {
+  //   try {
+  //     await Comment.delete({
+  //       username: res.locals.username,
+  //       id: commentId,
+  //     });
+  //     return true;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  // }
 }

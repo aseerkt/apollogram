@@ -1,57 +1,73 @@
+import { useMemo, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
+import { useParams } from 'react-router';
 import Modal from '../components-ui/Modal';
 import Spinner from '../components-ui/Spinner';
-import { FollowEnum, useGetFollowsQuery, User } from '../generated/graphql';
+import { useGetUserQuery, User } from '../generated/graphql';
 import SuggestionItem from './SuggestionItem';
 
 interface FollowModalProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  username: string;
-  modalTitle: FollowEnum;
+  modalTitle: 'Followers' | 'Followings';
 }
 
-const FollowModal: React.FC<FollowModalProps> = ({
-  isOpen,
-  setIsOpen,
-  modalTitle,
-  username,
-}) => {
-  const { data, loading } = useGetFollowsQuery({
-    variables: { selector: modalTitle, username },
-    fetchPolicy: 'network-only',
+const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const { username } = useParams<{ username: string }>();
+  const { data, loading } = useGetUserQuery({
+    variables: { username },
+    skip: typeof username !== 'string',
   });
+  const follows = useMemo(
+    () =>
+      modalTitle === 'Followers'
+        ? data?.getUser?.profile.followers
+        : data?.getUser?.profile.followings,
+    [data, modalTitle]
+  );
+
   if (loading && isOpen) {
     return <Spinner />;
   }
 
   return (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-      <main className='bg-white rounded-md'>
-        <header className='flex items-center justify-between p-3 border-b-2'>
-          <div> </div>
-          <h1 className='font-bold'>{modalTitle}</h1>
-          <FaTimes
-            className='ml-auto cursor-pointer'
-            size='1.2em'
-            onClick={() => setIsOpen(false)}
-          />
-        </header>
-        <div className='px-3 overflow-y-auto max-h-96 h-96'>
-          {data?.getFollows?.map((u) => (
-            <SuggestionItem
-              key={`follow_${u.id}`}
-              darkFollowButton
-              s={u as User}
+    <>
+      <button
+        onClick={() => {
+          if (!follows || follows?.length > 0) setIsOpen(!isOpen);
+        }}
+        className='md:flex'
+      >
+        <strong className='md:mr-1'>{follows?.length || 0}</strong>
+        <p className='text-gray-600 md:text-black'>
+          {modalTitle.toLowerCase()}
+        </p>
+      </button>
+      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+        <main className='bg-white rounded-md'>
+          <header className='flex items-center justify-between p-3 border-b-2'>
+            <div> </div>
+            <h1 className='font-bold'>{modalTitle}</h1>
+            <FaTimes
+              className='ml-auto cursor-pointer'
+              size='1.2em'
+              onClick={() => setIsOpen(false)}
             />
-          ))}
-          {!data?.getFollows ||
-            (data.getFollows.length === 0 && (
-              <p className='py-3'>You have no {modalTitle.toLowerCase()}</p>
+          </header>
+          <div className='px-3 overflow-y-auto max-h-96 h-96'>
+            {follows?.map((u) => (
+              <SuggestionItem
+                key={`follow_${u.id}`}
+                darkFollowButton
+                s={u as User}
+              />
             ))}
-        </div>
-      </main>
-    </Modal>
+            {follows?.length === 0 && (
+              <p className='py-3'>You have no {modalTitle.toLowerCase()}</p>
+            )}
+          </div>
+        </main>
+      </Modal>
+    </>
   );
 };
 

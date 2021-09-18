@@ -2,13 +2,21 @@ import http from 'http';
 import express from 'express';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
-import { ApolloServerPluginDrainHttpServer } from 'apollo-server-core';
+import {
+  ApolloServerPluginDrainHttpServer,
+  ApolloServerPluginLandingPageGraphQLPlayground,
+  ApolloServerPluginLandingPageProductionDefault,
+} from 'apollo-server-core';
 import { buildSchema } from 'type-graphql';
 import { graphqlUploadExpress } from 'graphql-upload';
 import cookieParser from 'cookie-parser';
-import { createUserLoader } from './utils/createUserLoader';
-import { createProfileLoader } from './utils/createProfileLoader';
-import { FRONTEND_URL } from './constants';
+import { createUserLoader } from './dataloaders/createUserLoader';
+import { createProfileLoader } from './dataloaders/createProfileLoader';
+import { FRONTEND_URL, __prod__ } from './constants';
+import { MyContext } from './types';
+import { createCommentLoader } from './dataloaders/createCommentLoader';
+import { createLikeLoader } from './dataloaders/createLikeLoader';
+import { createFollowLoader } from './dataloaders/createFollowLoader';
 
 async function createServer() {
   const app = express();
@@ -33,13 +41,22 @@ async function createServer() {
     schema: await buildSchema({
       resolvers: [`${__dirname}/resolvers/**/*.{ts,js}`],
     }),
-    context: ({ req, res }) => ({
-      req,
-      res,
-      userLoader: createUserLoader(),
-      profileLoader: createProfileLoader(),
-    }),
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: ({ req, res }) =>
+      ({
+        req,
+        res,
+        userLoader: createUserLoader(),
+        profileLoader: createProfileLoader(),
+        commentLoader: createCommentLoader(),
+        likeLoader: createLikeLoader(),
+        followLoader: createFollowLoader(),
+      } as MyContext),
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      __prod__
+        ? ApolloServerPluginLandingPageProductionDefault
+        : ApolloServerPluginLandingPageGraphQLPlayground,
+    ],
   });
 
   await apolloServer.start();
