@@ -191,18 +191,16 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async editCaption(
     @Arg('postId', () => ID) postId: string,
-    @Arg('caption') caption: string,
-    @Ctx() { res }: MyContext
+    @Arg('caption') caption: string
+    // @Ctx() { res }: MyContext
   ) {
     try {
-      const post = await Post.findOne({
-        where: { id: postId, username: res.locals.username },
-      });
-      if (!post) return null;
-      if (post.caption === caption) return null;
-      post.caption = caption;
-      await post.save();
-      return post.caption;
+      const result = await Post.update(
+        { id: postId, username: 'asdfsadf' },
+        { caption }
+      );
+
+      return result.affected && result.affected > 0 ? caption : null;
     } catch (err) {
       console.log(err);
       return null;

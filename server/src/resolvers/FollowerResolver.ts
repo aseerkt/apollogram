@@ -32,8 +32,6 @@ export class FollowerResolver {
       [res.locals.username]
     );
 
-    // "f"."followingUsername" != "u"."username"
-
     return suggestions;
   }
 
