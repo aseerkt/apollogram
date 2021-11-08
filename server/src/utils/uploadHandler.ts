@@ -1,6 +1,3 @@
-// import path from 'path';
-// import fs, { existsSync } from 'fs';
-// import sharp from 'sharp';
 import crypto from 'crypto';
 import { ImageTransformationOptions, v2 as cloudinary } from 'cloudinary';
 import { FileUpload } from 'graphql-upload';
