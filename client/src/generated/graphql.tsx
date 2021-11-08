@@ -373,7 +373,7 @@ export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
 
 export const MinimalPostFragmentDoc = gql`
     fragment MinimalPost on Post {
@@ -1064,10 +1064,10 @@ export type GetUserQueryResult = Apollo.QueryResult<GetUserQuery, GetUserQueryVa
 export const MeDocument = gql`
     query Me {
   me {
-    ...RegularUser
+    ...MinimalUser
   }
 }
-    ${RegularUserFragmentDoc}`;
+    ${MinimalUserFragmentDoc}`;
 
 /**
  * __useMeQuery__
