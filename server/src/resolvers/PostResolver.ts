@@ -147,13 +147,13 @@ export class PostResolver {
     @Arg('file', () => GraphQLUpload)
     file: FileUpload
   ): Promise<CreatePostResponse> {
-    const { user } = await checkUserFromCookie(ctx);
+    const { username } = await checkUserFromCookie(ctx);
 
     // const { isUploaded, imgURL } = await uploadFile(file, 'posts');
     const { url } = await uploadToCloudinary(file, 'posts');
     // if (isUploaded) {
     if (url) {
-      const post = Post.create({ caption, imgURL: url, user });
+      const post = Post.create({ caption, imgURL: url, username });
       const errors = await validate(post);
       if (errors.length > 0) {
         return { ok: false, error: formatErrors(errors)[0] };

@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
 import Button from '../components-ui/Button';
 import { useMeQuery, User } from '../generated/graphql';
-import useToggleFollowHook from '../utils/useToggleFollowHook';
+import useToggleFollowHook from '../hooks/useToggleFollowHook';
 
 interface SuggestionItemProps {
   s: User;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
-import { MeDocument, useMeQuery } from './generated/graphql';
+import { MeDocument, useGetPostsQuery, useMeQuery } from './generated/graphql';
 import Alert from './components-ui/Alert';
 import { apolloClient } from './utils/apolloClient';
 import Spinner from './components-ui/Spinner';
@@ -19,6 +19,7 @@ import Explore from './routes/Explore';
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery();
+  useGetPostsQuery({ variables: { limit: 4 } });
 
   if (loading) {
     return <Spinner />;

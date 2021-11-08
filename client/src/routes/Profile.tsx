@@ -7,7 +7,7 @@ import { AiOutlineTable } from 'react-icons/ai';
 import Button from '../components-ui/Button';
 import Alert from '../components-ui/Alert';
 import UserPosts from '../components/UserPosts';
-import useToggleFollowHook from '../utils/useToggleFollowHook';
+import useToggleFollowHook from '../hooks/useToggleFollowHook';
 import { FaCheck, FaUser } from 'react-icons/fa';
 import FollowModal from '../components/FollowModal';
 

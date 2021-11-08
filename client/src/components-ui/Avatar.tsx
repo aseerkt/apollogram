@@ -18,6 +18,7 @@ const Avatar: React.FC<AvatarProps> = ({
   if (customSize) avatarSize = customSize;
   return (
     <img
+      loading='lazy'
       src={src}
       alt='avatar'
       {...props}

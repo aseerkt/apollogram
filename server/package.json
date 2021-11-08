@@ -19,7 +19,6 @@
       "@types/graphql-upload": "^8.0.4",
       "@types/jsonwebtoken": "^8.5.5",
       "@types/node": "^16.7.1",
-      "@types/sharp": "^0.28.5",
       "apollo-server-express": "^3.1.2",
       "argon2": "^0.28.2",
       "class-validator": "^0.13.1",

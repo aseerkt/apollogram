@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useToggleLikeMutation } from '../generated/graphql';
-import useToggleLikeInCache from '../utils/useToggleLikeInCache';
+import useToggleLikeInCache from '../hooks/useToggleLikeInCache';
 
 interface LikeButtonProps {
   postId: string;

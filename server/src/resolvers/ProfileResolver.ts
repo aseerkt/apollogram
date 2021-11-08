@@ -107,8 +107,8 @@ export class ProfileResolver {
     @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload,
     @Ctx() ctx: MyContext
   ) {
-    const { user } = await checkUserFromCookie(ctx);
-    const profile = await Profile.findOne({ where: { user } });
+    const { username } = await checkUserFromCookie(ctx);
+    const profile = await Profile.findOne({ where: { username } });
     if (profile && file) {
       // if (profile.imgURL.startsWith('images/')) {
       //   unlinkSync(`public/${profile.imgURL}`);
