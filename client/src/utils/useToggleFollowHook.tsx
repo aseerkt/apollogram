@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { useMessageCtx } from '@/context/MessageContext';
 import {
   GetExplorePostsDocument,
+  GetFollowSuggestionsDocument,
   GetPostsDocument,
   useMeQuery,
   User,
@@ -26,6 +27,7 @@ const useToggleFollowHook = (user?: User) => {
           refetchQueries: [
             { query: GetPostsDocument, variables: { limit: 4 } },
             { query: GetExplorePostsDocument, variables: { limit: 12 } },
+            { query: GetFollowSuggestionsDocument },
           ],
           update: (cache, { data }) => {
             if (data?.toggleFollow) {
@@ -96,6 +98,7 @@ const useToggleFollowHook = (user?: User) => {
                   },
                 },
               });
+
               setMessage(
                 `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`
               );
