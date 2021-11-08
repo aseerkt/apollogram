@@ -240,15 +240,15 @@ export type MinimalPostFragment = { __typename?: 'Post', id: string, caption: st
 
 export type MinimalProfileFragment = { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string };
 
-export type MinimalUserFragment = { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } };
+export type MinimalUserFragment = { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } };
 
-export type RegularCommentFragment = { __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } };
+export type RegularCommentFragment = { __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } };
 
-export type RegularPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> };
+export type RegularPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> };
 
-export type RegularProfileFragment = { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
+export type RegularProfileFragment = { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
 
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } };
 
 export type AddCommentMutationVariables = Exact<{
   text: Scalars['String'];
@@ -256,7 +256,7 @@ export type AddCommentMutationVariables = Exact<{
 }>;
 
 
-export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> };
+export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> };
 
 export type AddPostMutationVariables = Exact<{
   file: Scalars['Upload'];
@@ -297,7 +297,7 @@ export type EditProfileMutationVariables = Exact<{
 }>;
 
 
-export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileResponse', user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
+export type EditProfileMutation = { __typename?: 'Mutation', editProfile: { __typename?: 'EditProfileResponse', user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
 
 export type LoginMutationVariables = Exact<{
   username: Scalars['String'];
@@ -305,7 +305,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } };
 
 export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -341,12 +341,12 @@ export type GetExplorePostsQueryVariables = Exact<{
 }>;
 
 
-export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> } };
+export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> } };
 
 export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
+export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
 
 export type GetPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
@@ -354,26 +354,26 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> } };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> } };
 
 export type GetSinglePostQueryVariables = Exact<{
   postId: Scalars['String'];
 }>;
 
 
-export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> };
+export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }> };
 
 export type GetUserQueryVariables = Exact<{
   username: Scalars['String'];
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }>, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } }> };
+export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } } }> }>, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string, followers: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }>, followings: Array<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> } }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
+export type MeQuery = { __typename?: 'Query', me?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, profile: { __typename?: 'Profile', id: string, name: string, website: string, bio: string, gender: string, imgURL: string } }> };
 
 export const MinimalPostFragmentDoc = gql`
     fragment MinimalPost on Post {
@@ -415,7 +415,6 @@ export const MinimalUserFragmentDoc = gql`
   id
   username
   email
-  isFollowing
   profile {
     ...MinimalProfile
   }
