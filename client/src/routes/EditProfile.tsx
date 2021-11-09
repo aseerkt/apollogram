@@ -38,7 +38,7 @@ const EditProfile: React.FC = () => {
           </div>
           <Formik
             initialValues={{
-              name: user.profile.name,
+              name: user.name,
               website: user.profile.website,
               bio: user.profile.bio,
               gender: user.profile.gender,

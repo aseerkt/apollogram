@@ -17,7 +17,7 @@ const useToggleFollowHook = (user?: User) => {
   const me = meData!.me!;
 
   const onToggle = useCallback(
-    (user?: User) => async (e: React.MouseEvent<HTMLButtonElement>) => {
+    (user?: User) => async () => {
       if (!user) return;
       try {
         const { id: userId, username, isFollowing, profile } = user;
@@ -43,61 +43,63 @@ const useToggleFollowHook = (user?: User) => {
                 broadcast: false,
               });
               // Update followers array
-              cache.modify({
-                id: cache.identify(profile),
-                broadcast: false,
-                fields: {
-                  followers(existingFollowersRefs = [], { readField }) {
-                    if (!isFollowing) {
-                      const newFollowerRef = cache.identify(me);
+              if (profile) {
+                cache.modify({
+                  id: cache.identify(profile),
+                  broadcast: false,
+                  fields: {
+                    followers(existingFollowersRefs = [], { readField }) {
+                      if (!isFollowing) {
+                        const newFollowerRef = cache.identify(me);
 
-                      // Quick safety check - if the new follower is already
-                      // present in the cache, we don't need to add it again.
-                      if (
-                        existingFollowersRefs.some(
-                          (ref: any) => readField('id', ref) === me.id
-                        )
-                      ) {
-                        return existingFollowersRefs;
+                        // Quick safety check - if the new follower is already
+                        // present in the cache, we don't need to add it again.
+                        if (
+                          existingFollowersRefs.some(
+                            (ref: any) => readField('id', ref) === me.id
+                          )
+                        ) {
+                          return existingFollowersRefs;
+                        }
+
+                        return [newFollowerRef, ...existingFollowersRefs];
+                      } else {
+                        return existingFollowersRefs.filter(
+                          (ref: any) => readField('id', ref) !== me.id
+                        );
                       }
-
-                      return [newFollowerRef, ...existingFollowersRefs];
-                    } else {
-                      return existingFollowersRefs.filter(
-                        (ref: any) => readField('id', ref) !== me.id
-                      );
-                    }
+                    },
                   },
-                },
-              });
-              // update followings array
-              cache.modify({
-                id: cache.identify(profile),
-                broadcast: false,
-                fields: {
-                  followings(existingFollowingsRefs = [], { readField }) {
-                    if (!isFollowing) {
-                      const newFollowingRef = cache.identify(user);
+                });
+                // update followings array
+                cache.modify({
+                  id: cache.identify(profile),
+                  broadcast: false,
+                  fields: {
+                    followings(existingFollowingsRefs = [], { readField }) {
+                      if (!isFollowing) {
+                        const newFollowingRef = cache.identify(user);
 
-                      // Quick safety check - if the new following is already
-                      // present in the cache, we don't need to add it again.
-                      if (
-                        existingFollowingsRefs.some(
-                          (ref: any) => readField('id', ref) === user.id
-                        )
-                      ) {
-                        return existingFollowingsRefs;
+                        // Quick safety check - if the new following is already
+                        // present in the cache, we don't need to add it again.
+                        if (
+                          existingFollowingsRefs.some(
+                            (ref: any) => readField('id', ref) === user.id
+                          )
+                        ) {
+                          return existingFollowingsRefs;
+                        }
+
+                        return [newFollowingRef, ...existingFollowingsRefs];
+                      } else {
+                        return existingFollowingsRefs.filter(
+                          (ref: any) => readField('id', ref) !== user.id
+                        );
                       }
-
-                      return [newFollowingRef, ...existingFollowingsRefs];
-                    } else {
-                      return existingFollowingsRefs.filter(
-                        (ref: any) => readField('id', ref) !== user.id
-                      );
-                    }
+                    },
                   },
-                },
-              });
+                });
+              }
 
               setMessage(
                 `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`

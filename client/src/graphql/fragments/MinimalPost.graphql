@@ -6,18 +6,14 @@ fragment MinimalPost on Post {
   updatedAt
   user {
     username
-    profile {
-      imgURL
-    }
+    imgURL
   }
   likeCount
   comments {
     text
     username
     user {
-      profile {
-        imgURL
-      }
+      imgURL
     }
   }
 }

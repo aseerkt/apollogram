@@ -14,7 +14,7 @@ import {
 import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { v2 as cloudinary } from 'cloudinary';
 import { FieldError, MyContext } from '../types';
-import { generateUrl, uploadToCloudinary } from '../utils/uploadHandler';
+import { uploadToCloudinary } from '../utils/uploadHandler';
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
@@ -62,14 +62,6 @@ export class ProfileResolver {
     return '';
   }
 
-  @FieldResolver(() => String)
-  imgURL(@Root() profile: Profile): string {
-    if (profile.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-      return generateUrl(profile.imgURL, 'profiles');
-    }
-    return profile.imgURL;
-  }
-
   @FieldResolver(() => [User])
   async followers(
     @Root() profile: Profile,
@@ -108,18 +100,18 @@ export class ProfileResolver {
     @Ctx() ctx: MyContext
   ) {
     const { username } = await checkUserFromCookie(ctx);
-    const profile = await Profile.findOne({ where: { username } });
-    if (profile && file) {
+    const user = await User.findOne({ where: { username } });
+    if (user && file) {
       // if (profile.imgURL.startsWith('images/')) {
       //   unlinkSync(`public/${profile.imgURL}`);
       // }
-      if (profile.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-        await cloudinary.uploader.destroy(profile.imgURL);
+      if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
+        await cloudinary.uploader.destroy(user.imgURL);
       }
       const { url } = await uploadToCloudinary(file, 'profiles');
       if (url) {
-        profile.imgURL = url;
-        await profile.save();
+        user.imgURL = url;
+        await user.save();
         return true;
       }
     }
@@ -131,13 +123,13 @@ export class ProfileResolver {
   @Mutation(() => String, { nullable: true })
   @UseMiddleware(isAuth)
   async removeProfilePhoto(@Ctx() { res }: MyContext) {
-    const profile = await Profile.findOne({
+    const user = await User.findOne({
       where: { username: res.locals.username },
     });
-    if (profile) {
-      profile.imgURL = '/user.jpg';
-      await profile.save();
-      return profile;
+    if (user) {
+      user.imgURL = '/user.jpg';
+      await user.save();
+      return user;
     }
     return false;
   }
@@ -157,9 +149,9 @@ export class ProfileResolver {
 
     if (profile && user) {
       user.email = email;
+      user.name = name;
       profile.gender = gender;
       profile.website = website;
-      profile.name = name;
       profile.bio = bio;
       try {
         const userErrors = await validate(user);

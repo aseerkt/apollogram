@@ -27,7 +27,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
 
   const triggerFileSelectPopup = () => inputRef.current?.click();
 
-  const [displayImage, setDisplayImage] = useState(me.profile.imgURL);
+  const [displayImage, setDisplayImage] = useState(me.imgURL);
   const inputRef = useRef<HTMLInputElement>(null);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });

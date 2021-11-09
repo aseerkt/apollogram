@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
                 <Avatar
                   className='w-5 h-5 my-2 ml-auto cursor-pointer'
                   title={me.username}
-                  src={me.profile.imgURL}
+                  src={me.imgURL}
                 />
               </DropDown>
             </div>

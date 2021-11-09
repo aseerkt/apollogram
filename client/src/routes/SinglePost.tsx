@@ -42,10 +42,7 @@ const SinglePost = () => {
           <header className='static top-0 right-0 flex items-center justify-between h-20 px-3 border-b border-gray-300 md:border-l md:absolute md:w-80'>
             <div className='flex items-center'>
               <Link to={`/u/${user.username}`} className='flex items-center'>
-                <Avatar
-                  className='my-2 cursor-pointer'
-                  src={user.profile.imgURL}
-                />
+                <Avatar className='my-2 cursor-pointer' src={user.imgURL} />
                 <span className='ml-2 font-semibold'>{user.username}</span>
               </Link>
             </div>
@@ -71,7 +68,7 @@ const SinglePost = () => {
                   >
                     <Avatar
                       className='my-2 cursor-pointer ring-2 ring-red-500'
-                      src={user.profile.imgURL}
+                      src={user.imgURL}
                     />
                   </Link>
                   <div className='flex flex-col mt-2'>
@@ -100,7 +97,7 @@ const SinglePost = () => {
                       >
                         <Avatar
                           className='my-2 cursor-pointer'
-                          src={c.user.profile.imgURL}
+                          src={c.user.imgURL}
                         />
                       </Link>
                       <div className='flex flex-col mt-2'>

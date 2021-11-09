@@ -1,5 +1,8 @@
 query Me {
   me {
     ...MinimalUser
+    profile {
+      ...MinimalProfile
+    }
   }
 }
