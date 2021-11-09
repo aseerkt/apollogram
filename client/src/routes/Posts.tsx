@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 const Posts: React.FC = () => {
   const [observedPost, setObservedPost] = React.useState('');
   const { data, loading, error, fetchMore, variables } = useGetPostsQuery({
-    variables: { limit: 4 },
+    variables: { limit: 3 },
   });
 
   React.useEffect(() => {
