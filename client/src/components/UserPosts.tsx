@@ -13,7 +13,9 @@ const UserPosts: React.FC<{ username: string }> = ({ username }) => {
     // console.log(error);
     <Alert severity='danger'>{JSON.stringify(error)}</Alert>;
   }
-  return <PostsGrid posts={data?.getUser?.posts as Post[]} />;
+  return data?.getUser?.posts ? (
+    <PostsGrid posts={data.getUser.posts as Post[]} />
+  ) : null;
 };
 
 export default UserPosts;
