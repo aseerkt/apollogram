@@ -1,14 +1,6 @@
 import { MinLength } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
-import {
-  Entity,
-  Column,
-  ManyToOne,
-  OneToMany,
-  JoinColumn,
-  AfterLoad,
-} from 'typeorm';
-import { EXPRESS_ENDPOINT } from '../constants';
+import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 import { BaseColumns } from './BaseColumns';
 import { Comment } from './Comment';
 import { Like } from './Like';
@@ -43,12 +35,4 @@ export class Post extends BaseColumns {
 
   @OneToMany(() => Like, (like) => like.post)
   likes: Like[];
-
-  // Methods
-  @AfterLoad()
-  generateURL() {
-    this.imgURL = this.imgURL.startsWith('images/')
-      ? `${EXPRESS_ENDPOINT}/${this.imgURL}`
-      : this.imgURL;
-  }
 }

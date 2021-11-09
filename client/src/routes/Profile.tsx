@@ -33,8 +33,10 @@ const Profile: React.FC = () => {
     const {
       username,
       posts,
+      name,
+      imgURL,
       isFollowing,
-      profile: { imgURL, name, bio, website },
+      profile: { bio, website },
     } = data.getUser;
     return (
       <Container>

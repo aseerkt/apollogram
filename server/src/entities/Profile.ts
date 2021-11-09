@@ -1,7 +1,6 @@
 import { IsUrl } from 'class-validator';
 import { Field, ObjectType } from 'type-graphql';
-import { AfterLoad, Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { EXPRESS_ENDPOINT, GRAVATAR } from '../constants';
+import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { BaseColumns } from './BaseColumns';
 import { User } from './User';
 
@@ -12,13 +11,6 @@ export class Profile extends BaseColumns {
     super();
     Object.assign(this, profile);
   }
-  @Field()
-  @Column({ default: '' })
-  imgURL: string;
-
-  @Field()
-  @Column({ default: '' })
-  name: string;
 
   @Field()
   @IsUrl(undefined, { message: 'Invalid Website URL' })
@@ -41,13 +33,4 @@ export class Profile extends BaseColumns {
   @OneToOne(() => User, (user) => user.profile)
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
-
-  @AfterLoad()
-  setProfilePhoto() {
-    this.imgURL = this.imgURL.startsWith('images/')
-      ? `${EXPRESS_ENDPOINT}/${this.imgURL}`
-      : this.imgURL === ''
-      ? GRAVATAR
-      : this.imgURL;
-  }
 }

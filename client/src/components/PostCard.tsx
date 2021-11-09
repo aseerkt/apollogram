@@ -42,7 +42,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
       <div className='flex items-center justify-between px-3 border-b border-gray-300'>
         <div className='flex items-center'>
           <Link to={`/u/${user.username}`} className='flex items-center'>
-            <Avatar className='my-2 cursor-pointer' src={user.profile.imgURL} />
+            <Avatar className='my-2 cursor-pointer' src={user.imgURL} />
             <span className='ml-2 font-semibold hover:underline'>
               {user.username}
             </span>

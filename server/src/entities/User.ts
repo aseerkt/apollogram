@@ -34,6 +34,14 @@ export class User extends BaseColumns {
   @Column()
   password: string;
 
+  @Field()
+  @Column({ default: '' })
+  imgURL: string;
+
+  @Field()
+  @Column({ default: '' })
+  name: string;
+
   // Relations
 
   @Field(() => [Post])

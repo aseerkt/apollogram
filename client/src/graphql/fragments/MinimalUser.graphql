@@ -2,7 +2,6 @@ fragment MinimalUser on User {
   id
   username
   email
-  profile {
-    ...MinimalProfile
-  }
+  imgURL
+  name
 }

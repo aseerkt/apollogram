@@ -1,14 +1,11 @@
 fragment RegularProfile on Profile {
-  id
-  name
-  website
-  bio
-  gender
-  imgURL
+  ...MinimalProfile
   followers {
     ...MinimalUser
+    isFollowing
   }
   followings {
     ...MinimalUser
+    isFollowing
   }
 }

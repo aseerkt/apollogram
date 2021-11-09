@@ -18,13 +18,19 @@ import {
   RegisterVars,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
-import { COOKIE_NAME, EXPRESS_ENDPOINT, __prod__ } from '../constants';
+import {
+  CLOUDINARY_ROOT_PATH,
+  COOKIE_NAME,
+  EXPRESS_ENDPOINT,
+  __prod__,
+} from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
 import { extractDomainFromUrl } from '../utils/extractDomainFromUrl';
+import { generateUrl } from '../utils/uploadHandler';
 
 @Resolver(User)
 export class UserResolver {
@@ -36,6 +42,14 @@ export class UserResolver {
       return user.email;
     }
     return '';
+  }
+
+  @FieldResolver(() => String)
+  imgURL(@Root() user: User): string {
+    if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
+      return generateUrl(user.imgURL, 'profiles');
+    }
+    return user.imgURL;
   }
 
   @FieldResolver(() => Profile)

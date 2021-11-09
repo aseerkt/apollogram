@@ -12,17 +12,13 @@ const ProfileRight: React.FC = () => {
     <>
       <div className='flex items-center py-3 mt-3'>
         <Link to={`/u/${me.username}`}>
-          <Avatar
-            className='w-16 h-16'
-            src={me.profile.imgURL}
-            alt={me.username}
-          />
+          <Avatar className='w-16 h-16' src={me.imgURL} alt={me.username} />
         </Link>
         <div className='ml-4'>
           <Link to={`/u/${me.username}`}>
             <strong>{me.username}</strong>
           </Link>
-          <p className='text-gray-600'>{me.profile.name}</p>
+          <p className='text-gray-600'>{me.name}</p>
         </div>
       </div>
       <div className='flex items-center justify-between py-3 '>

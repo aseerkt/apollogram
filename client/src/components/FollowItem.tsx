@@ -20,7 +20,7 @@ const FollowItem: React.FC<SuggestionItemProps> = ({
   return (
     <div className='mt-3' key={s.id + s.username + s.id}>
       <div className='flex items-center pb-2'>
-        <Avatar src={s.profile.imgURL} />
+        <Avatar src={s.imgURL} />
         <div className='flex flex-col ml-2'>
           <Link className='font-bold hover:underline' to={`/u/${s.username}`}>
             {s.username}

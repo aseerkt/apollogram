@@ -14,6 +14,9 @@ mutation EditProfile(
   ) {
     user {
       ...MinimalUser
+      profile {
+        ...MinimalProfile
+      }
     }
     errors {
       path
