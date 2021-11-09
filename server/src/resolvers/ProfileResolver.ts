@@ -67,7 +67,7 @@ export class ProfileResolver {
     @Root() profile: Profile,
     @Ctx() { followLoader, userLoader }: MyContext
   ): Promise<User[]> {
-    const followData = await followLoader.load(profile.username);
+    const followData = (await followLoader.load(profile.username)) || [];
 
     return await Promise.all(
       followData
@@ -81,7 +81,7 @@ export class ProfileResolver {
     @Root() profile: Profile,
     @Ctx() { followLoader, userLoader }: MyContext
   ): Promise<User[]> {
-    const followData = await followLoader.load(profile.username);
+    const followData = (await followLoader.load(profile.username)) || [];
 
     return await Promise.all(
       followData
