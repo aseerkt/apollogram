@@ -27,6 +27,8 @@ async function createServer() {
     cors({
       origin: FRONTEND_URL,
       credentials: true,
+      methods: ['GET', 'POST', 'HEAD'],
+      maxAge: 600,
     })
   );
 
