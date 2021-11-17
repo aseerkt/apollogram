@@ -6,6 +6,9 @@ type AvatarProps = React.DetailedHTMLProps<
   customSize?: string | null;
 };
 
+const GRAVATAR_PLACEHOLDER =
+  'https://www.gravatar.com/avatar/00000000000000000000000000000000';
+
 const Avatar: React.FC<AvatarProps> = ({
   size = 'small',
   customSize,
@@ -19,10 +22,10 @@ const Avatar: React.FC<AvatarProps> = ({
   return (
     <img
       loading='lazy'
-      src={src}
+      src={src ? src : GRAVATAR_PLACEHOLDER}
       alt='avatar'
       {...props}
-      className={`${className} ring-1 ring-gray-200 rounded-full ${avatarSize}`}
+      className={`${className} object-cover ring-1 ring-gray-200 rounded-full ${avatarSize}`}
     />
   );
 };
