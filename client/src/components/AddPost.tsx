@@ -18,6 +18,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [file, setFile] = useState<File>(null as any);
   const inputRef = React.createRef<HTMLInputElement>();
   const [imgSrc, setImgSrc] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const history = useHistory();
 
@@ -25,7 +26,11 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     (files: File[]) => {
       // console.log('files dropped');
       // console.log(files);
-      setFile(files[0]);
+      if (!files[0].type.includes('image')) {
+        setUploadError('Unsupported file format (Supported : JPEG/JPG/PNG)');
+        setFile(files[0]);
+        return;
+      }
       setImgSrc(URL.createObjectURL(files[0]));
     },
     [setFile]
@@ -97,9 +102,17 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           className='p-5 my-2 mb-5 text-gray-700 border border-blue-400 rounded cursor-pointer hover:bg-gray-100'
           {...getRootProps()}
         >
-          <input {...getInputProps()} />
+          <input
+            type='file'
+            {...getInputProps()}
+            accept='image/*'
+            multiple={false}
+          />
           {file ? (
-            <p className='text-xs text-black'>{file.name}</p>
+            <>
+              <p className='text-xs text-black'>{file.name}</p>
+              <small className='my-1 text-red-700'>{uploadError}</small>
+            </>
           ) : isDragActive ? (
             <p className='text-sm text-center uppercase'>
               Drop the files here ...
@@ -117,7 +130,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           className='block mx-auto'
           color='dark'
           type='submit'
-          disabled={!file || !caption}
+          disabled={!imgSrc || !caption}
         >
           Upload
         </Button>
