@@ -3,15 +3,16 @@ import { ImageTransformationOptions, v2 as cloudinary } from 'cloudinary';
 import { FileUpload } from 'graphql-upload';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 
+type PathSuffix = 'profiles' | 'posts';
+
 function generateFileName() {
   return crypto.randomBytes(15).toString('hex');
 }
 
-export function generateUrl(
-  selector: string,
-  pathSuffix: 'profiles' | 'posts'
-) {
-  const options: ImageTransformationOptions = {
+function getTransformationOptions(
+  pathSuffix: PathSuffix
+): ImageTransformationOptions {
+  return {
     format: 'webp',
     quality: 'auto',
     ...(pathSuffix === 'posts'
@@ -23,6 +24,10 @@ export function generateUrl(
           height: 180,
         }),
   };
+}
+
+export function generateUrl(selector: string, pathSuffix: PathSuffix) {
+  const options = getTransformationOptions(pathSuffix);
   return cloudinary.url(selector, options);
 }
 
@@ -40,7 +45,7 @@ export async function uploadToCloudinary(
       {
         public_id: fileName,
         folder: filePath,
-        format: 'webp',
+        ...getTransformationOptions(pathSuffix),
       },
       (err, res) => {
         console.log(res);
