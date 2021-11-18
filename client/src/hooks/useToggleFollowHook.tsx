@@ -5,22 +5,32 @@ import {
   GetExplorePostsDocument,
   GetFollowSuggestionsDocument,
   GetPostsDocument,
+  useGetUserQuery,
   useMeQuery,
   User,
   useToggleFollowMutation,
 } from '@/generated/graphql';
 
-const useToggleFollowHook = (user?: User) => {
+const useToggleFollowHook = (user: User) => {
   const { setMessage } = useMessageCtx();
   const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
   const { data: meData } = useMeQuery();
   const me = meData!.me!;
+  const { data: followUser } = useGetUserQuery({
+    variables: { username: user?.username },
+    skip: !user?.username,
+    fetchPolicy: 'cache-only',
+  });
+  const { data: currentUser } = useGetUserQuery({
+    variables: { username: me.username },
+    fetchPolicy: 'cache-only',
+  });
 
   const onToggle = useCallback(
-    (user?: User) => async () => {
-      if (!user) return;
+    (user: User) => async () => {
+      if (!user || me.id === user.id) return;
       try {
-        const { id: userId, username, isFollowing, profile } = user;
+        const { id: userId, username, isFollowing } = user;
 
         await toggleFollow({
           variables: { followingUsername: username },
@@ -43,9 +53,9 @@ const useToggleFollowHook = (user?: User) => {
                 broadcast: false,
               });
               // Update followers array
-              if (profile) {
+              if (followUser?.getUser?.profile) {
                 cache.modify({
-                  id: cache.identify(profile),
+                  id: cache.identify(followUser?.getUser?.profile),
                   broadcast: false,
                   fields: {
                     followers(existingFollowersRefs = [], { readField }) {
@@ -71,9 +81,12 @@ const useToggleFollowHook = (user?: User) => {
                     },
                   },
                 });
+              }
+
+              if (currentUser?.getUser?.profile) {
                 // update followings array
                 cache.modify({
-                  id: cache.identify(profile),
+                  id: cache.identify(currentUser?.getUser?.profile),
                   broadcast: false,
                   fields: {
                     followings(existingFollowingsRefs = [], { readField }) {
