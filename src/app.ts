@@ -1,7 +1,6 @@
 import http from 'http';
 import path from 'path';
 import express from 'express';
-import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
@@ -13,7 +12,7 @@ import { graphqlUploadExpress } from 'graphql-upload';
 import cookieParser from 'cookie-parser';
 import { createUserLoader } from './dataloaders/createUserLoader';
 import { createProfileLoader } from './dataloaders/createProfileLoader';
-import { FRONTEND_URL, __prod__ } from './constants';
+import { __prod__ } from './constants';
 import { MyContext } from './types';
 import { createCommentLoader } from './dataloaders/createCommentLoader';
 import { createLikeLoader } from './dataloaders/createLikeLoader';
