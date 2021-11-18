@@ -8,8 +8,6 @@ import Container from '../components-ui/Container';
 import Modal from '../components-ui/Modal';
 import { FiPlusSquare } from 'react-icons/fi';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
-import { IoIosCompass } from 'react-icons/io';
-import { ImCompass2 } from 'react-icons/im';
 import { MdExplore, MdOutlineExplore } from 'react-icons/md';
 
 const Navbar: React.FC = () => {
