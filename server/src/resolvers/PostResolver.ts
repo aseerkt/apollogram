@@ -192,11 +192,11 @@ export class PostResolver {
   async editCaption(
     @Arg('postId', () => ID) postId: string,
     @Arg('caption') caption: string
-    // @Ctx() { res }: MyContext
+    @Ctx() { res }: MyContext
   ) {
     try {
       const result = await Post.update(
-        { id: postId, username: 'asdfsadf' },
+        { id: postId, username: res.locals.username },
         { caption }
       );
 
