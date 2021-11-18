@@ -10,7 +10,7 @@
     "dev": "concurrently \"yarn watch\" \"yarn server\" -c blue.bold,yellow.bold -n TSC,SERVER",
     "typeorm": "ts-node ./node_modules/typeorm/cli.js",
     "seed": "npx tsc && ts-node ./node_modules/typeorm-seeding/dist/cli.js seed",
-    "heroku-postbuild": "YARN_PRODUCTION=false npx tsc && yarn --cwd client && yarn build --cwd client"
+    "heroku-postbuild": "YARN_PRODUCTION=false npx tsc && yarn --cwd client && yarn --cwd client build "
   },
   "dependencies": {
     "@types/cookie-parser": "^1.4.2",
