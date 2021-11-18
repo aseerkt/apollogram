@@ -10,6 +10,7 @@ import { FiPlusSquare } from 'react-icons/fi';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { IoIosCompass } from 'react-icons/io';
 import { ImCompass2 } from 'react-icons/im';
+import { MdExplore, MdOutlineExplore } from 'react-icons/md';
 
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
@@ -29,19 +30,19 @@ const Navbar: React.FC = () => {
         </Link>
         {me && (
           <>
-            <div className='flex items-center ml-auto'>
+            <div className='flex items-center ml-auto space-x-3'>
               <Link title='Home' aria-label='home' to='/'>
                 {location.pathname === '/' ? (
-                  <AiFillHome size='1.7em' className='mr-3' />
+                  <AiFillHome size='1.7em' />
                 ) : (
-                  <AiOutlineHome size='1.7em' className='mr-3' />
+                  <AiOutlineHome size='1.7em' />
                 )}
               </Link>
               <Link title='Explore' aria-label='explore' to='/explore'>
                 {location.pathname === '/explore' ? (
-                  <IoIosCompass size='2.1em' className='mr-3' />
+                  <MdExplore size='2em' />
                 ) : (
-                  <ImCompass2 size='1.7em' className='mr-3' />
+                  <MdOutlineExplore size='2em' />
                 )}
               </Link>
               <button
