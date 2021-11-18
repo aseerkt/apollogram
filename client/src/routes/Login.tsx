@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
@@ -8,6 +9,7 @@ import { Form, Formik } from 'formik';
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
   const [login] = useLoginMutation();
+  const [testLoading, setTestLoading] = useState(false);
 
   return (
     <FormWrapper title='Login'>
@@ -53,12 +55,13 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                 Login
               </Button>
               <Button
-                isLoading={isSubmitting}
+                isLoading={testLoading}
                 className='my-3'
                 fullWidth
                 color='dark'
                 type='button'
-                onClick={() =>
+                onClick={() => {
+                  setTestLoading(true);
                   login({
                     variables: { username: 'bob', password: 'bob123' },
                     update: (cache, result) => {
@@ -71,8 +74,8 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
                         window.location.pathname = '/';
                       }
                     },
-                  })
-                }
+                  });
+                }}
               >
                 Login as Guest
               </Button>
