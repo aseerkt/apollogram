@@ -25,7 +25,7 @@ const Avatar: React.FC<AvatarProps> = ({
       src={src ? src : GRAVATAR_PLACEHOLDER}
       alt='avatar'
       {...props}
-      className={`${className} object-cover ring-1 ring-gray-200 rounded-full ${avatarSize}`}
+      className={`${className} object-cover object-center ring-1 ring-gray-200 rounded-full ${avatarSize}`}
     />
   );
 };
