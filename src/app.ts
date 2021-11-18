@@ -24,15 +24,6 @@ async function createServer() {
 
   const httpServer = http.createServer(app);
 
-  app.use(
-    cors({
-      origin: FRONTEND_URL,
-      credentials: true,
-      methods: ['GET', 'POST', 'HEAD'],
-      maxAge: 600,
-    })
-  );
-
   // app.get('/', (_, res) => res.send('Welcome to Apollo Instagram API'));
 
   app.use(cookieParser());
