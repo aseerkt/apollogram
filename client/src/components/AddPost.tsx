@@ -31,6 +31,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
         setFile(files[0]);
         return;
       }
+      setFile(files[0]);
       setImgSrc(URL.createObjectURL(files[0]));
     },
     [setFile]
