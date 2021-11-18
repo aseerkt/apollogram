@@ -21,13 +21,8 @@ const ProfileRight: React.FC = () => {
           <p className='text-gray-600'>{me.name}</p>
         </div>
       </div>
-      <div className='flex items-center justify-between py-3 '>
-        <p className='font-bold text-gray-500'>Suggestions For You</p>
-        <p className='font-semibold text-gray-800 cursor-pointer'>See All</p>
-      </div>
-      <div className='flex flex-col'>
+     
         <Suggestions />
-      </div>
     </>
   );
 };

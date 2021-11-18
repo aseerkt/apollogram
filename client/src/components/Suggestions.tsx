@@ -11,11 +11,16 @@ const Suggestions = () => {
 
   return (
     <div>
-      {data?.getFollowSuggestions.map((s) => (
-        <FollowItem key={s.username + s.id} s={s as User} />
-      ))}
-      {!data?.getFollowSuggestions ||
-        (data.getFollowSuggestions.length < 1 && <p>No Suggestions</p>)}
+      <div className='flex items-center justify-between py-3 '>
+        <p className='font-bold text-gray-500'>Suggestions For You</p>
+      </div>
+      <div className='flex flex-col'>
+        {data?.getFollowSuggestions.map((s) => (
+          <FollowItem key={s.username + s.id} s={s as User} />
+        ))}
+        {!data?.getFollowSuggestions ||
+          (data.getFollowSuggestions.length < 1 && <p>No Suggestions</p>)}
+      </div>
     </div>
   );
 };
