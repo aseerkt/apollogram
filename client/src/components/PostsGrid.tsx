@@ -7,7 +7,9 @@ const PostsGrid: React.FC<{ posts: Post[] }> = ({ posts }) => {
   return (
     <section className='grid grid-cols-2 gap-1 mt-2 md:grid-cols-3 md:gap-4'>
       {posts.length === 0 && (
-        <strong className='col-start-2 text-gray-500'>No Posts Uploaded</strong>
+        <div className='p-5 text-center border rounded-sm col-span-full'>
+          <strong className='py-4 text-gray-500 '>No Posts Uploaded</strong>
+        </div>
       )}
       {posts.map(({ imgURL, comments, likeCount, id }) => (
         <Link
