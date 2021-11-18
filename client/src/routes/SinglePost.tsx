@@ -15,7 +15,6 @@ const SinglePost = () => {
   const { postId }: any = useParams();
   const { data, loading } = useGetSinglePostQuery({ variables: { postId } });
 
-  // const { me } = apolloClient.readQuery({ query: MeDocument });
   const addCommentRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -50,11 +49,12 @@ const SinglePost = () => {
             <PostOptions post={data.getSinglePost as Post} />
           </header>
           {/* Media */}
-          <div className='md:h-full md:mr-80'>
+          <div className='flex items-center md:h-full md:mr-80'>
             <img
+              loading='lazy'
               className='w-full mr-0 md:w-full md:object-cover md:h-full'
               src={imgURL}
-              alt=''
+              alt={caption}
             />
           </div>
           <div className='static bottom-0 right-0 flex flex-col justify-between md:border-l md:border-gray-300 md:absolute top-20 md:w-80'>
@@ -89,29 +89,29 @@ const SinglePost = () => {
 
                 {/* Comments */}
                 <div className='my-1 comments-container'>
-                  {comments.map((c) => (
-                    <div key={c.id} className='flex'>
+                  {comments.map((comment) => (
+                    <div key={comment.id} className='flex'>
                       <Link
-                        to={`/u/${c.username}`}
+                        to={`/u/${comment.username}`}
                         className='mr-2 font-semibold '
                       >
                         <Avatar
                           className='my-2 cursor-pointer'
-                          src={c.user.imgURL}
+                          src={comment.user.imgURL}
                         />
                       </Link>
                       <div className='flex flex-col mt-2'>
                         <div className='flex'>
                           <Link
-                            to={`/u/${c.username}`}
+                            to={`/u/${comment.username}`}
                             className='flex mr-1 font-semibold hover:underline'
                           >
-                            {c.username}
+                            {comment.username}
                           </Link>
-                          <span>{c.text}</span>
+                          <span>{comment.text}</span>
                         </div>
                         <span className='mt-2 text-sm text-gray-400'>
-                          {dayjs(c.createdAt).fromNow(true)}
+                          {dayjs(comment.createdAt).fromNow(true)}
                         </span>
                       </div>
                     </div>
