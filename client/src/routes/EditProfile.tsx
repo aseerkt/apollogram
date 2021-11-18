@@ -28,7 +28,7 @@ const EditProfile: React.FC = () => {
               <li className='px-5 py-2 font-bold border-l-2 border-black'>
                 Edit Profile
               </li>
-              <li className='px-5 py-2'>Change Password</li>
+              {/* <li className='px-5 py-2'>Change Password</li> */}
             </ul>
           </div>
         </div>
@@ -91,6 +91,7 @@ const EditProfile: React.FC = () => {
                   <Field
                     as='textarea'
                     name='bio'
+                    row='3'
                     className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
                   ></Field>
                 </div>
@@ -98,7 +99,7 @@ const EditProfile: React.FC = () => {
                 <InputField inline name='email' label='Email' />
                 <InputField inline name='gender' label='Gender' error='' />
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
-                  <div></div>
+                  <div aria-label='offset'></div>
                   <Button
                     isLoading={isSubmitting || loading}
                     className='inline-block w-20 text-left'

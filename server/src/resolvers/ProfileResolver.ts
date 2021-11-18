@@ -102,9 +102,6 @@ export class ProfileResolver {
     const { username } = await checkUserFromCookie(ctx);
     const user = await User.findOne({ where: { username } });
     if (user && file) {
-      // if (profile.imgURL.startsWith('images/')) {
-      //   unlinkSync(`public/${profile.imgURL}`);
-      // }
       if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
         await cloudinary.uploader.destroy(user.imgURL);
       }
