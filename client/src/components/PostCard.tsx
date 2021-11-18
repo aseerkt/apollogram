@@ -52,7 +52,9 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <PostOptions post={post} />
       </div>
       {/* Media */}
-      <img loading='lazy' className='w-full' src={imgURL} alt='' />
+      <Link to={`/p/${id}`} className='flex items-center w-full'>
+        <img loading='lazy' className='w-full' src={imgURL} alt={caption} />
+      </Link>
       {/* Likes and comments */}
       <div className='h-full'>
         <div className='flex flex-col justify-between px-3 py-2'>
