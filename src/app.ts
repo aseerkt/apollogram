@@ -1,4 +1,5 @@
 import http from 'http';
+import path from 'path';
 import express from 'express';
 import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
@@ -32,12 +33,21 @@ async function createServer() {
     })
   );
 
-  app.get('/', (_, res) => res.send('Welcome to Apollo Instagram API'));
+  // app.get('/', (_, res) => res.send('Welcome to Apollo Instagram API'));
 
   app.use(cookieParser());
 
-  app.use('/', express.static('public'));
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
+
+  app.use(express.static('client/build'));
+
+  console.log(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
+
+  app.get('*', (_req, res) => {
+    res.sendFile(
+      path.resolve(__dirname, '..', 'client', 'build', 'index.html')
+    );
+  });
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
