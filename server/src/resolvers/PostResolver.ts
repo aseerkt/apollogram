@@ -191,7 +191,7 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async editCaption(
     @Arg('postId', () => ID) postId: string,
-    @Arg('caption') caption: string
+    @Arg('caption') caption: string,
     @Ctx() { res }: MyContext
   ) {
     try {
