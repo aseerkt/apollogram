@@ -1,6 +1,7 @@
 import http from 'http';
 import path from 'path';
 import express from 'express';
+import cors from 'cors';
 import { ApolloServer } from 'apollo-server-express';
 import {
   ApolloServerPluginDrainHttpServer,
@@ -29,15 +30,16 @@ async function createServer() {
 
   app.use(graphqlUploadExpress({ maxFileSize: 100000000, maxFiles: 10 }));
 
-  app.use(express.static('client/build'));
-
-  console.log(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
-
-  app.get('*', (_req, res) => {
-    res.sendFile(
-      path.resolve(__dirname, '..', 'client', 'build', 'index.html')
-    );
-  });
+  if (__prod__) {
+    app.use(express.static('client/build'));
+    app.get('*', (_req, res) => {
+      res.sendFile(
+        path.resolve(__dirname, '..', 'client', 'build', 'index.html')
+      );
+    });
+  } else {
+    app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+  }
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
