@@ -9,7 +9,6 @@ import Modal from '../components-ui/Modal';
 import { FiPlusSquare } from 'react-icons/fi';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { MdExplore, MdOutlineExplore } from 'react-icons/md';
-
 const Navbar: React.FC = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
