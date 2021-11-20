@@ -12,23 +12,24 @@ function generateFileName() {
 function getTransformationOptions(
   pathSuffix: PathSuffix
 ): ImageTransformationOptions {
-  return {
-    format: 'webp',
-    quality: 'auto',
-    ...(pathSuffix === 'posts'
-      ? {
-          width: 600,
-        }
-      : {
-          width: 180,
-          height: 180,
-        }),
-  };
+  return pathSuffix === 'posts'
+    ? {
+        width: 600,
+      }
+    : {
+        width: 180,
+        height: 180,
+      };
 }
 
 export function generateUrl(selector: string, pathSuffix: PathSuffix) {
   const options = getTransformationOptions(pathSuffix);
-  return cloudinary.url(selector, options);
+
+  return cloudinary.url(selector, {
+    ...options,
+    quality: 'auto',
+    format: 'webp',
+  });
 }
 
 export async function uploadToCloudinary(
@@ -45,10 +46,8 @@ export async function uploadToCloudinary(
       {
         public_id: fileName,
         folder: filePath,
-        ...getTransformationOptions(pathSuffix),
       },
       (err, res) => {
-        console.log(res);
         if (res) {
           resolve({
             url: `${filePath}/${fileName}`,
