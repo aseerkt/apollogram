@@ -58,10 +58,10 @@ const SinglePost = () => {
             />
           </div>
           <div className='static bottom-0 right-0 flex flex-col justify-between md:border-l md:border-gray-300 md:absolute top-20 md:w-80'>
-            <div className='flex flex-col justify-between h-full pt-2'>
+            <div className='flex flex-col justify-between h-full'>
               <div className='px-3 overflow-y-auto md:min-h-48'>
                 {/* Post Caption */}
-                <div className='flex pb-2 mb-3 border-b'>
+                <div className='flex py-2 mb-3 border-b'>
                   <Link
                     to={`/u/${user.username}`}
                     className='mr-2 font-semibold '
