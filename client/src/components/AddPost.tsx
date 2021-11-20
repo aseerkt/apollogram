@@ -6,6 +6,7 @@ import Card from '../components-ui/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 import { useMessageCtx } from '../context/MessageContext';
 import { useHistory } from 'react-router-dom';
+import useCompressor from '../hooks/useCompressor';
 
 interface AddPostProps {
   className?: string;
@@ -21,6 +22,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [uploadError, setUploadError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const history = useHistory();
+  const compress = useCompressor();
 
   const onDrop = useCallback(
     (files: File[]) => {
@@ -57,17 +59,27 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
     if (!file) return alert('No file selected');
     setSubmitting(true);
     // console.log(file);
-    const res = await addPost({ variables: { file, caption } });
-    // console.log(res);
-    if (res.data?.addPost.ok) {
-      setFile(null as any);
-      setImgSrc(null);
-      setCaption('');
-      setMessage('Post uploaded successfully');
-      setIsOpen(false);
-    }
+    compress(file, {
+      width: 600,
+      mimeType: 'image/jpeg',
+      success: async (result) => {
+        const res = await addPost({ variables: { file: result, caption } });
+        // console.log(res);
+        if (res.data?.addPost.ok) {
+          setFile(null as any);
+          setImgSrc(null);
+          setCaption('');
+          setMessage('Post uploaded successfully');
+          setIsOpen(false);
+        }
 
-    setSubmitting(false);
+        setSubmitting(false);
+      },
+      error: (err) => {
+        alert(err.message);
+        setSubmitting(false);
+      },
+    });
   };
 
   return (

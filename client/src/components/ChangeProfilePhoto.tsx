@@ -12,6 +12,7 @@ import { getCroppedImg } from '../utils/cropImage';
 import { dataURLtoFile } from '../utils/dataURLtoFile';
 import Spinner from '../components-ui/Spinner';
 import { useMessageCtx } from '../context/MessageContext';
+import useCompressor from '../hooks/useCompressor';
 
 interface ChangeProfilePhotoProps {
   username: string;
@@ -20,14 +21,13 @@ interface ChangeProfilePhotoProps {
 const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   username,
 }) => {
-  const { data: meData } = useMeQuery({ fetchPolicy: 'cache-only' });
-  const me = meData!.me!;
+  const { data: meData } = useMeQuery();
 
   const { setMessage } = useMessageCtx();
 
   const triggerFileSelectPopup = () => inputRef.current?.click();
 
-  const [displayImage, setDisplayImage] = useState(me.imgURL);
+  const [displayImage, setDisplayImage] = useState(meData?.me?.imgURL);
   const inputRef = useRef<HTMLInputElement>(null);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -35,7 +35,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
   const [image, setImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [submitting, setSubmitting] = useState(false);
-
+  const compress = useCompressor();
   const [changeProfilePhoto] = useChangeProfilePhotoMutation();
 
   const onCropComplete = (
@@ -66,17 +66,28 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
     const imgURL = croppedImageCanvas.toDataURL();
     const fileToSend = dataURLtoFile(imgURL, fileName);
     try {
-      const res = await changeProfilePhoto({
-        variables: { file: fileToSend },
-        refetchQueries: [{ query: MeDocument }],
-      });
-      if (res.data?.changeProfilePhoto) {
-        setImage(null);
-        setMessage('Profile photo updated');
-      } else {
-        setSubmitting(false);
-      }
       // console.log(res);
+      compress(fileToSend, {
+        width: 180,
+        height: 180,
+        mimeType: 'image/jpeg',
+        success: async (result) => {
+          const res = await changeProfilePhoto({
+            variables: { file: result },
+            refetchQueries: [{ query: MeDocument }],
+          });
+          if (res.data?.changeProfilePhoto) {
+            setImage(null);
+            setMessage('Profile photo updated');
+          } else {
+            setSubmitting(false);
+          }
+        },
+        error: (err) => {
+          alert(err.message);
+          setSubmitting(false);
+        },
+      });
     } catch (err) {
       setSubmitting(false);
       // console.log(err);
