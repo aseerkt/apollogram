@@ -73,11 +73,11 @@ export const generateDownload = async (
 
   canvas.toBlob(
     (blob) => {
-      const previewUrl = window.URL.createObjectURL(blob);
+      const previewUrl = window.URL.createObjectURL(blob!);
 
       const anchor = document.createElement('a');
       anchor.download = 'image.jpeg';
-      anchor.href = URL.createObjectURL(blob);
+      anchor.href = URL.createObjectURL(blob!);
       anchor.click();
 
       window.URL.revokeObjectURL(previewUrl);

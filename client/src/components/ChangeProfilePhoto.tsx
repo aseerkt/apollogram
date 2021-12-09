@@ -61,7 +61,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
     setSubmitting(true);
     const croppedImageCanvas = await getCroppedImg(image!, croppedArea!);
     croppedImageCanvas.toBlob((blob) => {
-      setDisplayImage(URL.createObjectURL(blob));
+      setDisplayImage(URL.createObjectURL(blob!));
     });
     const imgURL = croppedImageCanvas.toDataURL();
     const fileToSend = dataURLtoFile(imgURL, fileName);
