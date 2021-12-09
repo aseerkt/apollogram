@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.4.8",
-    "@craco/craco": "^6.1.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^12.0.0",
     "@testing-library/user-event": "^13.2.1",
@@ -15,27 +14,31 @@
     "@types/react-dom": "^17.0.9",
     "@types/react-icons": "^3.0.0",
     "@types/react-router-dom": "^5.1.7",
+    "@vitejs/plugin-react": "^1.1.1",
     "apollo-upload-client": "^16.0.0",
+    "autoprefixer": "^10.4.0",
     "classnames": "^2.3.1",
     "compressorjs": "^1.1.1",
     "dayjs": "^1.10.4",
     "formik": "^2.2.6",
     "graphql": "^15.5.0",
+    "postcss": "^8.4.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-easy-crop": "^3.3.3",
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
-    "react-scripts": "4.0.3",
+    "tailwindcss": "^2.2.19",
     "typescript": "^4.3.5",
+    "vite": "^2.7.1",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test",
-    "eject": "react-scripts eject",
+    "start": "vite",
+    "build": "tsc && vite build",
+    "serve": "vite preview",
+    "type-check": "tsc --noEmit",
     "gen": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
@@ -60,10 +63,7 @@
     "@graphql-codegen/cli": "^2.1.1",
     "@graphql-codegen/typescript": "2.1.0",
     "@graphql-codegen/typescript-operations": "2.1.0",
-    "@graphql-codegen/typescript-react-apollo": "3.1.0",
-    "autoprefixer": "^9",
-    "postcss": "^7",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat"
+    "@graphql-codegen/typescript-react-apollo": "3.1.0"
   },
   "license": "MIT"
 }
