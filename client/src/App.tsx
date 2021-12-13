@@ -8,14 +8,14 @@ import Spinner from './components-ui/Spinner';
 import PrivateRoute from './containers/PrivateRoute';
 
 // Routes
-const Login = lazy(() => import('./routes/Login'));
-const Register = lazy(() => import('./routes/Register'));
-const Posts = lazy(() => import('./routes/Posts'));
-const EditProfile = lazy(() => import('./routes/EditProfile'));
-const Profile = lazy(() => import('./routes/Profile'));
-const SinglePost = lazy(() => import('./routes/SinglePost'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Posts = lazy(() => import('./pages/Posts'));
+const EditProfile = lazy(() => import('./pages/EditProfile'));
+const Profile = lazy(() => import('./pages/Profile'));
+const SinglePost = lazy(() => import('./pages/SinglePost'));
 const MessageProvider = lazy(() => import('./context/MessageContext'));
-const Explore = lazy(() => import('./routes/Explore'));
+const Explore = lazy(() => import('./pages/Explore'));
 
 const App: React.FC = () => {
   const { loading, error } = useMeQuery();
