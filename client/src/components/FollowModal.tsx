@@ -37,11 +37,11 @@ const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
     <>
       <button
         onClick={() => {
-          if (!follows || follows?.length > 0) setIsOpen(!isOpen);
+          if (follows?.length) setIsOpen(!isOpen);
         }}
         className='md:flex'
       >
-        <strong className='md:mr-1'>{follows?.length || 0}</strong>
+        <strong className='md:mr-1'>{follows?.length}</strong>
         <p className='text-gray-600 md:text-black'>
           {modalTitle.toLowerCase()}
         </p>
