@@ -41,7 +41,6 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [addPost] = useAddPostMutation({
     update: (cache, { data }) => {
       if (data?.addPost.post) {
-        cache.evict({ fieldName: 'getPosts' });
         cache.evict({ fieldName: 'getExplorePosts' });
         cache.evict({
           fieldName: 'getUser',
