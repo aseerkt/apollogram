@@ -1,0 +1,12 @@
+query GetFollows($username: String!) {
+  getFollows(username: $username) {
+    followers {
+      ...MinimalUser
+      isFollowing
+    }
+    followings {
+      ...MinimalUser
+      isFollowing
+    }
+  }
+}

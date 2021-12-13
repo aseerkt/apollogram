@@ -1,8 +1,10 @@
 import {
   Arg,
   Ctx,
+  Field,
   ID,
   Mutation,
+  ObjectType,
   Query,
   Resolver,
   UseMiddleware,
@@ -13,9 +15,35 @@ import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
 
+@ObjectType()
+class FollowData {
+  @Field(() => [User])
+  followers: User[];
+  @Field(() => [User])
+  followings: User[];
+}
+
 @Resolver()
 export class FollowerResolver {
   // QUERIES
+
+  @Query(() => FollowData, { nullable: true })
+  @UseMiddleware(isAuth)
+  async getFollows(@Arg('username') username: string): Promise<FollowData> {
+    const followData = await Follow.find({
+      where: [{ username }, { followingUsername: username }],
+      relations: ['user', 'following'],
+    });
+
+    const followers = followData
+      .filter((follow) => follow.followingUsername === username)
+      .map((follow) => follow.user);
+    const followings = followData
+      .filter((follow) => follow.username === username)
+      .map((follow) => follow.following);
+
+    return { followers, followings };
+  }
 
   @Query(() => [User])
   @UseMiddleware(isAuth)
@@ -55,8 +83,10 @@ export class FollowerResolver {
           followingUsername,
         }).save();
       }
-      followLoader.clear(res.locals.username);
-      followLoader.clear(followingUsername);
+      followLoader.clear({
+        username: res.locals.username,
+        followingUsername,
+      });
       return true;
     } catch (err) {
       console.log(err);

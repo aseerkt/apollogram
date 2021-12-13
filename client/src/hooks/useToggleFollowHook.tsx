@@ -3,9 +3,11 @@ import { useCallback } from 'react';
 import { useMessageCtx } from '@/context/MessageContext';
 import {
   GetExplorePostsDocument,
+  GetFollowsDocument,
+  GetFollowsQuery,
   GetFollowSuggestionsDocument,
   GetPostsDocument,
-  useGetUserQuery,
+  useGetFollowsQuery,
   useMeQuery,
   User,
   useToggleFollowMutation,
@@ -16,12 +18,12 @@ const useToggleFollowHook = (user: User) => {
   const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
   const { data: meData } = useMeQuery();
   const me = meData!.me!;
-  const { data: followUser } = useGetUserQuery({
+  const { data: selectedUserFollows } = useGetFollowsQuery({
     variables: { username: user?.username },
     skip: !user?.username,
     fetchPolicy: 'cache-only',
   });
-  const { data: currentUser } = useGetUserQuery({
+  const { data: currentUserFollows } = useGetFollowsQuery({
     variables: { username: me.username },
     fetchPolicy: 'cache-only',
   });
@@ -36,7 +38,6 @@ const useToggleFollowHook = (user: User) => {
           variables: { followingUsername: username },
           refetchQueries: [
             { query: GetPostsDocument, variables: { limit: 4 } },
-            { query: GetExplorePostsDocument, variables: { limit: 12 } },
             { query: GetFollowSuggestionsDocument },
           ],
           update: (cache, { data }) => {
@@ -52,67 +53,16 @@ const useToggleFollowHook = (user: User) => {
                 data: { isFollowing: !isFollowing },
                 broadcast: false,
               });
-              // Update followers array
-              if (followUser?.getUser?.profile) {
-                cache.modify({
-                  id: cache.identify(followUser?.getUser?.profile),
-                  broadcast: false,
-                  fields: {
-                    followers(existingFollowersRefs = [], { readField }) {
-                      if (!isFollowing) {
-                        const newFollowerRef = cache.identify(me);
-
-                        // Quick safety check - if the new follower is already
-                        // present in the cache, we don't need to add it again.
-                        if (
-                          existingFollowersRefs.some(
-                            (ref: any) => readField('id', ref) === me.id
-                          )
-                        ) {
-                          return existingFollowersRefs;
-                        }
-
-                        return [newFollowerRef, ...existingFollowersRefs];
-                      } else {
-                        return existingFollowersRefs.filter(
-                          (ref: any) => readField('id', ref) !== me.id
-                        );
-                      }
-                    },
-                  },
+              if (selectedUserFollows)
+                cache.evict({
+                  fieldName: 'getFollows',
+                  args: { username: user.username },
                 });
-              }
-
-              if (currentUser?.getUser?.profile) {
-                // update followings array
-                cache.modify({
-                  id: cache.identify(currentUser?.getUser?.profile),
-                  broadcast: false,
-                  fields: {
-                    followings(existingFollowingsRefs = [], { readField }) {
-                      if (!isFollowing) {
-                        const newFollowingRef = cache.identify(user);
-
-                        // Quick safety check - if the new following is already
-                        // present in the cache, we don't need to add it again.
-                        if (
-                          existingFollowingsRefs.some(
-                            (ref: any) => readField('id', ref) === user.id
-                          )
-                        ) {
-                          return existingFollowingsRefs;
-                        }
-
-                        return [newFollowingRef, ...existingFollowingsRefs];
-                      } else {
-                        return existingFollowingsRefs.filter(
-                          (ref: any) => readField('id', ref) !== user.id
-                        );
-                      }
-                    },
-                  },
+              if (currentUserFollows)
+                cache.evict({
+                  fieldName: 'getFollows',
+                  args: { username: me.username },
                 });
-              }
 
               setMessage(
                 `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`
