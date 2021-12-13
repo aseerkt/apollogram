@@ -6,6 +6,6 @@ fragment RegularUser on User {
   imgURL
   isFollowing
   profile {
-    ...RegularProfile
+    ...MinimalProfile
   }
 }

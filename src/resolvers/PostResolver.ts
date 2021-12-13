@@ -49,23 +49,18 @@ export class PostResolver {
     return userLoader.load(post.username);
   }
 
-  @FieldResolver(() => Int)
-  async likeCount(
-    @Root() post: Post,
-    @Ctx() { likeLoader }: MyContext
-  ): Promise<number> {
-    const likes = await likeLoader.load(post.id);
-    return likes?.length || 0;
-  }
-
   @FieldResolver(() => Boolean)
-  @UseMiddleware(isAuth)
   async userLike(
     @Root() post: Post,
     @Ctx() { res, likeLoader }: MyContext
   ): Promise<boolean> {
-    const likes = await likeLoader.load(post.id);
-    return likes?.some((l) => l.username === res.locals.username) || false;
+    if (!res.locals.username) return false;
+    console.log(res.locals.username);
+    const like = await likeLoader.load({
+      postId: post.id,
+      username: res.locals.username,
+    });
+    return like ? true : false;
   }
 
   @FieldResolver(() => [Comment])

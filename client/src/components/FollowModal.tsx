@@ -3,7 +3,11 @@ import { FaTimes } from 'react-icons/fa';
 import { useParams } from 'react-router';
 import Modal from '../components-ui/Modal';
 import Spinner from '../components-ui/Spinner';
-import { useGetUserQuery, User } from '../generated/graphql';
+import {
+  useGetFollowsQuery,
+  useGetUserQuery,
+  User,
+} from '../generated/graphql';
 import FollowItem from './FollowItem';
 
 interface FollowModalProps {
@@ -13,15 +17,15 @@ interface FollowModalProps {
 const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
-  const { data, loading } = useGetUserQuery({
+  const { data, loading } = useGetFollowsQuery({
     variables: { username },
     skip: typeof username !== 'string',
   });
   const follows = useMemo(
     () =>
       modalTitle === 'Followers'
-        ? data?.getUser?.profile.followers
-        : data?.getUser?.profile.followings,
+        ? data?.getFollows?.followers
+        : data?.getFollows?.followings,
     [data, modalTitle]
   );
 

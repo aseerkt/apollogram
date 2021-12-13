@@ -22,14 +22,12 @@ export class Follow extends BaseEntity {
   followingUsername: string;
 
   @ManyToOne(() => User, {
-    eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'username', referencedColumnName: 'username' })
   user: User;
 
   @ManyToOne(() => User, {
-    eager: true,
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'followingUsername', referencedColumnName: 'username' })

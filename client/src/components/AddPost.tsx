@@ -43,6 +43,10 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
       if (data?.addPost.post) {
         cache.evict({ fieldName: 'getPosts' });
         cache.evict({ fieldName: 'getExplorePosts' });
+        cache.evict({
+          fieldName: 'getUser',
+          args: { username: data.addPost.post.user.username },
+        });
         history.push(`/p/${data.addPost.post.id}`);
       }
     },

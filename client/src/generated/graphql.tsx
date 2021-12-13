@@ -62,6 +62,12 @@ export type Follow = {
   username: Scalars['String'];
 };
 
+export type FollowData = {
+  __typename?: 'FollowData';
+  followers: Array<User>;
+  followings: Array<User>;
+};
+
 export type LoginResponse = {
   __typename?: 'LoginResponse';
   errors?: Maybe<Array<FieldError>>;
@@ -154,11 +160,12 @@ export type PaginatedPost = {
 export type Post = {
   __typename?: 'Post';
   caption: Scalars['String'];
+  commentCount: Scalars['Float'];
   comments: Array<Comment>;
   createdAt: Scalars['DateTime'];
   id: Scalars['ID'];
   imgURL: Scalars['String'];
-  likeCount: Scalars['Int'];
+  likeCount: Scalars['Float'];
   updatedAt: Scalars['DateTime'];
   user: User;
   userLike: Scalars['Boolean'];
@@ -175,8 +182,6 @@ export type Profile = {
   __typename?: 'Profile';
   bio: Scalars['String'];
   createdAt: Scalars['DateTime'];
-  followers: Array<User>;
-  followings: Array<User>;
   gender: Scalars['String'];
   id: Scalars['ID'];
   updatedAt: Scalars['DateTime'];
@@ -187,6 +192,7 @@ export type Query = {
   __typename?: 'Query';
   getExplorePosts: PaginatedPost;
   getFollowSuggestions: Array<User>;
+  getFollows?: Maybe<FollowData>;
   getPosts: PaginatedPost;
   getSinglePost?: Maybe<Post>;
   getUser?: Maybe<User>;
@@ -197,6 +203,11 @@ export type Query = {
 export type QueryGetExplorePostsArgs = {
   limit: Scalars['Int'];
   offset?: Maybe<Scalars['Int']>;
+};
+
+
+export type QueryGetFollowsArgs = {
+  username: Scalars['String'];
 };
 
 
@@ -246,9 +257,7 @@ export type RegularCommentFragment = { __typename?: 'Comment', id: string, text:
 
 export type RegularPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
 
-export type RegularProfileFragment = { __typename?: 'Profile', id: string, website: string, bio: string, gender: string, followers: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }>, followings: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> };
-
-export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string, followers: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }>, followings: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> } };
+export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string } };
 
 export type AddCommentMutationVariables = Exact<{
   text: Scalars['String'];
@@ -348,6 +357,13 @@ export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }
 
 export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> };
 
+export type GetFollowsQueryVariables = Exact<{
+  username: Scalars['String'];
+}>;
+
+
+export type GetFollowsQuery = { __typename?: 'Query', getFollows?: Maybe<{ __typename?: 'FollowData', followers: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }>, followings: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> }> };
+
 export type GetPostsQueryVariables = Exact<{
   limit: Scalars['Int'];
   offset?: Maybe<Scalars['Int']>;
@@ -368,7 +384,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }>, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string, followers: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }>, followings: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> } }> };
+export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }>, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string } }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -443,20 +459,6 @@ export const MinimalProfileFragmentDoc = gql`
   gender
 }
     `;
-export const RegularProfileFragmentDoc = gql`
-    fragment RegularProfile on Profile {
-  ...MinimalProfile
-  followers {
-    ...MinimalUser
-    isFollowing
-  }
-  followings {
-    ...MinimalUser
-    isFollowing
-  }
-}
-    ${MinimalProfileFragmentDoc}
-${MinimalUserFragmentDoc}`;
 export const RegularUserFragmentDoc = gql`
     fragment RegularUser on User {
   id
@@ -466,10 +468,10 @@ export const RegularUserFragmentDoc = gql`
   imgURL
   isFollowing
   profile {
-    ...RegularProfile
+    ...MinimalProfile
   }
 }
-    ${RegularProfileFragmentDoc}`;
+    ${MinimalProfileFragmentDoc}`;
 export const AddCommentDocument = gql`
     mutation AddComment($text: String!, $postId: String!) {
   addComment(text: $text, postId: $postId) {
@@ -945,6 +947,48 @@ export function useGetFollowSuggestionsLazyQuery(baseOptions?: Apollo.LazyQueryH
 export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollowSuggestionsQuery>;
 export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
 export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;
+export const GetFollowsDocument = gql`
+    query GetFollows($username: String!) {
+  getFollows(username: $username) {
+    followers {
+      ...MinimalUser
+      isFollowing
+    }
+    followings {
+      ...MinimalUser
+      isFollowing
+    }
+  }
+}
+    ${MinimalUserFragmentDoc}`;
+
+/**
+ * __useGetFollowsQuery__
+ *
+ * To run a query within a React component, call `useGetFollowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFollowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFollowsQuery({
+ *   variables: {
+ *      username: // value for 'username'
+ *   },
+ * });
+ */
+export function useGetFollowsQuery(baseOptions: Apollo.QueryHookOptions<GetFollowsQuery, GetFollowsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetFollowsQuery, GetFollowsQueryVariables>(GetFollowsDocument, options);
+      }
+export function useGetFollowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetFollowsQuery, GetFollowsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetFollowsQuery, GetFollowsQueryVariables>(GetFollowsDocument, options);
+        }
+export type GetFollowsQueryHookResult = ReturnType<typeof useGetFollowsQuery>;
+export type GetFollowsLazyQueryHookResult = ReturnType<typeof useGetFollowsLazyQuery>;
+export type GetFollowsQueryResult = Apollo.QueryResult<GetFollowsQuery, GetFollowsQueryVariables>;
 export const GetPostsDocument = gql`
     query GetPosts($limit: Int!, $offset: Int) {
   getPosts(limit: $limit, offset: $offset) {

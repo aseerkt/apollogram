@@ -1,30 +1,27 @@
 import DataLoader from 'dataloader';
+import { In } from 'typeorm';
 import { Follow } from '../entities/Follow';
-import { getRepository } from 'typeorm';
-
-interface FollowLoaderData {
-  username: string;
-  state: 'follower' | 'following';
-}
 
 export const createFollowLoader = () =>
-  new DataLoader<string, FollowLoaderData[]>(async (usernames) => {
-    const follows = await getRepository(Follow)
-      .createQueryBuilder('f')
-      .where('username IN (:...usernames)', { usernames })
-      .orWhere('"followingUsername" IN (:...usernames)', { usernames })
-      .getMany();
-    const usersToFollowerData: Record<string, FollowLoaderData[]> = {};
+  new DataLoader<{ username: string; followingUsername: string }, boolean>(
+    async (keys) => {
+      const follows = await Follow.find({
+        where: {
+          username: In(keys.map((key) => key.username)),
+          followingUsername: In(keys.map((key) => key.followingUsername)),
+        },
+        select: ['followingUsername', 'username'],
+      });
 
-    follows.forEach((f) => {
-      usersToFollowerData[f.username] = (
-        usersToFollowerData[f.username] || []
-      ).concat({ username: f.followingUsername, state: 'following' });
+      console.log(follows);
+      const userFollowData: Record<string, boolean> = {};
 
-      usersToFollowerData[f.followingUsername] = (
-        usersToFollowerData[f.followingUsername] || []
-      ).concat({ username: f.username, state: 'follower' });
-    });
+      follows.forEach(
+        (f) => (userFollowData[`${f.username}|${f.followingUsername}`] = true)
+      );
 
-    return usernames.map((username) => usersToFollowerData[username]);
-  });
+      return keys.map(
+        (key) => userFollowData[`${key.username}|${key.followingUsername}`]
+      );
+    }
+  );

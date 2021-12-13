@@ -62,33 +62,33 @@ export class ProfileResolver {
     return '';
   }
 
-  @FieldResolver(() => [User])
-  async followers(
-    @Root() profile: Profile,
-    @Ctx() { followLoader, userLoader }: MyContext
-  ): Promise<User[]> {
-    const followData = (await followLoader.load(profile.username)) || [];
+  // @FieldResolver(() => [User])
+  // async followers(
+  //   @Root() profile: Profile,
+  //   @Ctx() { followLoader, userLoader }: MyContext
+  // ): Promise<User[]> {
+  //   const followData = (await followLoader.load(profile.username)) || [];
 
-    return await Promise.all(
-      followData
-        .filter((f) => f.state === 'follower')
-        .map((f) => userLoader.load(f.username))
-    );
-  }
+  //   return await Promise.all(
+  //     followData
+  //       .filter((f) => f.state === 'follower')
+  //       .map((f) => userLoader.load(f.username))
+  //   );
+  // }
 
-  @FieldResolver(() => [User])
-  async followings(
-    @Root() profile: Profile,
-    @Ctx() { followLoader, userLoader }: MyContext
-  ): Promise<User[]> {
-    const followData = (await followLoader.load(profile.username)) || [];
+  // @FieldResolver(() => [User])
+  // async followings(
+  //   @Root() profile: Profile,
+  //   @Ctx() { followLoader, userLoader }: MyContext
+  // ): Promise<User[]> {
+  //   const followData = (await followLoader.load(profile.username)) || [];
 
-    return await Promise.all(
-      followData
-        .filter((f) => f.state === 'following')
-        .map((f) => userLoader.load(f.username))
-    );
-  }
+  //   return await Promise.all(
+  //     followData
+  //       .filter((f) => f.state === 'following')
+  //       .map((f) => userLoader.load(f.username))
+  //   );
+  // }
 
   // MUTATIONS
 
