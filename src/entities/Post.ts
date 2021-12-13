@@ -24,6 +24,14 @@ export class Post extends BaseColumns {
   @Column()
   username: string;
 
+  @Field()
+  @Column({ default: 0 })
+  likeCount: number;
+
+  @Field()
+  @Column({ default: 0 })
+  commentCount: number;
+
   @ManyToOne(() => User, (user) => user.posts, {
     onDelete: 'CASCADE',
   })

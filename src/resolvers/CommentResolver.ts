@@ -8,6 +8,7 @@ import {
   Root,
 } from 'type-graphql';
 import { Comment } from '../entities/Comment';
+import { Post } from '../entities/Post';
 import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
@@ -35,6 +36,13 @@ export class CommentResolver {
         text,
         username: res.locals.username,
       }).save();
+      const post = await Post.findOne({
+        where: { id: postId },
+        select: ['id', 'commentCount'],
+      });
+      if (!post) return false;
+      post.commentCount += 1;
+      await post.save();
       commentLoader.clear(postId);
       return newComment;
     } catch (err) {
