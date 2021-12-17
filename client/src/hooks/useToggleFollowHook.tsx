@@ -2,9 +2,6 @@ import { gql } from '@apollo/client';
 import { useCallback } from 'react';
 import { useMessageCtx } from '@/context/MessageContext';
 import {
-  GetExplorePostsDocument,
-  GetFollowsDocument,
-  GetFollowsQuery,
   GetFollowSuggestionsDocument,
   GetPostsDocument,
   useGetFollowsQuery,

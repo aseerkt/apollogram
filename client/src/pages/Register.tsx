@@ -5,6 +5,7 @@ import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { useRegisterMutation } from '../generated/graphql';
 import * as Yup from 'yup';
+import useGuest from '../hooks/useGuest';
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -26,6 +27,8 @@ const RegisterSchema = Yup.object().shape({
 
 const Register: React.FC<RouteComponentProps> = ({ history }) => {
   const [register] = useRegisterMutation();
+
+  useGuest();
 
   return (
     <FormWrapper title='Register'>

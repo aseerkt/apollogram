@@ -95,7 +95,7 @@ export class PostResolver {
       SELECT 
         p.* 
       FROM posts p 
-      LEFT JOIN follows f 
+      INNER JOIN follows f 
       ON f."followingUsername" = p.username 
       WHERE f.username = $1 
       ORDER BY p."createdAt" DESC 

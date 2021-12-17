@@ -6,6 +6,7 @@ import InputField from '../components-ui/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
+import useGuest from '../hooks/useGuest';
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().trim().required('Username is required'),
@@ -15,6 +16,8 @@ const LoginSchema = Yup.object().shape({
 const Login: React.FC<RouteComponentProps> = () => {
   const [login] = useLoginMutation();
   const [testLoading, setTestLoading] = useState(false);
+
+  useGuest();
 
   return (
     <FormWrapper title='Login'>
