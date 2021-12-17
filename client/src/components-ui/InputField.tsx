@@ -24,7 +24,7 @@ const InputField: React.FC<InterfaceProps> = ({
   ref,
   ...props
 }) => {
-  const [field, { error }] = useField(props);
+  const [field, { error, touched }] = useField(props);
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (focusOnRender) {
@@ -49,16 +49,19 @@ const InputField: React.FC<InterfaceProps> = ({
       <div>
         <input
           {...field}
-          className={cn('w-full px-2 mb-3 py-1  rounded-md  ', {
-            'border-2 border-red-500 bg-red-100': !!error,
-            'bg-blue-50 border border-gray-300 focus:border-gray-500': !error,
-          })}
+          className={`w-full px-2 mb-3 py-1 rounded-md border-gray-300 ${
+            error && touched
+              ? 'border-2 border-red-500 bg-red-100'
+              : 'bg-blue-50 border focus:border-gray-500'
+          }`}
           {...props}
           ref={inputRef}
           autoComplete=''
         />
         <small className='block leading-4 text-gray-500'>{helperText}</small>
-        <small className='my-1 text-red-700'>{error}</small>
+        {touched && error && (
+          <small className='my-1 text-red-700'>{error}</small>
+        )}
       </div>
     </div>
   );

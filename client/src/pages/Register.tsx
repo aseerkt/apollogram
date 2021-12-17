@@ -4,6 +4,25 @@ import FormWrapper from '../containers/FormWrapper';
 import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { useRegisterMutation } from '../generated/graphql';
+import * as Yup from 'yup';
+
+const RegisterSchema = Yup.object().shape({
+  username: Yup.string()
+    .trim()
+    .required('Username is required')
+    .min(3, 'Username is too short'),
+  email: Yup.string()
+    .trim()
+    .email('Invalid email address')
+    .required('Email is required'),
+  password: Yup.string()
+    .trim()
+    .required('Password is required')
+    .min(6, 'Password too short'),
+  password2: Yup.string()
+    .required('Confirm password is required')
+    .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+});
 
 const Register: React.FC<RouteComponentProps> = ({ history }) => {
   const [register] = useRegisterMutation();
@@ -18,6 +37,7 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
             password: '',
             password2: '',
           }}
+          validationSchema={RegisterSchema}
           onSubmit={async (values, { setFieldError }) => {
             const { email, username, password, password2 } = values;
             if (password !== password2) {

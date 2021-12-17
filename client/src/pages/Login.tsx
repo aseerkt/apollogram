@@ -5,9 +5,14 @@ import Button from '../components-ui/Button';
 import InputField from '../components-ui/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
 import { Form, Formik } from 'formik';
-// import { FaFacebookSquare } from 'react-icons/fa';
+import * as Yup from 'yup';
 
-const Login: React.FC<RouteComponentProps> = ({ history }) => {
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().trim().required('Username is required'),
+  password: Yup.string().trim().required('Password is required'),
+});
+
+const Login: React.FC<RouteComponentProps> = () => {
   const [login] = useLoginMutation();
   const [testLoading, setTestLoading] = useState(false);
 
