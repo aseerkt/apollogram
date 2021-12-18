@@ -1,12 +1,12 @@
-import { useApolloClient } from '@apollo/client';
 import { Link } from 'react-router-dom';
 import Avatar from '../components-ui/Avatar';
-import { MeDocument } from '../generated/graphql';
+import {  useMeQuery } from '../generated/graphql';
 import Suggestions from './Suggestions';
 
 const ProfileRight: React.FC = () => {
-  const apolloClient = useApolloClient();
-  const { me } = apolloClient.readQuery({ query: MeDocument });
+  const { data: meData } = useMeQuery();
+
+  const me = meData!.me!;
 
   return (
     <>
