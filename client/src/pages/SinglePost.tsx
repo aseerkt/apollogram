@@ -90,21 +90,21 @@ const SinglePost = () => {
                 {/* Comments */}
                 <div className='my-1 comments-container'>
                   {comments.map((comment) => (
-                    <div key={comment.id} className='flex'>
+                    <div key={comment.id} className='flex mt-2'>
                       <Link
                         to={`/u/${comment.username}`}
                         className='mr-2 font-semibold '
                       >
                         <Avatar
-                          className='my-2 cursor-pointer'
+                          className='cursor-pointer'
                           src={comment.user.imgURL}
                         />
                       </Link>
-                      <div className='flex flex-col mt-2'>
-                        <div className='flex'>
+                      <div className='flex flex-col'>
+                        <div className='flex space-x-1'>
                           <Link
                             to={`/u/${comment.username}`}
-                            className='flex mr-1 font-semibold hover:underline'
+                            className='flex font-semibold hover:underline'
                           >
                             {comment.username}
                           </Link>
