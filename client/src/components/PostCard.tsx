@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import { Link } from 'react-router-dom';
 import { Comment, Post } from '../generated/graphql';
 import Avatar from '../shared/Avatar';
@@ -8,8 +7,6 @@ import Card from '../shared/Card';
 import AddComment from './AddComment';
 import PostOptions from './PostOptions';
 import PostActions from './PostActions';
-
-dayjs.extend(relativeTime);
 
 interface PostCardProps {
   post: Post;

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import Avatar from '../shared/Avatar';
 import Card from '../shared/Card';
