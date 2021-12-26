@@ -55,7 +55,6 @@ export class PostResolver {
     @Ctx() { res, likeLoader }: MyContext
   ): Promise<boolean> {
     if (!res.locals.username) return false;
-    console.log(res.locals.username);
     const like = await likeLoader.load({
       postId: post.id,
       username: res.locals.username,

@@ -73,6 +73,7 @@ export class UserResolver {
     @Root() user: User,
     @Ctx() { res, followLoader }: MyContext
   ): Promise<boolean> {
+    if (res.locals.username === user.username) return false;
     const following = await followLoader.load({
       username: res.locals.username,
       followingUsername: user.username,

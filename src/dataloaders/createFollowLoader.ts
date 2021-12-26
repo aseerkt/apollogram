@@ -13,7 +13,6 @@ export const createFollowLoader = () =>
         select: ['followingUsername', 'username'],
       });
 
-      console.log(follows);
       const userFollowData: Record<string, boolean> = {};
 
       follows.forEach(

@@ -165,8 +165,6 @@ export class ProfileResolver {
       } catch (err) {
         console.log(err);
       }
-    } else {
-      console.log(profile, user);
     }
     return {
       errors: [{ path: 'unknown', message: 'Server Error' }],
