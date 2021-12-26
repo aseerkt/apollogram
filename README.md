@@ -1,4 +1,4 @@
-# Apollo Instagram Clone
+# Apollogram
 
 > Instagram Clone | Social Media Application
 

@@ -19,11 +19,9 @@ const Navbar: React.FC = () => {
     <nav className='fixed inset-x-0 top-0 z-50 bg-white border border-gray-200 h-14'>
       <Container className='flex items-center h-full px-2 md:px-0'>
         <Link aria-label='app icon' to='/'>
-          <img
-            className='object-contain w-auto h-8'
-            src='https://www.instagram.com/static/images/web/mobile_nav_type_logo-2x.png/1b47f9d0e595.png'
-            alt='instgram logo'
-          />
+          <h1 style={{ fontFamily: 'Grand Hotel', fontSize: '2rem' }}>
+            Apollogram
+          </h1>
         </Link>
         {me && (
           <>
