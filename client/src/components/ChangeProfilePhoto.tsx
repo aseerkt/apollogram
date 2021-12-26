@@ -130,7 +130,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
             onClick={() => {
               inputRef.current?.click();
             }}
-            className='ml-auto mr-auto transform border-2 border-gray-500 rounded-full cursor-pointer md:mr-0 hover:border-green-600 hover:scale-110 w-28 h-28'
+            className='ml-auto mr-auto transform border-2 border-gray-500 rounded-full cursor-pointer md:mr-0 hover:border-green-600 transition-all duration-300 hover:scale-110 w-28 h-28'
           >
             <img
               className='w-full h-full rounded-full'

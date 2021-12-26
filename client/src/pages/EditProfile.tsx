@@ -9,6 +9,7 @@ import {
 import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
 import { Field, Form, Formik } from 'formik';
 import { useMessageCtx } from '../context/MessageContext';
+import SelectField from '@/shared/SelectField';
 
 const EditProfile: React.FC = () => {
   const { setMessage } = useMessageCtx();
@@ -97,12 +98,16 @@ const EditProfile: React.FC = () => {
                 </div>
 
                 <InputField inline name='email' label='Email' />
-                <InputField inline name='gender' label='Gender' error='' />
+                <SelectField inline name='gender' label='Gender'>
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                  <option value='Prefer not to say'>Prefer not to say</option>
+                </SelectField>
                 <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
                   <div aria-label='offset'></div>
                   <Button
-                    isLoading={isSubmitting || loading}
-                    className='inline-block w-20 text-left'
+                    isLoading={isSubmitting}
+                    className='w-24'
                     disabled={!email}
                     color='dark'
                     type='submit'

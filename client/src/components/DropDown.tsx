@@ -19,7 +19,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 }) => (
   <Link
     onClick={onClick}
-    className='flex items-center p-3 hover:bg-gray-100'
+    className='flex items-center p-3 space-x-3 hover:bg-gray-100'
     to={href}
   >
     {children}
@@ -61,16 +61,16 @@ const DropDown: React.FC = ({ children }) => {
         className='absolute right-0 z-50 w-48 bg-white rounded-lg shadow-md top-full place-items-end'
       >
         <MenuItem onClick={toggle} href={`/u/${me.username}`}>
-          <CgProfile size='1.5em' className='mr-3' />
+          <CgProfile size='1.5em' />
           Profile
         </MenuItem>
 
         <MenuItem onClick={toggle} href='/edit-profile'>
-          <FiEdit size='1.5em' className='mr-3' />
+          <FiEdit size='1.5em' />
           Edit Profile
         </MenuItem>
         <MenuItem onClick={() => logout() as any} href='/login'>
-          <HiOutlineLogout size='1.5em' className='mr-3' />
+          <HiOutlineLogout size='1.5em' />
           Logout
         </MenuItem>
       </div>
