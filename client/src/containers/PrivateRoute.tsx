@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import { useMeQuery } from '@/generated/graphql';
-import Spinner from '@/components-ui/Spinner';
+import Spinner from '@/shared/Spinner';
 
 type PrivateRouteProps = RouteProps & {
   component: React.FC<RouteComponentProps>;

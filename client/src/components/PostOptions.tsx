@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
-import Modal from '../components-ui/Modal';
+import Modal from '../shared/Modal';
 import { useMessageCtx } from '../context/MessageContext';
 import { useMeQuery, useDeletePostMutation, Post } from '../generated/graphql';
 import ActionModal from './ActionModal';

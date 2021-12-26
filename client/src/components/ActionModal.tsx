@@ -1,5 +1,5 @@
-import Card from '../components-ui/Card';
-import Modal from '../components-ui/Modal';
+import Card from '../shared/Card';
+import Modal from '../shared/Modal';
 import { ModalProps } from '../prop-types/ModalProps';
 import './ActionModal.css';
 

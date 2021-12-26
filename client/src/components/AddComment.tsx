@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Spinner from '../components-ui/Spinner';
+import Spinner from '../shared/Spinner';
 import { useMessageCtx } from '../context/MessageContext';
 import {
   RegularCommentFragment,

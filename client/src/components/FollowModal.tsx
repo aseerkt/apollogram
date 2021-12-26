@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useParams } from 'react-router';
-import Modal from '../components-ui/Modal';
-import Spinner from '../components-ui/Spinner';
+import Modal from '../shared/Modal';
+import Spinner from '../shared/Spinner';
 import {
   useGetFollowsQuery,
   useGetUserQuery,

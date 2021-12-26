@@ -1,11 +1,11 @@
 import { Link, useParams } from 'react-router-dom';
-import Avatar from '../components-ui/Avatar';
-import Container from '../components-ui/Container';
-import Spinner from '../components-ui/Spinner';
+import Avatar from '../shared/Avatar';
+import Container from '../shared/Container';
+import Spinner from '../shared/Spinner';
 import { useGetUserQuery, useMeQuery, User } from '../generated/graphql';
 import { AiOutlineTable } from 'react-icons/ai';
-import Button from '../components-ui/Button';
-import Alert from '../components-ui/Alert';
+import Button from '../shared/Button';
+import Alert from '../shared/Alert';
 import UserPosts from '../components/UserPosts';
 import useToggleFollowHook from '../hooks/useToggleFollowHook';
 import { FaCheck, FaUser } from 'react-icons/fa';

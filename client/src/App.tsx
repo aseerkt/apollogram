@@ -2,9 +2,9 @@ import { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import { MeDocument, useMeQuery } from './generated/graphql';
-import Alert from './components-ui/Alert';
+import Alert from './shared/Alert';
 import { apolloClient } from './utils/apolloClient';
-import Spinner from './components-ui/Spinner';
+import Spinner from './shared/Spinner';
 import PrivateRoute from './containers/PrivateRoute';
 
 // Routes

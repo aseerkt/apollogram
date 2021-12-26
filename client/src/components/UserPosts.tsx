@@ -1,5 +1,5 @@
-import Alert from '../components-ui/Alert';
-import Spinner from '../components-ui/Spinner';
+import Alert from '../shared/Alert';
+import Spinner from '../shared/Spinner';
 import { Post, useGetUserQuery } from '../generated/graphql';
 import PostsGrid from './PostsGrid';
 

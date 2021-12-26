@@ -1,8 +1,8 @@
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 import FormWrapper from '../containers/FormWrapper';
-import Button from '../components-ui/Button';
-import InputField from '../components-ui/InputField';
+import Button from '../shared/Button';
+import InputField from '../shared/InputField';
 import { useRegisterMutation } from '../generated/graphql';
 import * as Yup from 'yup';
 import useGuest from '../hooks/useGuest';

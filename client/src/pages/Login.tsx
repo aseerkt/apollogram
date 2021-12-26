@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import FormWrapper from '../containers/FormWrapper';
-import Button from '../components-ui/Button';
-import InputField from '../components-ui/InputField';
+import Button from '../shared/Button';
+import InputField from '../shared/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';

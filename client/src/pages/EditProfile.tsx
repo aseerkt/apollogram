@@ -1,6 +1,6 @@
-import Button from '../components-ui/Button';
-import Container from '../components-ui/Container';
-import InputField from '../components-ui/InputField';
+import Button from '../shared/Button';
+import Container from '../shared/Container';
+import InputField from '../shared/InputField';
 import {
   MeDocument,
   useEditProfileMutation,

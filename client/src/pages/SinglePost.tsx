@@ -1,10 +1,10 @@
 import dayjs from 'dayjs';
 import React, { useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import Avatar from '../components-ui/Avatar';
-import Card from '../components-ui/Card';
-import Container from '../components-ui/Container';
-import Spinner from '../components-ui/Spinner';
+import Avatar from '../shared/Avatar';
+import Card from '../shared/Card';
+import Container from '../shared/Container';
+import Spinner from '../shared/Spinner';
 import AddComment from '../components/AddComment';
 import PostActions from '../components/PostActions';
 import PostOptions from '../components/PostOptions';

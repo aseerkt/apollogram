@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { createRef, useEffect, useState } from 'react';
-import Button from '../components-ui/Button';
-import Card from '../components-ui/Card';
+import Button from '../shared/Button';
+import Card from '../shared/Card';
 import { useMessageCtx } from '../context/MessageContext';
 import { useEditCaptionMutation } from '../generated/graphql';
 

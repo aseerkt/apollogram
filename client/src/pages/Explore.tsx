@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import Alert from '../components-ui/Alert';
-import Container from '../components-ui/Container';
-import Spinner from '../components-ui/Spinner';
+import Alert from '../shared/Alert';
+import Container from '../shared/Container';
+import Spinner from '../shared/Spinner';
 import PostsGrid from '../components/PostsGrid';
 import { Post, useGetExplorePostsQuery } from '../generated/graphql';
 

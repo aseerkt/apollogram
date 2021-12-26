@@ -7,10 +7,10 @@ import {
   useChangeProfilePhotoMutation,
   useMeQuery,
 } from '../generated/graphql';
-import Button from '../components-ui/Button';
+import Button from '../shared/Button';
 import { getCroppedImg } from '../utils/cropImage';
 import { dataURLtoFile } from '../utils/dataURLtoFile';
-import Spinner from '../components-ui/Spinner';
+import Spinner from '../shared/Spinner';
 import { useMessageCtx } from '../context/MessageContext';
 import useCompressor from '../hooks/useCompressor';
 

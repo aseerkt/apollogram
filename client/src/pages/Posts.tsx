@@ -1,9 +1,9 @@
 import React from 'react';
 import PostCard from '../components/PostCard';
-import Container from '../components-ui/Container';
+import Container from '../shared/Container';
 import { Post, useGetPostsQuery } from '../generated/graphql';
-import Spinner from '../components-ui/Spinner';
-import Alert from '../components-ui/Alert';
+import Spinner from '../shared/Spinner';
+import Alert from '../shared/Alert';
 import ProfileRight from '../components/ProfileRight';
 import { Link } from 'react-router-dom';
 

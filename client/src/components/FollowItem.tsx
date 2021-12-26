@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Avatar from '../components-ui/Avatar';
-import Button from '../components-ui/Button';
+import Avatar from '../shared/Avatar';
+import Button from '../shared/Button';
 import { useMeQuery, User } from '../generated/graphql';
 import useToggleFollowHook from '../hooks/useToggleFollowHook';
 

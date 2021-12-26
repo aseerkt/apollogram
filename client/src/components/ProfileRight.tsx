@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import Avatar from '../components-ui/Avatar';
-import {  useMeQuery } from '../generated/graphql';
+import Avatar from '../shared/Avatar';
+import { useMeQuery } from '../generated/graphql';
 import Suggestions from './Suggestions';
 
 const ProfileRight: React.FC = () => {
@@ -21,8 +21,8 @@ const ProfileRight: React.FC = () => {
           <p className='text-gray-600'>{me.name}</p>
         </div>
       </div>
-     
-        <Suggestions />
+
+      <Suggestions />
     </>
   );
 };

@@ -1,6 +1,6 @@
 import { useGetFollowSuggestionsQuery, User } from '../generated/graphql';
 import FollowItem from './FollowItem';
-import Spinner from '../components-ui/Spinner';
+import Spinner from '../shared/Spinner';
 
 const Suggestions = () => {
   const { data, loading } = useGetFollowSuggestionsQuery();

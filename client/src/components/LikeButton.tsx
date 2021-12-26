@@ -1,7 +1,7 @@
 import { useToggleLikeMutation } from '../generated/graphql';
 import useToggleLikeInCache from '../hooks/useToggleLikeInCache';
 import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import Spinner from '../components-ui/Spinner';
+import Spinner from '../shared/Spinner';
 
 interface LikeButtonProps {
   postId: string;

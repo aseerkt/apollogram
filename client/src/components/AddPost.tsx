@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useAddPostMutation } from '../generated/graphql';
-import Button from '../components-ui/Button';
-import Card from '../components-ui/Card';
+import Button from '../shared/Button';
+import Card from '../shared/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 import { useMessageCtx } from '../context/MessageContext';
 import { useHistory } from 'react-router-dom';
