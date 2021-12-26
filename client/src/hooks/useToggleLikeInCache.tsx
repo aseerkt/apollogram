@@ -19,8 +19,7 @@ export default function useToggleLikeInCache() {
         }
       `,
     });
-    console.log('cacheModifier', cacheModifier);
-    console.log(prevLikeData);
+
     if (prevLikeData) {
       const fragment = gql`
         fragment ToggleLike on Post {
@@ -28,7 +27,8 @@ export default function useToggleLikeInCache() {
           likeCount
         }
       `;
-      const stuff = cacheModifier.writeFragment<{
+
+      cacheModifier.writeFragment<{
         __typename: string;
         userLike: boolean;
         likeCount: number;
@@ -42,7 +42,6 @@ export default function useToggleLikeInCache() {
           likeCount: prevLikeData.likeCount + (prevLikeData.userLike ? -1 : 1),
         },
       });
-      console.log(stuff);
     }
   };
 }
