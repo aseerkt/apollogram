@@ -32,7 +32,6 @@ const Login: React.FC<RouteComponentProps> = () => {
                   const user = result.data?.login.user;
                   if (user) {
                     cache.writeQuery({ query: MeDocument, data: { me: user } });
-                    window.location.pathname = '/';
                   }
                 },
               });

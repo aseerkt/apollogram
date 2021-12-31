@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { CgProfile } from 'react-icons/cg';
 import { FiEdit } from 'react-icons/fi';
@@ -29,14 +29,16 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 const DropDown: React.FC = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
-  const { data } = useMeQuery();
+  const { data, client } = useMeQuery();
+  const history = useHistory();
 
   const me = data!.me!;
 
   const [logout] = useLogoutMutation({
-    onCompleted: (data) => {
-      if (data.logout) {
-        window.location.pathname = '/login';
+    update: (cache, result) => {
+      if (result.data?.logout) {
+        client.resetStore();
+        // history.replace('/login');
       }
     },
   });
