@@ -18,18 +18,12 @@ import {
   RegisterVars,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
-import {
-  CLOUDINARY_ROOT_PATH,
-  COOKIE_NAME,
-  EXPRESS_ENDPOINT,
-  __prod__,
-} from '../constants';
+import { CLOUDINARY_ROOT_PATH, COOKIE_NAME, __prod__ } from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createTokenCookie } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
-import { extractDomainFromUrl } from '../utils/extractDomainFromUrl';
 import { generateUrl } from '../utils/uploadHandler';
 
 @Resolver(User)
@@ -176,11 +170,7 @@ export class UserResolver {
   @UseMiddleware(isAuth)
   logout(@Ctx() { res }: MyContext) {
     return new Promise((resolve) => {
-      res.clearCookie(COOKIE_NAME, {
-        domain: extractDomainFromUrl(EXPRESS_ENDPOINT),
-        sameSite: __prod__ ? 'none' : 'lax',
-        secure: __prod__,
-      });
+      res.clearCookie(COOKIE_NAME);
       resolve(true);
     });
   }

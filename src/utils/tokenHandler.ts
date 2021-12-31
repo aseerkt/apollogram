@@ -12,7 +12,7 @@ export const createTokenCookie = (user: User, res: Response) => {
     {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      sameSite: __prod__ ? 'none' : 'lax',
+      sameSite: 'strict',
       secure: __prod__,
     }
   );
