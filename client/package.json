@@ -28,7 +28,7 @@
     "react-dropzone": "^11.3.2",
     "react-easy-crop": "^3.3.3",
     "react-icons": "^4.2.0",
-    "react-router-dom": "^5.2.0",
+    "react-router-dom": "6",
     "tailwindcss": "^2.2.19",
     "typescript": "4.5.2",
     "vite": "^2.7.1",
