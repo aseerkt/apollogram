@@ -62,16 +62,16 @@ const DropDown: React.FC = ({ children }) => {
       >
         <MenuItem onClick={toggle} href={`/u/${me.username}`}>
           <CgProfile size='1.5em' />
-          Profile
+          <span>Profile</span>
         </MenuItem>
 
         <MenuItem onClick={toggle} href='/edit-profile'>
           <FiEdit size='1.5em' />
-          Edit Profile
+          <span>Edit Profile</span>
         </MenuItem>
         <MenuItem onClick={() => logout() as any} href='/login'>
           <HiOutlineLogout size='1.5em' />
-          Logout
+          <span>Logout</span>
         </MenuItem>
       </div>
     </div>
