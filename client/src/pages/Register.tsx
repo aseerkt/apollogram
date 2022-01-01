@@ -1,11 +1,11 @@
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../shared/Button';
 import InputField from '../shared/InputField';
 import { useRegisterMutation } from '../generated/graphql';
 import * as Yup from 'yup';
-import useGuest from '../hooks/useGuest';
+import useRedirect from '../hooks/useRedirect';
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -25,10 +25,11 @@ const RegisterSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords must match'),
 });
 
-const Register: React.FC<RouteComponentProps> = ({ history }) => {
+const Register: React.FC = ({}) => {
   const [register] = useRegisterMutation();
+  const navigate = useNavigate();
 
-  useGuest();
+  useRedirect('guest');
 
   return (
     <FormWrapper title='Register'>
@@ -58,14 +59,11 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
               });
             }
             if (ok) {
-              history.push('/login');
+              navigate('/login');
             }
           }}
         >
-          {({
-            isSubmitting,
-            values: { email, username, password, password2 },
-          }) => (
+          {({ isSubmitting, isValid }) => (
             <Form className='mb-3'>
               <InputField label='Email' name='email' />
               <InputField label='Username' name='username' />
@@ -81,7 +79,7 @@ const Register: React.FC<RouteComponentProps> = ({ history }) => {
                 fullWidth
                 type='submit'
                 isLoading={isSubmitting}
-                disabled={!username || !password || !email || !password2}
+                disabled={!isValid}
               >
                 Sign Up
               </Button>

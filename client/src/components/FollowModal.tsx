@@ -18,7 +18,7 @@ const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { username } = useParams<{ username: string }>();
   const { data, loading } = useGetFollowsQuery({
-    variables: { username },
+    variables: { username: username! },
     skip: typeof username !== 'string',
   });
   const follows = useMemo(

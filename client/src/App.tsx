@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import { MeDocument, useMeQuery } from './generated/graphql';
 import Alert from './shared/Alert';
@@ -32,19 +32,50 @@ const App: React.FC = () => {
       <BrowserRouter>
         <MessageProvider>
           <div className='pb-10'>
-            <Switch>
-              <PrivateRoute exact path='/' component={Posts} />
-              <PrivateRoute exact path='/explore' component={Explore} />
-              <Route exact path='/login' component={Login} />
-              <Route exact path='/register' component={Register} />
-              <PrivateRoute exact path='/p/:postId' component={SinglePost} />
-              <PrivateRoute
-                exact
-                path='/edit-profile'
-                component={EditProfile}
+            <Routes>
+              <Route
+                path='/'
+                element={
+                  <PrivateRoute>
+                    <Posts />
+                  </PrivateRoute>
+                }
               />
-              <PrivateRoute exact path='/u/:username' component={Profile} />
-            </Switch>
+              <Route
+                path='/explore'
+                element={
+                  <PrivateRoute>
+                    <Explore />
+                  </PrivateRoute>
+                }
+              />
+              <Route path='/login' element={<Login />} />
+              <Route path='/register' element={<Register />} />
+              <Route
+                path='/p/:postId'
+                element={
+                  <PrivateRoute>
+                    <SinglePost />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path='/edit-profile'
+                element={
+                  <PrivateRoute>
+                    <EditProfile />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path='/u/:username'
+                element={
+                  <PrivateRoute>
+                    <Profile />
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
           </div>
         </MessageProvider>
       </BrowserRouter>

@@ -18,7 +18,7 @@ const Profile: React.FC = () => {
   const params = useParams<{ username: string }>();
 
   const { data, loading, error } = useGetUserQuery({
-    variables: { username: params.username },
+    variables: { username: params.username! },
   });
 
   const { onToggle, toggling } = useToggleFollowHook(data?.getUser as User);
@@ -108,7 +108,7 @@ const Profile: React.FC = () => {
           </header>
         </section>
         {/* Posts Grid */}
-        <UserPosts username={params.username} />
+        <UserPosts username={params.username!} />
       </Container>
     );
   }

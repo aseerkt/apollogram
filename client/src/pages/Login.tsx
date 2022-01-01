@@ -1,28 +1,29 @@
 import { useState } from 'react';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import FormWrapper from '../containers/FormWrapper';
 import Button from '../shared/Button';
 import InputField from '../shared/InputField';
 import { MeDocument, useLoginMutation } from '../generated/graphql';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import useGuest from '../hooks/useGuest';
+import useRedirect from '../hooks/useRedirect';
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().trim().required('Username is required'),
   password: Yup.string().trim().required('Password is required'),
 });
 
-const Login: React.FC<RouteComponentProps> = () => {
+const Login: React.FC = () => {
   const [login] = useLoginMutation();
   const [testLoading, setTestLoading] = useState(false);
 
-  useGuest();
+  useRedirect('guest');
 
   return (
     <FormWrapper title='Login'>
       <div className='p-4'>
         <Formik
+          validationSchema={LoginSchema}
           initialValues={{ username: '', password: '' }}
           onSubmit={async ({ username, password }, { setFieldError }) => {
             try {
@@ -46,7 +47,7 @@ const Login: React.FC<RouteComponentProps> = () => {
             }
           }}
         >
-          {({ isSubmitting, values: { password, username } }) => (
+          {({ isSubmitting, isValid }) => (
             <Form className='mb-3'>
               <InputField name='username' label='Username' />
               <InputField name='password' type='password' label='Password' />
@@ -57,7 +58,7 @@ const Login: React.FC<RouteComponentProps> = () => {
                 color='dark'
                 fullWidth
                 type='submit'
-                disabled={!username || !password}
+                disabled={!isValid}
               >
                 Login
               </Button>
@@ -78,7 +79,6 @@ const Login: React.FC<RouteComponentProps> = () => {
                           query: MeDocument,
                           data: { me: user },
                         });
-                        window.location.pathname = '/';
                       }
                     },
                   });

@@ -1,44 +1,14 @@
-import React from 'react';
-import {
-  Redirect,
-  Route,
-  RouteComponentProps,
-  RouteProps,
-} from 'react-router-dom';
 import Navbar from '@/components/Navbar';
-import { useMeQuery } from '@/generated/graphql';
-import Spinner from '@/shared/Spinner';
+import useRedirect from '@/hooks/useRedirect';
 
-type PrivateRouteProps = RouteProps & {
-  component: React.FC<RouteComponentProps>;
-};
+const PrivateRoute: React.FC = ({ children }) => {
+  useRedirect('private');
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({
-  component: Component,
-  ...rest
-}) => {
-  const { data, loading } = useMeQuery();
-  if (loading) {
-    return <Spinner />;
-  }
   return (
-    <Route
-      {...rest}
-      render={(props) =>
-        data && data.me ? (
-          <>
-            <Navbar />
-            <div className='mt-20'>
-              <Component {...props} />
-            </div>
-          </>
-        ) : (
-          <Redirect
-            to={{ pathname: '/login', state: { from: props.location } }}
-          />
-        )
-      }
-    />
+    <>
+      <Navbar />
+      <div className='mt-20'>{children}</div>
+    </>
   );
 };
 
