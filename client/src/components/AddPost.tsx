@@ -5,7 +5,7 @@ import Button from '../shared/Button';
 import Card from '../shared/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 import { useMessageCtx } from '../context/MessageContext';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import useCompressor from '../hooks/useCompressor';
 
 interface AddPostProps {
@@ -21,7 +21,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const compress = useCompressor();
 
   const onDrop = useCallback(
@@ -46,7 +46,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           fieldName: 'getUser',
           args: { username: data.addPost.post.user.username },
         });
-        history.push(`/p/${data.addPost.post.id}`);
+        navigate(`/p/${data.addPost.post.id}`);
       }
     },
   });

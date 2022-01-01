@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useLogoutMutation, useMeQuery } from '../generated/graphql';
 import { CgProfile } from 'react-icons/cg';
 import { FiEdit } from 'react-icons/fi';
@@ -30,15 +30,13 @@ const DropDown: React.FC = ({ children }) => {
   const [open, setOpen] = useState<boolean>(false);
   const toggle = () => setOpen(!open);
   const { data, client } = useMeQuery();
-  const history = useHistory();
 
   const me = data!.me!;
 
   const [logout] = useLogoutMutation({
-    update: (cache, result) => {
-      if (result.data?.logout) {
+    onCompleted: (data) => {
+      if (data?.logout) {
         client.resetStore();
-        // history.replace('/login');
       }
     },
   });

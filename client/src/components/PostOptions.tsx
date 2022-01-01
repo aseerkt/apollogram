@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { MdMoreHoriz } from 'react-icons/md';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Modal from '../shared/Modal';
 import { useMessageCtx } from '../context/MessageContext';
 import { useMeQuery, useDeletePostMutation, Post } from '../generated/graphql';
@@ -15,7 +15,7 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
 
   const { data: meData } = useMeQuery();
   const [deletePost] = useDeletePostMutation();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <div className='cursor-pointer' role='button'>
@@ -33,7 +33,7 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
                       cache.evict({ id: 'Post:' + id });
                       setIsOpen(false);
                       setMessage('Post removed successfully');
-                      history.push('/');
+                      navigate('/');
                     }
                   },
                 });
@@ -51,7 +51,7 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
             </li>
           </>
         )}
-        <li onClick={() => history.push(`/p/${id}`)}>Go to Post</li>
+        <li onClick={() => navigate(`/p/${id}`)}>Go to Post</li>
       </ActionModal>
       {/* Edit Caption Modal */}
       <Modal isOpen={openEditCaption} setIsOpen={setOpenEditCaption}>

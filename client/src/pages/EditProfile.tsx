@@ -14,7 +14,7 @@ import SelectField from '@/shared/SelectField';
 const EditProfile: React.FC = () => {
   const { setMessage } = useMessageCtx();
   const { data } = useMeQuery();
-  const [editProfile, { loading }] = useEditProfileMutation();
+  const [editProfile] = useEditProfileMutation();
 
   if (!data) return null;
 
