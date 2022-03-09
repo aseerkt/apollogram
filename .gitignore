@@ -5,6 +5,8 @@ build/
 tmp/
 temp/
 .env
+.env.local
+.env.development
 .env.production
 yarn-error.log
 dump.rdb
