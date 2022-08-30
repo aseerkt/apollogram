@@ -31,7 +31,7 @@
     "react-router-dom": "6",
     "tailwindcss": "^2.2.19",
     "typescript": "4.5.2",
-    "vite": "^2.7.1",
+    "vite": "^2.9.13",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
