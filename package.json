@@ -21,7 +21,7 @@
     "@types/node": "^16.7.1",
     "apollo-server-express": "^3.1.2",
     "argon2": "^0.28.2",
-    "class-validator": "^0.13.1",
+    "class-validator": "^0.14.0",
     "cloudinary": "^1.26.3",
     "colors": "^1.4.0",
     "cookie-parser": "^1.4.5",
