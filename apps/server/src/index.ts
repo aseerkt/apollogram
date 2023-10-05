@@ -3,7 +3,7 @@ import 'colors';
 import 'dotenv/config';
 import { createConnection } from 'typeorm';
 import { __prod__ } from './constants';
-import createServer from './app';
+import createGQLServer from './app';
 import setupCloundinary from './config/setupCloundinary';
 
 const main = async () => {
@@ -11,7 +11,7 @@ const main = async () => {
 
   setupCloundinary();
 
-  const { server } = await createServer();
+  const { server } = await createGQLServer();
 
   const PORT = process.env.PORT || 5000;
 

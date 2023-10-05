@@ -21,7 +21,7 @@ import { formatErrors } from '../utils/formatErrors';
 import { CLOUDINARY_ROOT_PATH, COOKIE_NAME, __prod__ } from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
-import { createTokenCookie } from '../utils/tokenHandler';
+import { createToken } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
 import { isAuth } from '../middlewares/isAuth';
 import { generateUrl } from '../utils/uploadHandler';
@@ -32,7 +32,7 @@ export class UserResolver {
 
   @FieldResolver(() => String)
   email(@Root() user: User, @Ctx() { res }: MyContext): string {
-    if (res.locals.username === user.username) {
+    if (req.username === user.username) {
       return user.email;
     }
     return '';
@@ -67,9 +67,9 @@ export class UserResolver {
     @Root() user: User,
     @Ctx() { res, followLoader }: MyContext
   ): Promise<boolean> {
-    if (res.locals.username === user.username) return false;
+    if (req.username === user.username) return false;
     const following = await followLoader.load({
-      username: res.locals.username,
+      username: req.username,
       followingUsername: user.username,
     });
     return following ? true : false;
@@ -81,7 +81,7 @@ export class UserResolver {
   @UseMiddleware(isUser)
   me(@Ctx() { res }: MyContext) {
     return User.findOne({
-      where: { username: res.locals.username },
+      where: { username: req.username },
     });
   }
 
@@ -139,7 +139,7 @@ export class UserResolver {
   async login(
     @Arg('username') username: string,
     @Arg('password') password: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ) {
     try {
       const user = await User.findOne({
@@ -158,8 +158,8 @@ export class UserResolver {
           errors: [{ path: 'password', message: 'Incorrect Password' }],
         };
       }
-      createTokenCookie(user, res);
-      res.locals.username = user.username;
+      createToken(user);
+      req.username = user.username;
       return { ok: true, user };
     } catch (err) {
       return { ok: false };
@@ -168,9 +168,8 @@ export class UserResolver {
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
-  logout(@Ctx() { res }: MyContext) {
+  logout() {
     return new Promise((resolve) => {
-      res.clearCookie(COOKIE_NAME);
       resolve(true);
     });
   }

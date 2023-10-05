@@ -16,6 +16,6 @@ export const checkUserFromCookie = async ({ req, res }: MyContext) => {
     throw new AuthenticationError('Unauthorized');
   }
 
-  res.locals.username = username;
+  req.username = username;
   return { username };
 };

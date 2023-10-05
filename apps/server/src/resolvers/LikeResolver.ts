@@ -19,10 +19,10 @@ export class LikeResolver {
       });
       if (!post) return false;
       let like = await Like.findOne({
-        where: { postId, username: res.locals.username },
+        where: { postId, username: req.username },
       });
       if (!like) {
-        await Like.create({ postId, username: res.locals.username }).save();
+        await Like.create({ postId, username: req.username }).save();
         post.likeCount += 1;
       } else {
         await like.remove();
@@ -31,7 +31,7 @@ export class LikeResolver {
       await post.save();
       likeLoader.clear({
         postId: post.id,
-        username: res.locals.username,
+        username: req.username,
       });
       return true;
     } catch (err) {

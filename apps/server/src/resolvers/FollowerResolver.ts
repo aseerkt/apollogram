@@ -57,7 +57,7 @@ export class FollowerResolver {
         AND username NOT IN
           (SELECT "followingUsername" FROM follows where username = $1);
       `,
-      [res.locals.username]
+      [req.username]
     );
 
     return suggestions;
@@ -73,18 +73,18 @@ export class FollowerResolver {
   ): Promise<boolean> {
     try {
       const following = await Follow.findOne({
-        where: { username: res.locals.username, followingUsername },
+        where: { username: req.username, followingUsername },
       });
       if (following) {
         await following.remove();
       } else {
         await Follow.create({
-          username: res.locals.username,
+          username: req.username,
           followingUsername,
         }).save();
       }
       followLoader.clear({
-        username: res.locals.username,
+        username: req.username,
         followingUsername,
       });
       return true;

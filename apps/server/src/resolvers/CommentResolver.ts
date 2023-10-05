@@ -34,7 +34,7 @@ export class CommentResolver {
       const newComment = await Comment.create({
         postId,
         text,
-        username: res.locals.username,
+        username: req.username,
       }).save();
       const post = await Post.findOne({
         where: { id: postId },
@@ -59,7 +59,7 @@ export class CommentResolver {
   // ) {
   //   try {
   //     await Comment.delete({
-  //       username: res.locals.username,
+  //       username: req.username,
   //       id: commentId,
   //     });
   //     return true;

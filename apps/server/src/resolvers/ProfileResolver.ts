@@ -56,7 +56,7 @@ export class ProfileResolver {
 
   @FieldResolver(() => String)
   gender(@Root() profile: Profile, @Ctx() { res }: MyContext): string {
-    if (res.locals.username == profile.username) {
+    if (req.username == profile.username) {
       return profile.gender;
     }
     return '';
@@ -121,7 +121,7 @@ export class ProfileResolver {
   @UseMiddleware(isAuth)
   async removeProfilePhoto(@Ctx() { res }: MyContext) {
     const user = await User.findOne({
-      where: { username: res.locals.username },
+      where: { username: req.username },
     });
     if (user) {
       user.imgURL = '/user.jpg';
@@ -140,7 +140,7 @@ export class ProfileResolver {
     @Ctx() { res }: MyContext
   ): Promise<EditProfileResponse> {
     const user = await User.findOne({
-      where: { username: res.locals.username },
+      where: { username: req.username },
     });
     const profile = await Profile.findOne({ user });
 

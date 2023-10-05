@@ -1,5 +1,4 @@
 import { Field, ObjectType } from 'type-graphql';
-import { Request, Response } from 'express';
 import { createUserLoader } from './dataloaders/createUserLoader';
 import { createProfileLoader } from './dataloaders/createProfileLoader';
 import { createLikeLoader } from './dataloaders/createLikeLoader';
@@ -16,8 +15,8 @@ export class FieldError {
 }
 
 export interface MyContext {
-  req: Request;
-  res: Response & { locals: { username: string } };
+  req: Request & { username?: string };
+  // res: Response & { locals: { username: string } };
   userLoader: ReturnType<typeof createUserLoader>;
   profileLoader: ReturnType<typeof createProfileLoader>;
   commentLoader: ReturnType<typeof createCommentLoader>;

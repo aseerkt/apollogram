@@ -1,0 +1,19 @@
+
+> client@0.1.0 dev /Users/apple/Documents/personal-projects/apollogram/apps/client
+> vite
+
+
+  vite v2.9.16 dev server running at:
+
+  > Local: http://localhost:3000/
+  > Network: use `--host` to expose
+
+  ready in 811ms.
+
+The following dependencies are imported but could not be resolved:
+
+  yup (imported by /Users/apple/Documents/personal-projects/apollogram/apps/client/src/pages/Login.tsx)
+  react-router (imported by /Users/apple/Documents/personal-projects/apollogram/apps/client/src/components/FollowModal.tsx)
+
+Are they installed?
+ ELIFECYCLE  Command failed.

@@ -54,10 +54,10 @@ export class PostResolver {
     @Root() post: Post,
     @Ctx() { res, likeLoader }: MyContext
   ): Promise<boolean> {
-    if (!res.locals.username) return false;
+    if (!req.username) return false;
     const like = await likeLoader.load({
       postId: post.id,
-      username: res.locals.username,
+      username: req.username,
     });
     return like ? true : false;
   }
@@ -86,7 +86,7 @@ export class PostResolver {
     @Arg('limit', () => Int) limit: number,
     @Arg('offset', () => Int, { nullable: true }) offset?: number
   ): Promise<PaginatedPost> {
-    const params = [res.locals.username, limit + 1];
+    const params = [req.username, limit + 1];
     if (offset) params.push(offset);
     // Get posts from followed peoples only
     const posts: Post[] = await getConnection().query(
@@ -166,7 +166,7 @@ export class PostResolver {
   ) {
     try {
       const post = await Post.findOne({
-        where: { id: postId, username: res.locals.username },
+        where: { id: postId, username: req.username },
       });
       if (!post) return false;
       if (post.imgURL.startsWith(CLOUDINARY_ROOT_PATH)) {
@@ -190,7 +190,7 @@ export class PostResolver {
   ) {
     try {
       const result = await Post.update(
-        { id: postId, username: res.locals.username },
+        { id: postId, username: req.username },
         { caption }
       );
 
