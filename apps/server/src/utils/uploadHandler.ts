@@ -1,13 +1,7 @@
-import crypto from 'crypto';
 import { ImageTransformationOptions, v2 as cloudinary } from 'cloudinary';
-import { FileUpload } from 'graphql-upload';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 
 type PathSuffix = 'profiles' | 'posts';
-
-function generateFileName() {
-  return crypto.randomBytes(15).toString('hex');
-}
 
 function getTransformationOptions(
   pathSuffix: PathSuffix
@@ -29,37 +23,6 @@ export function generateUrl(selector: string, pathSuffix: PathSuffix) {
     ...options,
     quality: 'auto',
     format: 'webp',
-  });
-}
-
-export async function uploadToCloudinary(
-  file: FileUpload,
-  pathSuffix: 'profiles' | 'posts'
-) {
-  const { createReadStream } = await file;
-
-  return new Promise<{ url: string }>((resolve, reject) => {
-    const fileName = generateFileName();
-    const filePath = `${CLOUDINARY_ROOT_PATH}/${pathSuffix}`;
-
-    const stream = cloudinary.uploader.upload_stream(
-      {
-        public_id: fileName,
-        folder: filePath,
-      },
-      (err, res) => {
-        if (res) {
-          resolve({
-            url: `${filePath}/${fileName}`,
-          });
-        } else {
-          reject(err);
-        }
-      }
-    );
-    createReadStream()
-      .pipe(stream)
-      .on('error', (err) => reject(err));
   });
 }
 

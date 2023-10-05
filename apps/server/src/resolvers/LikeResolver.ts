@@ -10,7 +10,7 @@ export class LikeResolver {
   @UseMiddleware(isAuth)
   async toggleLike(
     @Arg('postId') postId: string,
-    @Ctx() { res, likeLoader }: MyContext
+    @Ctx() { req, likeLoader }: MyContext
   ): Promise<boolean> {
     try {
       const post = await Post.findOne({
@@ -31,7 +31,7 @@ export class LikeResolver {
       await post.save();
       likeLoader.clear({
         postId: post.id,
-        username: req.username,
+        username: req.username!,
       });
       return true;
     } catch (err) {

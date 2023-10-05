@@ -1,5 +1,4 @@
 import { validate } from 'class-validator';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import {
   Arg,
   Ctx,
@@ -24,11 +23,7 @@ import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
-import {
-  uploadToCloudinary,
-  generateUrl,
-  deleteCloudinaryFile,
-} from '../utils/uploadHandler';
+import { generateUrl, deleteCloudinaryFile } from '../utils/uploadHandler';
 
 @ObjectType()
 class CreatePostResponse {
@@ -52,7 +47,7 @@ export class PostResolver {
   @FieldResolver(() => Boolean)
   async userLike(
     @Root() post: Post,
-    @Ctx() { res, likeLoader }: MyContext
+    @Ctx() { req, likeLoader }: MyContext
   ): Promise<boolean> {
     if (!req.username) return false;
     const like = await likeLoader.load({
@@ -82,7 +77,7 @@ export class PostResolver {
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
   async getPosts(
-    @Ctx() { res }: MyContext,
+    @Ctx() { req }: MyContext,
     @Arg('limit', () => Int) limit: number,
     @Arg('offset', () => Int, { nullable: true }) offset?: number
   ): Promise<PaginatedPost> {
@@ -137,14 +132,14 @@ export class PostResolver {
   @Mutation(() => CreatePostResponse)
   async addPost(
     @Arg('caption') caption: string,
-    @Ctx() ctx: MyContext,
-    @Arg('file', () => GraphQLUpload)
-    file: FileUpload
+    @Ctx() ctx: MyContext
   ): Promise<CreatePostResponse> {
     const { username } = await checkUserFromCookie(ctx);
 
     // const { isUploaded, imgURL } = await uploadFile(file, 'posts');
-    const { url } = await uploadToCloudinary(file, 'posts');
+    // const { url } = await uploadToCloudinary(file, 'posts');
+    // TODO: to update url with correct one
+    const url = '';
     // if (isUploaded) {
     if (url) {
       const post = Post.create({ caption, imgURL: url, username });
@@ -162,7 +157,7 @@ export class PostResolver {
   @UseMiddleware(isAuth)
   async deletePost(
     @Arg('postId', () => ID) postId: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ) {
     try {
       const post = await Post.findOne({
@@ -186,7 +181,7 @@ export class PostResolver {
   async editCaption(
     @Arg('postId', () => ID) postId: string,
     @Arg('caption') caption: string,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ) {
     try {
       const result = await Post.update(

@@ -28,7 +28,7 @@ export class CommentResolver {
   async addComment(
     @Arg('postId') postId: string,
     @Arg('text') text: string,
-    @Ctx() { res, commentLoader }: MyContext
+    @Ctx() { req, commentLoader }: MyContext
   ) {
     try {
       const newComment = await Comment.create({
@@ -50,22 +50,4 @@ export class CommentResolver {
       return false;
     }
   }
-
-  // @Mutation(() => Boolean)
-  // @UseMiddleware(isAuth)
-  // async deleteComment(
-  //   @Arg('commentId') commentId: string,
-  //   @Ctx() { res }: MyContext
-  // ) {
-  //   try {
-  //     await Comment.delete({
-  //       username: req.username,
-  //       id: commentId,
-  //     });
-  //     return true;
-  //   } catch (err) {
-  //     console.log(err);
-  //     return false;
-  //   }
-  // }
 }

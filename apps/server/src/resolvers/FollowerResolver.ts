@@ -47,7 +47,7 @@ export class FollowerResolver {
 
   @Query(() => [User])
   @UseMiddleware(isAuth)
-  async getFollowSuggestions(@Ctx() { res }: MyContext): Promise<User[]> {
+  async getFollowSuggestions(@Ctx() { req }: MyContext): Promise<User[]> {
     const suggestions = await getConnection().query(
       /*sql*/ `
         SELECT 
@@ -69,7 +69,7 @@ export class FollowerResolver {
   @UseMiddleware(isAuth)
   async toggleFollow(
     @Arg('followingUsername', () => ID) followingUsername: string,
-    @Ctx() { res, followLoader }: MyContext
+    @Ctx() { req, followLoader }: MyContext
   ): Promise<boolean> {
     try {
       const following = await Follow.findOne({
@@ -84,7 +84,7 @@ export class FollowerResolver {
         }).save();
       }
       followLoader.clear({
-        username: req.username,
+        username: req.username!,
         followingUsername,
       });
       return true;

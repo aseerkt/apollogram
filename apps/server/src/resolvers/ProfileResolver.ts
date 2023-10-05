@@ -1,5 +1,4 @@
 import {
-  Arg,
   Args,
   ArgsType,
   Ctx,
@@ -11,10 +10,9 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { FileUpload, GraphQLUpload } from 'graphql-upload';
 import { v2 as cloudinary } from 'cloudinary';
 import { FieldError, MyContext } from '../types';
-import { uploadToCloudinary } from '../utils/uploadHandler';
+
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
@@ -55,57 +53,28 @@ export class ProfileResolver {
   // FIELD RESOLVERS
 
   @FieldResolver(() => String)
-  gender(@Root() profile: Profile, @Ctx() { res }: MyContext): string {
+  gender(@Root() profile: Profile, @Ctx() { req }: MyContext): string {
     if (req.username == profile.username) {
       return profile.gender;
     }
     return '';
   }
 
-  // @FieldResolver(() => [User])
-  // async followers(
-  //   @Root() profile: Profile,
-  //   @Ctx() { followLoader, userLoader }: MyContext
-  // ): Promise<User[]> {
-  //   const followData = (await followLoader.load(profile.username)) || [];
-
-  //   return await Promise.all(
-  //     followData
-  //       .filter((f) => f.state === 'follower')
-  //       .map((f) => userLoader.load(f.username))
-  //   );
-  // }
-
-  // @FieldResolver(() => [User])
-  // async followings(
-  //   @Root() profile: Profile,
-  //   @Ctx() { followLoader, userLoader }: MyContext
-  // ): Promise<User[]> {
-  //   const followData = (await followLoader.load(profile.username)) || [];
-
-  //   return await Promise.all(
-  //     followData
-  //       .filter((f) => f.state === 'following')
-  //       .map((f) => userLoader.load(f.username))
-  //   );
-  // }
-
   // MUTATIONS
 
   // Change Profile Photo
 
   @Mutation(() => Boolean)
-  async changeProfilePhoto(
-    @Arg('file', () => GraphQLUpload, { nullable: true }) file: FileUpload,
-    @Ctx() ctx: MyContext
-  ) {
+  async changeProfilePhoto(@Ctx() ctx: MyContext) {
     const { username } = await checkUserFromCookie(ctx);
     const user = await User.findOne({ where: { username } });
-    if (user && file) {
+    if (user) {
       if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
         await cloudinary.uploader.destroy(user.imgURL);
       }
-      const { url } = await uploadToCloudinary(file, 'profiles');
+      // const { url } = await uploadToCloudinary(file, 'profiles');
+      // TODO: to update url with correct cloudinary url
+      const url = '';
       if (url) {
         user.imgURL = url;
         await user.save();
@@ -119,7 +88,7 @@ export class ProfileResolver {
 
   @Mutation(() => String, { nullable: true })
   @UseMiddleware(isAuth)
-  async removeProfilePhoto(@Ctx() { res }: MyContext) {
+  async removeProfilePhoto(@Ctx() { req }: MyContext) {
     const user = await User.findOne({
       where: { username: req.username },
     });
@@ -137,7 +106,7 @@ export class ProfileResolver {
   @UseMiddleware(isAuth)
   async editProfile(
     @Args() { name, gender, website, bio, email }: EditProfileArgs,
-    @Ctx() { res }: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<EditProfileResponse> {
     const user = await User.findOne({
       where: { username: req.username },

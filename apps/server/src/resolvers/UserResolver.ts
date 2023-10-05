@@ -18,7 +18,7 @@ import {
   RegisterVars,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
-import { CLOUDINARY_ROOT_PATH, COOKIE_NAME, __prod__ } from '../constants';
+import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createToken } from '../utils/tokenHandler';
@@ -31,7 +31,7 @@ export class UserResolver {
   // Field Resolvers
 
   @FieldResolver(() => String)
-  email(@Root() user: User, @Ctx() { res }: MyContext): string {
+  email(@Root() user: User, @Ctx() { req }: MyContext): string {
     if (req.username === user.username) {
       return user.email;
     }
@@ -65,8 +65,9 @@ export class UserResolver {
   @FieldResolver(() => Boolean)
   async isFollowing(
     @Root() user: User,
-    @Ctx() { res, followLoader }: MyContext
+    @Ctx() { req, followLoader }: MyContext
   ): Promise<boolean> {
+    if (!req.username) return false;
     if (req.username === user.username) return false;
     const following = await followLoader.load({
       username: req.username,
@@ -79,7 +80,7 @@ export class UserResolver {
 
   @Query(() => User, { nullable: true })
   @UseMiddleware(isUser)
-  me(@Ctx() { res }: MyContext) {
+  me(@Ctx() { req }: MyContext) {
     return User.findOne({
       where: { username: req.username },
     });
