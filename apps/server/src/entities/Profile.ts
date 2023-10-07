@@ -7,11 +7,6 @@ import { User } from './User';
 @ObjectType()
 @Entity('profiles')
 export class Profile extends BaseColumns {
-  constructor(profile: Partial<Profile>) {
-    super();
-    Object.assign(this, profile);
-  }
-
   @Field()
   @IsUrl(undefined, { message: 'Invalid Website URL' })
   @Column({ default: '' })

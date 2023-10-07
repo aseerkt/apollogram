@@ -18,9 +18,9 @@ import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
 import { validate } from 'class-validator';
 import { formatErrors } from '../utils/formatErrors';
-import { getManager } from 'typeorm';
 import { checkUserFromCookie } from '../utils/checkUserFromCookie';
 import { CLOUDINARY_ROOT_PATH } from '../constants';
+import { AppDataSource } from '../data-source';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -111,7 +111,7 @@ export class ProfileResolver {
     const user = await User.findOne({
       where: { username: req.username },
     });
-    const profile = await Profile.findOne({ user });
+    const profile = await Profile.findOneBy({ username: req.username });
 
     if (profile && user) {
       user.email = email;
@@ -126,7 +126,7 @@ export class ProfileResolver {
           const errors = formatErrors([...userErrors, ...profileErrors]);
           return { errors };
         }
-        await getManager().transaction(async (tem) => {
+        await AppDataSource.manager.transaction(async (tem) => {
           await tem.save(user);
           await tem.save(profile);
         });

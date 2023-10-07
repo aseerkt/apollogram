@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import 'colors';
 import 'dotenv/config';
-import { createConnection } from 'typeorm';
 import { __prod__ } from './constants';
 import createGQLServer from './app';
 import setupCloundinary from './config/setupCloundinary';
+import { AppDataSource } from './data-source';
 
 const main = async () => {
-  await createConnection();
+  await AppDataSource.initialize();
 
   setupCloundinary();
 

@@ -15,10 +15,13 @@ export class RegisterResponse {
 export class LoginResponse extends RegisterResponse {
   @Field(() => User, { nullable: true })
   user?: User;
+
+  @Field({ nullable: true })
+  token?: string;
 }
 
 @ArgsType()
-export class RegisterVars {
+export class RegisterVariables {
   @Field()
   email: string;
 

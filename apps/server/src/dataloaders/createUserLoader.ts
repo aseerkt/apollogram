@@ -1,10 +1,10 @@
 import DataLoader from 'dataloader';
-import { getManager } from 'typeorm';
 import { User } from '../entities/User';
+import { AppDataSource } from '../data-source';
 
 export const createUserLoader = () =>
   new DataLoader<string, User>(async (usernames) => {
-    const users = await getManager()
+    const users = await AppDataSource.manager
       .createQueryBuilder(User, 'user')
       .where('user.username IN (:...usernames)', { usernames })
       .getMany();

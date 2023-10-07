@@ -2,8 +2,8 @@ import { MyContext } from '../types';
 import { verifyToken } from './tokenHandler';
 
 export const checkUserFromCookie = async ({ req }: MyContext) => {
-  // TODO: fix token fetch
-  const token = '';
+  const authHeader = req.headers.get('Authorization');
+  const token = authHeader?.replace('Bearer ', '');
   if (!token) {
     console.log('Something is wrong');
     throw new Error('Unauthorized');

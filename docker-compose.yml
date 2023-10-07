@@ -1,14 +1,15 @@
-version: '3.8'
-
 services:
   db_postgres:
-    image: postgres:14.2-alpine
+    image: postgres:16-alpine
     restart: always
-    environment:
-      - POSTGRES_PASSWORD=postgres
-  server:
-    build: .
-    depends_on:
-      - db_postgres
     ports:
-      - 5000:5000
+      - '${DB_PORT}:5432'
+    environment:
+      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_DB=$DB_NAME
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+volumes:
+  dbdata:

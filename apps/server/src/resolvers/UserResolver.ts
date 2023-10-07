@@ -15,7 +15,7 @@ import { MyContext } from '../types';
 import {
   LoginResponse,
   RegisterResponse,
-  RegisterVars,
+  RegisterVariables,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
@@ -98,15 +98,17 @@ export class UserResolver {
 
   @Mutation(() => RegisterResponse)
   async register(
-    @Args() { email, username, password }: RegisterVars
+    @Args() { email, username, password }: RegisterVariables
   ): Promise<RegisterResponse> {
     let errors = [];
-    const emailUser = await User.findOne({ email });
-    const usernameUser = await User.findOne({ username });
-    if (emailUser)
-      errors.push({ path: 'email', message: 'Email already registered' });
-    if (usernameUser)
-      errors.push({ path: 'username', message: 'Username already taken' });
+    const existingUser = await User.findOne({
+      where: [{ email }, { username }],
+    });
+    if (existingUser)
+      errors.push({
+        path: 'unknown',
+        message: 'Email / Username already taken',
+      });
 
     if (errors.length > 0)
       return {
@@ -122,7 +124,9 @@ export class UserResolver {
     }
     try {
       await user.save();
-      await Profile.create({ username: user.username }).save();
+      const profile = new Profile();
+      profile.username = user.username;
+      await profile.save();
       return { ok: true };
     } catch (err) {
       console.log(err);
@@ -159,9 +163,9 @@ export class UserResolver {
           errors: [{ path: 'password', message: 'Incorrect Password' }],
         };
       }
-      createToken(user);
+      const token = createToken(user);
       req.username = user.username;
-      return { ok: true, user };
+      return { ok: true, user, token };
     } catch (err) {
       return { ok: false };
     }
