@@ -1,23 +1,48 @@
+import { setToken } from '@/utils/auth';
+import { FetchResult, useApolloClient } from '@apollo/client';
+import { Form, Formik } from 'formik';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
 import FormWrapper from '../containers/FormWrapper';
+import { LoginMutation, useLoginMutation } from '../generated/graphql';
+import useRedirect from '../hooks/useRedirect';
 import Button from '../shared/Button';
 import InputField from '../shared/InputField';
-import { MeDocument, useLoginMutation } from '../generated/graphql';
-import { Form, Formik } from 'formik';
-import * as Yup from 'yup';
-import useRedirect from '../hooks/useRedirect';
 
 const LoginSchema = Yup.object().shape({
   username: Yup.string().trim().required('Username is required'),
   password: Yup.string().trim().required('Password is required'),
 });
 
+const testLoginCredentials = { username: 'bob', password: 'bob123' };
+
 const Login: React.FC = () => {
   const [login] = useLoginMutation();
   const [testLoading, setTestLoading] = useState(false);
+  const client = useApolloClient();
 
   useRedirect('guest');
+
+  const invalidateUserInCache = async (result: FetchResult<LoginMutation>) => {
+    const user = result.data?.login.user;
+    const token = result.data?.login.token;
+    if (user && token) {
+      setToken(token);
+      await client.refetchQueries({
+        updateCache(cache) {
+          cache.evict({ fieldName: 'me', broadcast: false });
+        },
+      });
+    }
+  };
+
+  const handleTestLogin = async () => {
+    setTestLoading(true);
+    login({
+      variables: testLoginCredentials,
+    }).then(invalidateUserInCache);
+  };
 
   return (
     <FormWrapper title='Login'>
@@ -27,21 +52,16 @@ const Login: React.FC = () => {
           initialValues={{ username: '', password: '' }}
           onSubmit={async ({ username, password }, { setFieldError }) => {
             try {
-              const { data } = await login({
+              const result = await login({
                 variables: { username, password },
-                update: (cache, result) => {
-                  const user = result.data?.login.user;
-                  if (user) {
-                    cache.writeQuery({ query: MeDocument, data: { me: user } });
-                  }
-                },
               });
-              if (data?.login.errors) {
-                data.login.errors.forEach(({ path, message }) => {
+              if (result.data?.login.errors) {
+                result.data.login.errors.forEach(({ path, message }) => {
                   setFieldError(path, message);
                 });
+                return;
               }
-              // console.log(data);
+              invalidateUserInCache(result);
             } catch (err) {
               // console.log(err);
             }
@@ -68,36 +88,13 @@ const Login: React.FC = () => {
                 fullWidth
                 color='dark'
                 type='button'
-                onClick={() => {
-                  setTestLoading(true);
-                  login({
-                    variables: { username: 'bob', password: 'bob123' },
-                    update: (cache, result) => {
-                      const user = result.data?.login.user;
-                      if (user) {
-                        cache.writeQuery({
-                          query: MeDocument,
-                          data: { me: user },
-                        });
-                      }
-                    },
-                  });
-                }}
+                onClick={handleTestLogin}
               >
                 Login as Guest
               </Button>
             </Form>
           )}
         </Formik>
-        {/* <a
-          href={`${process.env.REACT_APP_EXPRESS_URI!}/auth/facebook`}
-          className='block px-3 py-1 my-1 text-center text-white uppercase bg-blue-800 rounded-lg'
-        >
-          <span className='flex items-center justify-center'>
-            <FaFacebookSquare className='mr-2' />
-            Login With Facebook
-          </span>
-        </a> */}
         <small>
           Don't have an account?{' '}
           <Link to='/register' className='text-blue-500'>

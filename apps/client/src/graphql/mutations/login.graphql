@@ -8,5 +8,6 @@ mutation Login($username: String!, $password: String!) {
     user {
       ...MinimalUser
     }
+    token
   }
 }

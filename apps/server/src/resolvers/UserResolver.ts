@@ -81,6 +81,7 @@ export class UserResolver {
   @Query(() => User, { nullable: true })
   @UseMiddleware(isUser)
   me(@Ctx() { req }: MyContext) {
+    if (!req.username) return null;
     return User.findOne({
       where: { username: req.username },
     });
@@ -169,13 +170,5 @@ export class UserResolver {
     } catch (err) {
       return { ok: false };
     }
-  }
-
-  @Mutation(() => Boolean)
-  @UseMiddleware(isAuth)
-  logout() {
-    return new Promise((resolve) => {
-      resolve(true);
-    });
   }
 }

@@ -4,7 +4,7 @@ import Container from '../shared/Container';
 import { Post, useGetPostsQuery } from '../generated/graphql';
 import Spinner from '../shared/Spinner';
 import Alert from '../shared/Alert';
-import ProfileRight from '../components/ProfileRight';
+import MiniProfileView from '../components/MiniProfileView';
 import { Link } from 'react-router-dom';
 
 const Posts: React.FC = () => {
@@ -66,7 +66,7 @@ const Posts: React.FC = () => {
               ))}
             </div>
             <div className='relative flex-1 hidden md:block md:ml-4'>
-              {data && data.getPosts.posts.length > 0 && <ProfileRight />}
+              {data && data.getPosts.posts.length > 0 && <MiniProfileView />}
             </div>
           </>
         ) : (
@@ -78,7 +78,7 @@ const Posts: React.FC = () => {
                 Explore
               </Link>
             </p>
-            <ProfileRight />
+            <MiniProfileView />
           </div>
         )}
       </div>

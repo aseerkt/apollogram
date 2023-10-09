@@ -9,11 +9,11 @@ import {
   Resolver,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
 import { Follow } from '../entities/Follow';
 import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { MyContext } from '../types';
+import { AppDataSource } from '../data-source';
 
 @ObjectType()
 class FollowData {
@@ -48,7 +48,7 @@ export class FollowerResolver {
   @Query(() => [User])
   @UseMiddleware(isAuth)
   async getFollowSuggestions(@Ctx() { req }: MyContext): Promise<User[]> {
-    const suggestions = await getConnection().query(
+    const suggestions = await AppDataSource.query(
       /*sql*/ `
         SELECT 
           u.*

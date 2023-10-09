@@ -3,7 +3,7 @@ import Avatar from '../shared/Avatar';
 import { useMeQuery } from '../generated/graphql';
 import Suggestions from './Suggestions';
 
-const ProfileRight: React.FC = () => {
+const MiniProfileView: React.FC = () => {
   const { data: meData } = useMeQuery();
 
   const me = meData!.me!;
@@ -27,4 +27,4 @@ const ProfileRight: React.FC = () => {
   );
 };
 
-export default ProfileRight;
+export default MiniProfileView;

@@ -1,5 +1,5 @@
-mutation AddPost($file: Upload!, $caption: String!) {
-  addPost(file: $file, caption: $caption) {
+mutation AddPost($caption: String!) {
+  addPost(caption: $caption) {
     ok
     post {
       id

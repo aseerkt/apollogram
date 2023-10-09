@@ -6,11 +6,14 @@ function useRedirect(route: 'guest' | 'private') {
   const navigate = useNavigate();
   const { data, loading } = useMeQuery();
 
+  console.log(data, loading);
+
   useEffect(() => {
-    if (route === 'guest' && !loading && data?.me) {
+    if (loading) return;
+    if (route === 'guest' && data?.me) {
       navigate('/', { replace: true });
     }
-    if (route === 'private' && !loading && !data?.me) {
+    if (route === 'private' && !data?.me) {
       navigate('/login', { replace: true });
     }
   }, [data, loading]);

@@ -3,14 +3,11 @@ import {
   FieldPolicy,
   FieldReadFunction,
   InMemoryCache,
+  createHttpLink,
 } from '@apollo/client';
-import { createUploadLink } from 'apollo-upload-client';
 import { PaginatedPost } from '../generated/graphql';
-
-const uploadLink = createUploadLink({
-  uri: `${import.meta.env.VITE_EXPRESS_URI}/graphql`,
-  credentials: 'include',
-});
+import { setContext } from '@apollo/client/link/context';
+import { getToken } from './auth';
 
 function customOffsetPagination():
   | FieldPolicy<any, any, any>
@@ -34,8 +31,22 @@ function customOffsetPagination():
   };
 }
 
+const httpLink = createHttpLink({
+  uri: `${import.meta.env.VITE_EXPRESS_URI}/graphql`,
+});
+
+const authLink = setContext((_, { headers }) => {
+  const token = getToken();
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 export const apolloClient = new ApolloClient({
-  link: uploadLink as any,
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

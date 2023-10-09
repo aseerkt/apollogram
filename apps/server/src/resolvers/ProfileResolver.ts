@@ -18,7 +18,7 @@ import { Profile } from '../entities/Profile';
 import { isAuth } from '../middlewares/isAuth';
 import { validate } from 'class-validator';
 import { formatErrors } from '../utils/formatErrors';
-import { checkUserFromCookie } from '../utils/checkUserFromCookie';
+import { getUserFromToken } from '../utils/checkUserFromCookie';
 import { CLOUDINARY_ROOT_PATH } from '../constants';
 import { AppDataSource } from '../data-source';
 
@@ -66,7 +66,7 @@ export class ProfileResolver {
 
   @Mutation(() => Boolean)
   async changeProfilePhoto(@Ctx() ctx: MyContext) {
-    const { username } = await checkUserFromCookie(ctx);
+    const { username } = await getUserFromToken(ctx);
     const user = await User.findOne({ where: { username } });
     if (user) {
       if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {

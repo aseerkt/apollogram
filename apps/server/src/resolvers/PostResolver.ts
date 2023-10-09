@@ -13,7 +13,6 @@ import {
   Root,
   UseMiddleware,
 } from 'type-graphql';
-import { getConnection } from 'typeorm';
 import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
 import { Comment } from '../entities/Comment';
 import { Post } from '../entities/Post';
@@ -21,9 +20,10 @@ import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
 import { FieldError, MyContext } from '../types';
 import { PaginatedPost } from '../types/postTypes';
-import { checkUserFromCookie } from '../utils/checkUserFromCookie';
+import { getUserFromToken } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
 import { generateUrl, deleteCloudinaryFile } from '../utils/uploadHandler';
+import { AppDataSource } from '../data-source';
 
 @ObjectType()
 class CreatePostResponse {
@@ -84,7 +84,7 @@ export class PostResolver {
     const params = [req.username, limit + 1];
     if (offset) params.push(offset);
     // Get posts from followed peoples only
-    const posts: Post[] = await getConnection().query(
+    const posts: Post[] = await AppDataSource.query(
       /*sql*/ `
       SELECT 
         p.* 
@@ -134,7 +134,7 @@ export class PostResolver {
     @Arg('caption') caption: string,
     @Ctx() ctx: MyContext
   ): Promise<CreatePostResponse> {
-    const { username } = await checkUserFromCookie(ctx);
+    const { username } = await getUserFromToken(ctx);
 
     // const { isUploaded, imgURL } = await uploadFile(file, 'posts');
     // const { url } = await uploadToCloudinary(file, 'posts');
@@ -196,9 +196,3 @@ export class PostResolver {
     }
   }
 }
-/*
- * curl 'http://localhost:5000/graphql' -H 'Accept-Encoding: gzip, deflate, br' -H 'Content-Type: application/json' -H 'Accept: application/json' -H 'Connection: keep-alive' -H 'DNT: 1' -H 'Origin: http://localhost:5000' --data-binary '{"query":"mutation AddPost($file: Upload!){\n  addPost(file)\n}"}' --compressed
- *
- */
-
-// SELECT "p"."id", "p"."createdAt", "p"."updatedAt", "p"."caption", "p"."imgURL", "p"."username" FROM "posts" "p" LEFT JOIN "follows" "f" ON "f"."followingUsername" = "p"."username" WHERE "f"."username" = 'bob' ORDER BY "p"."createdAt" DESC LIMIT 6 OFFSET 10;

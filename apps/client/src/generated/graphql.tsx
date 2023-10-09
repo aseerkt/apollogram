@@ -12,10 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
   DateTime: any;
-  /** The `Upload` scalar type represents a file upload. */
-  Upload: any;
 };
 
 export type BaseColumns = {
@@ -72,6 +69,7 @@ export type LoginResponse = {
   __typename?: 'LoginResponse';
   errors?: Maybe<Array<FieldError>>;
   ok: Scalars['Boolean'];
+  token?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
 };
 
@@ -84,7 +82,6 @@ export type Mutation = {
   editCaption?: Maybe<Scalars['String']>;
   editProfile: EditProfileResponse;
   login: LoginResponse;
-  logout: Scalars['Boolean'];
   register: RegisterResponse;
   removeProfilePhoto?: Maybe<Scalars['String']>;
   toggleFollow: Scalars['Boolean'];
@@ -100,12 +97,6 @@ export type MutationAddCommentArgs = {
 
 export type MutationAddPostArgs = {
   caption: Scalars['String'];
-  file: Scalars['Upload'];
-};
-
-
-export type MutationChangeProfilePhotoArgs = {
-  file?: Maybe<Scalars['Upload']>;
 };
 
 
@@ -232,7 +223,6 @@ export type RegisterResponse = {
   ok: Scalars['Boolean'];
 };
 
-
 export type User = {
   __typename?: 'User';
   createdAt: Scalars['DateTime'];
@@ -268,16 +258,13 @@ export type AddCommentMutationVariables = Exact<{
 export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
 
 export type AddPostMutationVariables = Exact<{
-  file: Scalars['Upload'];
   caption: Scalars['String'];
 }>;
 
 
 export type AddPostMutation = { __typename?: 'Mutation', addPost: { __typename?: 'CreatePostResponse', ok: boolean, post?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', username: string } }>, error?: Maybe<{ __typename?: 'FieldError', path: string, message: string }> } };
 
-export type ChangeProfilePhotoMutationVariables = Exact<{
-  file?: Maybe<Scalars['Upload']>;
-}>;
+export type ChangeProfilePhotoMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ChangeProfilePhotoMutation = { __typename?: 'Mutation', changeProfilePhoto: boolean };
@@ -314,12 +301,7 @@ export type LoginMutationVariables = Exact<{
 }>;
 
 
-export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }> } };
-
-export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', ok: boolean, token?: Maybe<string>, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>>, user?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }> } };
 
 export type RegisterMutationVariables = Exact<{
   email: Scalars['String'];
@@ -507,8 +489,8 @@ export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutati
 export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
 export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
 export const AddPostDocument = gql`
-    mutation AddPost($file: Upload!, $caption: String!) {
-  addPost(file: $file, caption: $caption) {
+    mutation AddPost($caption: String!) {
+  addPost(caption: $caption) {
     ok
     post {
       id
@@ -542,7 +524,6 @@ export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPost
  * @example
  * const [addPostMutation, { data, loading, error }] = useAddPostMutation({
  *   variables: {
- *      file: // value for 'file'
  *      caption: // value for 'caption'
  *   },
  * });
@@ -555,8 +536,8 @@ export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
 export type AddPostMutationResult = Apollo.MutationResult<AddPostMutation>;
 export type AddPostMutationOptions = Apollo.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;
 export const ChangeProfilePhotoDocument = gql`
-    mutation ChangeProfilePhoto($file: Upload) {
-  changeProfilePhoto(file: $file)
+    mutation ChangeProfilePhoto {
+  changeProfilePhoto
 }
     `;
 export type ChangeProfilePhotoMutationFn = Apollo.MutationFunction<ChangeProfilePhotoMutation, ChangeProfilePhotoMutationVariables>;
@@ -574,7 +555,6 @@ export type ChangeProfilePhotoMutationFn = Apollo.MutationFunction<ChangeProfile
  * @example
  * const [changeProfilePhotoMutation, { data, loading, error }] = useChangeProfilePhotoMutation({
  *   variables: {
- *      file: // value for 'file'
  *   },
  * });
  */
@@ -712,6 +692,7 @@ export const LoginDocument = gql`
     user {
       ...MinimalUser
     }
+    token
   }
 }
     ${MinimalUserFragmentDoc}`;
@@ -742,36 +723,6 @@ export function useLoginMutation(baseOptions?: Apollo.MutationHookOptions<LoginM
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = Apollo.MutationResult<LoginMutation>;
 export type LoginMutationOptions = Apollo.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
-export const LogoutDocument = gql`
-    mutation Logout {
-  logout
-}
-    `;
-export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
-
-/**
- * __useLogoutMutation__
- *
- * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useLogoutMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
- *   variables: {
- *   },
- * });
- */
-export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
-      }
-export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
-export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
-export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $username: String!, $password: String!) {
   register(email: $email, username: $username, password: $password) {

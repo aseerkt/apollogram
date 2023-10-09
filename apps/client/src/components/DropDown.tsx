@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useLogoutMutation, useMeQuery } from '../generated/graphql';
+import { useMeQuery } from '../generated/graphql';
 import { CgProfile } from 'react-icons/cg';
 import { FiEdit } from 'react-icons/fi';
 import { HiOutlineLogout } from 'react-icons/hi';
+import { removeToken } from '@/utils/auth';
 
 interface MenuItemProps {
   href: string;
@@ -33,13 +34,10 @@ const DropDown: React.FC = ({ children }) => {
 
   const me = data!.me!;
 
-  const [logout] = useLogoutMutation({
-    onCompleted: (data) => {
-      if (data?.logout) {
-        client.resetStore();
-      }
-    },
-  });
+  const logout = () => {
+    client.resetStore();
+    removeToken();
+  };
 
   return (
     <div
@@ -69,7 +67,7 @@ const DropDown: React.FC = ({ children }) => {
           <FiEdit size='1.5em' />
           <span>Edit Profile</span>
         </MenuItem>
-        <MenuItem onClick={() => logout() as any} href='/login'>
+        <MenuItem onClick={logout} href='/login'>
           <HiOutlineLogout size='1.5em' />
           <span>Logout</span>
         </MenuItem>
