@@ -191,4 +191,726 @@ vite.config.ts:16:2: ERROR: Expected "}" but found "publicDir"
       at TypeScriptParserMixin.parseStatementContent (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9345:18)
       at TypeScriptParserMixin.parseStatementLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12593:17)
       at TypeScriptParserMixin.parseStatementOrSloppyAnnexBFunctionDeclaration (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12583:17)
-      at TypeScriptParserMixin.parseIfStatement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:1299
+      at TypeScriptParserMixin.parseIfStatement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12994:28)
+      at TypeScriptParserMixin.parseStatementContent (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12624:21)
+      at TypeScriptParserMixin.parseStatementContent (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9345:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12593:17)
+      at TypeScriptParserMixin.parseStatementListItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12573:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13194:61)
+      at TypeScriptParserMixin.parseBlockBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13187:10)
+      at TypeScriptParserMixin.parseBlock (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13175:10)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11940:24)
+      at TypeScriptParserMixin.parseArrowExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11915:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11516:12)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+4:42:06 PM [vite] hmr update /src/pages/Login.tsx
+4:42:27 PM [vite] page reload src/utils/auth.ts
+4:42:36 PM [vite] page reload src/utils/auth.ts
+4:42:37 PM [vite] page reload src/utils/auth.ts
+4:42:37 PM [vite] page reload src/utils/auth.ts
+4:42:39 PM [vite] page reload src/utils/auth.ts
+4:42:47 PM [vite] page reload src/utils/auth.ts
+4:43:25 PM [vite] hmr update /src/pages/Login.tsx
+4:43:27 PM [vite] hmr update /src/pages/Login.tsx
+4:46:00 PM [vite] hmr update /src/App.tsx
+4:46:02 PM [vite] hmr update /src/App.tsx
+4:48:56 PM [vite] hmr update /src/App.tsx
+4:48:56 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Missing initializer in const declaration. (20:17)
+
+  18 | const Explore = lazy(() => import('./pages/Explore'));
+  19 |
+> 20 | const routeConfig
+     |                  ^
+  21 |
+  22 | const App: React.FC = () => {
+  23 |   const { loading, error } = useMeQuery();
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:20:17
+  18 |  const Explore = lazy(() => import('./pages/Explore'));
+  19 |  
+  20 |  const routeConfig
+     |                   ^
+  21 |  
+  22 |  const App: React.FC = () => {
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.parseVar (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13272:16)
+      at TypeScriptParserMixin.parseVarStatement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13105:10)
+      at TypeScriptParserMixin.parseVarStatement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9311:31)
+      at TypeScriptParserMixin.parseStatementContent (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12688:23)
+      at TypeScriptParserMixin.parseStatementContent (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9345:18)
+      at TypeScriptParserMixin.parseStatementLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12593:17)
+      at TypeScriptParserMixin.parseModuleItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12570:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13194:36)
+      at TypeScriptParserMixin.parseBlockBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:13187:10)
+      at TypeScriptParserMixin.parseProgram (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12469:10)
+      at TypeScriptParserMixin.parseTopLevel (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12459:25)
+      at TypeScriptParserMixin.parse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:14381:10)
+      at TypeScriptParserMixin.parse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9987:18)
+      at parse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:14422:38)
+      at parser (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+core@7.23.0/node_modules/@babel/core/lib/parser/index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+core@7.23.0/node_modules/@babel/core/lib/transformation/normalize-file.js:64:37)
+      at normalizeFile.next (<anonymous>)
+      at run (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+core@7.23.0/node_modules/@babel/core/lib/transformation/index.js:21:50)
+      at run.next (<anonymous>)
+      at transform (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+core@7.23.0/node_modules/@babel/core/lib/transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:261:32)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:223:11)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:189:28
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+core@7.23.0/node_modules/@babel/core/lib/gensync-utils/async.js:68:7
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:113:33
+      at step (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:287:14)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:273:13
+      at async.call.result.err.err (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/gensync@1.0.0-beta.2/node_modules/gensync/index.js:223:11)
+4:49:00 PM [vite] hmr update /src/App.tsx
+4:49:03 PM [vite] hmr update /src/App.tsx
+4:49:10 PM [vite] hmr update /src/App.tsx
+4:49:14 PM [vite] hmr update /src/App.tsx
+4:49:16 PM [vite] hmr update /src/App.tsx
+4:49:23 PM [vite] hmr update /src/App.tsx
+4:49:31 PM [vite] hmr update /src/App.tsx
+4:49:31 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (24:19)
+
+  22 |     path: '/',
+  23 |     isPrivate: true,
+> 24 |     element: <Posts,
+     |                    ^
+  25 |   },
+  26 | ];
+  27 |
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:24:19
+  22 |      path: '/',
+  23 |      isPrivate: true,
+  24 |      element: <Posts,
+     |                     ^
+  25 |    },
+  26 |  ];
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6730:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6737:23)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6817:22)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseObjectProperty (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11789:83)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11816:100)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9606:18)
+      at TypeScriptParserMixin.parsePropertyDefinition (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11750:17)
+      at TypeScriptParserMixin.parseObjectLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11665:21)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11160:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseExprListItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12025:18)
+      at TypeScriptParserMixin.parseExprList (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11997:22)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11897:26)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9097:24)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11151:23)
+4:49:33 PM [vite] hmr update /src/App.tsx
+4:49:35 PM [vite] hmr update /src/App.tsx
+4:49:48 PM [vite] hmr update /src/App.tsx
+4:49:53 PM [vite] hmr update /src/App.tsx
+4:49:56 PM [vite] hmr update /src/App.tsx
+4:49:56 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (30:2)
+
+  28 |     isPrivate: false,
+  29 |     Element: 
+> 30 |   },
+     |   ^
+  31 | ];
+  32 |
+  33 | const App: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:30:2
+  28 |      isPrivate: false,
+  29 |      Element: 
+  30 |    },
+     |    ^
+  31 |  ];
+  32 |  
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11262:16)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseObjectProperty (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11789:83)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11816:100)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9606:18)
+      at TypeScriptParserMixin.parsePropertyDefinition (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11750:17)
+      at TypeScriptParserMixin.parseObjectLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11665:21)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11160:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseExprListItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12025:18)
+      at TypeScriptParserMixin.parseExprList (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11997:22)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11897:26)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9097:24)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11151:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+4:50:01 PM [vite] hmr update /src/App.tsx
+4:50:02 PM [vite] hmr update /src/App.tsx
+4:50:09 PM [vite] hmr update /src/App.tsx
+4:50:22 PM [vite] hmr update /src/App.tsx
+4:50:25 PM [vite] hmr update /src/App.tsx
+4:50:26 PM [vite] hmr update /src/App.tsx
+4:50:32 PM [vite] hmr update /src/App.tsx
+4:50:34 PM [vite] hmr update /src/App.tsx
+4:50:38 PM [vite] hmr update /src/App.tsx
+4:50:40 PM [vite] hmr update /src/App.tsx
+4:50:40 PM [vite] hmr update /src/App.tsx
+4:50:56 PM [vite] hmr update /src/App.tsx
+4:50:56 PM [vite] hmr update /src/App.tsx
+4:51:10 PM [vite] hmr update /src/App.tsx
+4:51:15 PM [vite] hmr update /src/App.tsx
+4:51:28 PM [vite] hmr update /src/App.tsx
+4:52:02 PM [vite] hmr update /src/App.tsx
+4:52:06 PM [vite] hmr update /src/App.tsx
+4:52:11 PM [vite] hmr update /src/App.tsx
+4:52:11 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (71:25)
+
+  69 |         <MessageProvider>
+  70 |           <div className='pb-10'>
+> 71 |             {routes.map(())}
+     |                          ^
+  72 |             <Routes>
+  73 |               <Route
+  74 |                 path='/'
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:71:25
+  69 |          <MessageProvider>
+  70 |            <div className='pb-10'>
+  71 |              {routes.map(())}
+     |                           ^
+  72 |              <Routes>
+  73 |                <Route
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11521:12)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseExprListItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12025:18)
+      at TypeScriptParserMixin.parseCallExpressionArguments (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11059:22)
+      at TypeScriptParserMixin.parseCoverCallAndAsyncArrowHead (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10969:29)
+      at TypeScriptParserMixin.parseSubscript (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10904:19)
+      at TypeScriptParserMixin.parseSubscript (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9172:18)
+      at TypeScriptParserMixin.parseSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10875:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10866:17)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10556:23)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6797:31)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6876:36)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6863:32)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6863:32)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6863:32)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+4:52:24 PM [vite] hmr update /src/App.tsx
+4:52:31 PM [vite] hmr update /src/App.tsx
+4:52:31 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (72:48)
+
+  70 |           <div className='pb-10'>
+  71 |             {routes.map((route) => (
+> 72 |               <Route key={route.path} element={<} />
+     |                                                 ^
+  73 |             ))}
+  74 |             <Routes>
+  75 |               <Route
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:72:48
+  70 |            <div className='pb-10'>
+  71 |              {routes.map((route) => (
+  72 |                <Route key={route.path} element={<} />
+     |                                                  ^
+  73 |              ))}
+  74 |              <Routes>
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6730:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6737:23)
+      at TypeScriptParserMixin.jsxParseElementName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6746:21)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6826:22)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10556:23)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6797:31)
+      at TypeScriptParserMixin.jsxParseAttributeValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6765:21)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6818:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11504:28)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+4:52:38 PM [vite] hmr update /src/App.tsx
+4:52:38 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (72:48)
+
+  70 |           <div className='pb-10'>
+  71 |             {routes.map(({path, Element}) => (
+> 72 |               <Route key={route.path} element={<} />
+     |                                                 ^
+  73 |             ))}
+  74 |             <Routes>
+  75 |               <Route
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:72:48
+  70 |            <div className='pb-10'>
+  71 |              {routes.map(({path, Element}) => (
+  72 |                <Route key={route.path} element={<} />
+     |                                                  ^
+  73 |              ))}
+  74 |              <Routes>
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6730:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6737:23)
+      at TypeScriptParserMixin.jsxParseElementName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6746:21)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6826:22)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10556:23)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6797:31)
+      at TypeScriptParserMixin.jsxParseAttributeValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6765:21)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6818:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11504:28)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+4:52:40 PM [vite] hmr update /src/App.tsx
+4:52:40 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (72:48)
+
+  70 |           <div className='pb-10'>
+  71 |             {routes.map(({path, Element, isPrivate}) => (
+> 72 |               <Route key={route.path} element={<} />
+     |                                                 ^
+  73 |             ))}
+  74 |             <Routes>
+  75 |               <Route
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:72:48
+  70 |            <div className='pb-10'>
+  71 |              {routes.map(({path, Element, isPrivate}) => (
+  72 |                <Route key={route.path} element={<} />
+     |                                                  ^
+  73 |              ))}
+  74 |              <Routes>
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.jsxParseIdentifier (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6730:12)
+      at TypeScriptParserMixin.jsxParseNamespacedName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6737:23)
+      at TypeScriptParserMixin.jsxParseElementName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6746:21)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6826:22)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10556:23)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6797:31)
+      at TypeScriptParserMixin.jsxParseAttributeValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6765:21)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6818:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11504:28)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+4:52:45 PM [vite] hmr update /src/App.tsx
+4:52:45 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: JSX attributes must only be assigned a non-empty expression. (72:46)
+
+  70 |           <div className='pb-10'>
+  71 |             {routes.map(({path, Element, isPrivate}) => (
+> 72 |               <Route key={route.path} element={} />
+     |                                               ^
+  73 |             ))}
+  74 |             <Routes>
+  75 |               <Route
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:72:46
+  70 |            <div className='pb-10'>
+  71 |              {routes.map(({path, Element, isPrivate}) => (
+  72 |                <Route key={route.path} element={} />
+     |                                                ^
+  73 |              ))}
+  74 |              <Routes>
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.jsxParseAttributeValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6767:16)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6818:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11504:28)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11933:24)
+      at TypeScriptParserMixin.parseArrowExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11915:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11516:12)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+4:52:53 PM [vite] hmr update /src/App.tsx
+4:52:53 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (72:99)
+
+  70 |           <div className='pb-10'>
+  71 |             {routes.map(({path, Element, isPrivate}) => (
+> 72 |               <Route key={route.path} element={isPrivate ? <PrivateRoute><Element /></PrivateRoute>} />
+     |                                                                                                    ^
+  73 |             ))}
+  74 |             <Routes>
+  75 |               <Route
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:72:99
+  70 |            <div className='pb-10'>
+  71 |              {routes.map(({path, Element, isPrivate}) => (
+  72 |                <Route key={route.path} element={isPrivate ? <PrivateRoute><Element /></PrivateRoute>} />
+     |                                                                                                     ^
+  73 |              ))}
+  74 |              <Routes>
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.checkExpressionErrors (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3672:12)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10634:12)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at TypeScriptParserMixin.parseExpressionBase (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10556:23)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10552:17)
+      at TypeScriptParserMixin.jsxParseExpressionContainer (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6797:31)
+      at TypeScriptParserMixin.jsxParseAttributeValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6765:21)
+      at TypeScriptParserMixin.jsxParseAttribute (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6818:38)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6832:28)
+      at TypeScriptParserMixin.jsxParseOpeningElementAfterName (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9908:18)
+      at TypeScriptParserMixin.jsxParseOpeningElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6827:17)
+      at TypeScriptParserMixin.jsxParseElementAt (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6851:33)
+      at TypeScriptParserMixin.jsxParseElement (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6920:17)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6932:19)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:39
+      at TypeScriptParserMixin.tryParse (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3597:20)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9637:18)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11504:28)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at TypeScriptParserMixin.parseFunctionBody (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11933:24)
+      at TypeScriptParserMixin.parseArrowExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11915:10)
+      at TypeScriptParserMixin.parseParenAndDistinguishExpression (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11516:12)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11142:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+4:53:01 PM [vite] hmr update /src/App.tsx
+4:53:06 PM [vite] hmr update /src/App.tsx
+4:53:25 PM [vite] hmr update /src/App.tsx
+4:53:29 PM [vite] hmr update /src/App.tsx
+4:53:29 PM [vite] Internal server error: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx: Unexpected token (55:2)
+
+  53 |     isPrivate: true,
+  54 |     Element: 
+> 55 |   },
+     |   ^
+  56 | ];
+  57 |
+  58 | const App: React.FC = () => {
+  Plugin: vite:react-babel
+  File: /Users/apple/Documents/personal-projects/apollogram/apps/client/src/App.tsx:55:2
+  53 |      isPrivate: true,
+  54 |      Element: 
+  55 |    },
+     |    ^
+  56 |  ];
+  57 |  
+      at constructor (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:356:19)
+      at TypeScriptParserMixin.raise (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3223:19)
+      at TypeScriptParserMixin.unexpected (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:3253:16)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11262:16)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseObjectProperty (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11789:83)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11816:100)
+      at TypeScriptParserMixin.parseObjPropValue (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9606:18)
+      at TypeScriptParserMixin.parsePropertyDefinition (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11750:17)
+      at TypeScriptParserMixin.parseObjectLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11665:21)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11160:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditional (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10641:23)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10602:21)
+      at TypeScriptParserMixin.parseMaybeAssign (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9648:20)
+      at /Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:39
+      at TypeScriptParserMixin.allowInAnd (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12289:12)
+      at TypeScriptParserMixin.parseMaybeAssignAllowIn (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10572:17)
+      at TypeScriptParserMixin.parseExprListItem (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:12025:18)
+      at TypeScriptParserMixin.parseExprList (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11997:22)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11897:26)
+      at TypeScriptParserMixin.parseArrayLike (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9097:24)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:11151:23)
+      at TypeScriptParserMixin.parseExprAtom (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:6937:20)
+      at TypeScriptParserMixin.parseExprSubscripts (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10862:23)
+      at TypeScriptParserMixin.parseUpdate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10845:21)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10821:23)
+      at TypeScriptParserMixin.parseMaybeUnary (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:9701:18)
+      at TypeScriptParserMixin.parseMaybeUnaryOrPrivate (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10659:61)
+      at TypeScriptParserMixin.parseExprOps (/Users/apple/Documents/personal-projects/apollogram/node_modules/.pnpm/@babel+parser@7.23.0/node_modules/@babel/parser/lib/index.js:10664:23)
+      at TypeScriptParserMixin.parseMaybeConditio

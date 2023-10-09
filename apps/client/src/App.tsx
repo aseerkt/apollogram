@@ -17,6 +17,44 @@ const SinglePost = lazy(() => import('./pages/SinglePost'));
 const MessageProvider = lazy(() => import('./context/MessageContext'));
 const Explore = lazy(() => import('./pages/Explore'));
 
+const routes = [
+  {
+    path: '/login',
+    isPrivate: false,
+    Element: Login,
+  },
+  {
+    path: '/register',
+    isPrivate: false,
+    Element: Register,
+  },
+  {
+    path: '/',
+    isPrivate: true,
+    Element: Posts,
+  },
+  {
+    path: '/explore',
+    isPrivate: true,
+    Element: Explore,
+  },
+  {
+    path: '/edit-profile',
+    isPrivate: true,
+    Element: EditProfile,
+  },
+  {
+    path: '/p/:postId',
+    isPrivate: true,
+    Element: SinglePost,
+  },
+  {
+    path: '/u/:username',
+    isPrivate: true,
+    Element: Profile,
+  },
+];
+
 const App: React.FC = () => {
   const { loading, error } = useMeQuery();
 
@@ -33,48 +71,20 @@ const App: React.FC = () => {
         <MessageProvider>
           <div className='pb-10'>
             <Routes>
-              <Route
-                path='/'
-                element={
-                  <PrivateRoute>
-                    <Posts />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/explore'
-                element={
-                  <PrivateRoute>
-                    <Explore />
-                  </PrivateRoute>
-                }
-              />
-              <Route path='/login' element={<Login />} />
-              <Route path='/register' element={<Register />} />
-              <Route
-                path='/p/:postId'
-                element={
-                  <PrivateRoute>
-                    <SinglePost />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/edit-profile'
-                element={
-                  <PrivateRoute>
-                    <EditProfile />
-                  </PrivateRoute>
-                }
-              />
-              <Route
-                path='/u/:username'
-                element={
-                  <PrivateRoute>
-                    <Profile />
-                  </PrivateRoute>
-                }
-              />
+              {routes.map(({ path, Element, isPrivate }) => (
+                <Route
+                  key={path}
+                  element={
+                    isPrivate ? (
+                      <PrivateRoute>
+                        <Element />
+                      </PrivateRoute>
+                    ) : (
+                      <Element />
+                    )
+                  }
+                />
+              ))}
             </Routes>
           </div>
         </MessageProvider>
