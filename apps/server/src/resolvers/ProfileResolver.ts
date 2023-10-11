@@ -1,4 +1,5 @@
 import {
+  Arg,
   Args,
   ArgsType,
   Ctx,
@@ -11,7 +12,7 @@ import {
   UseMiddleware,
 } from 'type-graphql';
 import { v2 as cloudinary } from 'cloudinary';
-import { FieldError, MyContext } from '../types';
+import { CloudinaryUploadResult, FieldError, MyContext } from '../types';
 
 import { User } from '../entities/User';
 import { Profile } from '../entities/Profile';
@@ -21,6 +22,7 @@ import { formatErrors } from '../utils/formatErrors';
 import { getUserFromToken } from '../utils/checkUserFromCookie';
 import { CLOUDINARY_ROOT_PATH } from '../constants';
 import { AppDataSource } from '../data-source';
+import { verifySignature } from '../utils/cloudinary';
 
 @ArgsType()
 export class EditProfileArgs {
@@ -65,21 +67,23 @@ export class ProfileResolver {
   // Change Profile Photo
 
   @Mutation(() => Boolean)
-  async changeProfilePhoto(@Ctx() ctx: MyContext) {
+  async changeProfilePhoto(
+    @Arg('uploadResult') uploadResult: CloudinaryUploadResult,
+    @Ctx() ctx: MyContext
+  ) {
+    verifySignature(uploadResult);
+
     const { username } = await getUserFromToken(ctx);
     const user = await User.findOne({ where: { username } });
+
     if (user) {
       if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
         await cloudinary.uploader.destroy(user.imgURL);
       }
-      // const { url } = await uploadToCloudinary(file, 'profiles');
-      // TODO: to update url with correct cloudinary url
-      const url = '';
-      if (url) {
-        user.imgURL = url;
-        await user.save();
-        return true;
-      }
+
+      user.imgURL = uploadResult.publicId;
+      await user.save();
+      return true;
     }
     return false;
   }

@@ -1,43 +1,61 @@
 import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useAddPostMutation } from '../generated/graphql';
+import {
+  CloudinaryUploadResult,
+  EnumFilePathPrefix,
+  useAddPostMutation,
+} from '../generated/graphql';
 import Button from '../shared/Button';
 import Card from '../shared/Card';
 import { FaCameraRetro } from 'react-icons/fa';
 import { useMessageCtx } from '../context/MessageContext';
 import { useNavigate } from 'react-router-dom';
 import useCompressor from '../hooks/useCompressor';
+import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload';
 
-interface AddPostProps {
+type AddPostProps = {
   className?: string;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+  onClose: () => void;
+};
 
-const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
+const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
   const { setMessage } = useMessageCtx();
+
   const [caption, setCaption] = useState('');
-  const [file, setFile] = useState<File>(null as any);
-  const inputRef = React.createRef<HTMLInputElement>();
+  const [uploadResult, setUploadResult] = useState<CloudinaryUploadResult>();
+
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
   const navigate = useNavigate();
   const compress = useCompressor();
+  const { uploadToCloudinary, uploading } = useCloudinaryUpload();
 
-  const onDrop = useCallback(
-    (files: File[]) => {
-      // console.log('files dropped');
-      // console.log(files);
-      if (!files[0].type.includes('image')) {
-        setUploadError('Unsupported file format (Supported : JPEG/JPG/PNG)');
-        setFile(files[0]);
-        return;
-      }
-      setFile(files[0]);
-      setImgSrc(URL.createObjectURL(files[0]));
-    },
-    [setFile]
-  );
+  const onDrop = useCallback((files: File[]) => {
+    if (!files[0].type.includes('image')) {
+      setUploadError('Unsupported file format (Supported: JPEG/JPG/PNG)');
+      return;
+    }
+    compress(files[0], {
+      width: 600,
+      mimeType: 'image/jpeg',
+      success: async (result) => {
+        const res = await uploadToCloudinary(
+          EnumFilePathPrefix.Posts,
+          result as File
+        );
+        if (res.publicId) {
+          setUploadResult(res);
+          setImgSrc(URL.createObjectURL(files[0]));
+        }
+      },
+      error: (err) => {
+        setUploadError(err.message);
+      },
+    });
+  }, []);
+
   const [addPost] = useAddPostMutation({
     update: (cache, { data }) => {
       if (data?.addPost.post) {
@@ -46,44 +64,27 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           fieldName: 'getUser',
           args: { username: data.addPost.post.user.username },
         });
-        navigate(`/p/${data.addPost.post.id}`);
       }
     },
   });
-
-  React.useEffect(() => {
-    inputRef.current?.focus();
-  }, [inputRef]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!file) return alert('No file selected');
     setSubmitting(true);
-    // console.log(file);
-    compress(file, {
-      width: 600,
-      mimeType: 'image/jpeg',
-      success: async (result) => {
-        const res = await addPost({ variables: { file: result, caption } });
-        // console.log(res);
-        if (res.data?.addPost.ok) {
-          setFile(null as any);
-          setImgSrc(null);
-          setCaption('');
-          setMessage('Post uploaded successfully');
-          setIsOpen(false);
-        }
+    if (!uploadResult) return setUploadError('Please upload file');
 
-        setSubmitting(false);
-      },
-      error: (err) => {
-        alert(err.message);
-        setSubmitting(false);
-      },
-    });
+    const res = await addPost({ variables: { uploadResult, caption } });
+    if (res.data?.addPost.post) {
+      onClose();
+      setMessage('Post uploaded successfully');
+      navigate(`/p/${res.data.addPost.post.id}`);
+    }
+    setSubmitting(false);
   };
+
+  const submitDisabled = !imgSrc || !caption;
 
   return (
     <Card className={`p-5 ${className}`}>
@@ -99,7 +100,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
               name='caption'
               placeholder='Add caption for your post...'
               className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
-              ref={inputRef}
+              autoFocus
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
             />
@@ -124,11 +125,13 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
             accept='image/*'
             multiple={false}
           />
-          {file ? (
-            <>
-              <p className='text-xs text-black'>{file.name}</p>
-              <small className='my-1 text-red-700'>{uploadError}</small>
-            </>
+
+          {uploading ? (
+            <small className='text-sm text-center uppercase'>
+              Uploading...
+            </small>
+          ) : uploadError ? (
+            <small className='my-1 text-red-700'>{uploadError}</small>
           ) : isDragActive ? (
             <p className='text-sm text-center uppercase'>
               Drop the files here ...
@@ -146,7 +149,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, setIsOpen }) => {
           className='block mx-auto'
           color='dark'
           type='submit'
-          disabled={!imgSrc || !caption}
+          disabled={submitDisabled}
         >
           Upload
         </Button>

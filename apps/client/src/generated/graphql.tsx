@@ -22,6 +22,19 @@ export type BaseColumns = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type CloudinarySignature = {
+  __typename?: 'CloudinarySignature';
+  publicId: Scalars['String'];
+  signature: Scalars['String'];
+  timestamp: Scalars['Int'];
+};
+
+export type CloudinaryUploadResult = {
+  publicId: Scalars['String'];
+  signature: Scalars['String'];
+  version: Scalars['Float'];
+};
+
 export type Comment = {
   __typename?: 'Comment';
   createdAt: Scalars['DateTime'];
@@ -46,6 +59,11 @@ export type EditProfileResponse = {
   errors?: Maybe<Array<FieldError>>;
   user?: Maybe<User>;
 };
+
+export enum EnumFilePathPrefix {
+  Posts = 'POSTS',
+  Profiles = 'PROFILES'
+}
 
 export type FieldError = {
   __typename?: 'FieldError';
@@ -97,6 +115,12 @@ export type MutationAddCommentArgs = {
 
 export type MutationAddPostArgs = {
   caption: Scalars['String'];
+  uploadResult: CloudinaryUploadResult;
+};
+
+
+export type MutationChangeProfilePhotoArgs = {
+  uploadResult: CloudinaryUploadResult;
 };
 
 
@@ -186,6 +210,7 @@ export type Query = {
   getFollows?: Maybe<FollowData>;
   getPosts: PaginatedPost;
   getSinglePost?: Maybe<Post>;
+  getUploadSignature: CloudinarySignature;
   getUser?: Maybe<User>;
   me?: Maybe<User>;
 };
@@ -210,6 +235,11 @@ export type QueryGetPostsArgs = {
 
 export type QueryGetSinglePostArgs = {
   postId: Scalars['String'];
+};
+
+
+export type QueryGetUploadSignatureArgs = {
+  pathPrefix: EnumFilePathPrefix;
 };
 
 
@@ -259,12 +289,15 @@ export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{
 
 export type AddPostMutationVariables = Exact<{
   caption: Scalars['String'];
+  uploadResult: CloudinaryUploadResult;
 }>;
 
 
 export type AddPostMutation = { __typename?: 'Mutation', addPost: { __typename?: 'CreatePostResponse', ok: boolean, post?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', username: string } }>, error?: Maybe<{ __typename?: 'FieldError', path: string, message: string }> } };
 
-export type ChangeProfilePhotoMutationVariables = Exact<{ [key: string]: never; }>;
+export type ChangeProfilePhotoMutationVariables = Exact<{
+  uploadResult: CloudinaryUploadResult;
+}>;
 
 
 export type ChangeProfilePhotoMutation = { __typename?: 'Mutation', changeProfilePhoto: boolean };
@@ -360,6 +393,13 @@ export type GetSinglePostQueryVariables = Exact<{
 
 
 export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> };
+
+export type GetUploadSignatureQueryVariables = Exact<{
+  pathPrefix: EnumFilePathPrefix;
+}>;
+
+
+export type GetUploadSignatureQuery = { __typename?: 'Query', getUploadSignature: { __typename?: 'CloudinarySignature', publicId: string, signature: string, timestamp: number } };
 
 export type GetUserQueryVariables = Exact<{
   username: Scalars['String'];
@@ -489,8 +529,8 @@ export type AddCommentMutationHookResult = ReturnType<typeof useAddCommentMutati
 export type AddCommentMutationResult = Apollo.MutationResult<AddCommentMutation>;
 export type AddCommentMutationOptions = Apollo.BaseMutationOptions<AddCommentMutation, AddCommentMutationVariables>;
 export const AddPostDocument = gql`
-    mutation AddPost($caption: String!) {
-  addPost(caption: $caption) {
+    mutation AddPost($caption: String!, $uploadResult: CloudinaryUploadResult!) {
+  addPost(caption: $caption, uploadResult: $uploadResult) {
     ok
     post {
       id
@@ -525,6 +565,7 @@ export type AddPostMutationFn = Apollo.MutationFunction<AddPostMutation, AddPost
  * const [addPostMutation, { data, loading, error }] = useAddPostMutation({
  *   variables: {
  *      caption: // value for 'caption'
+ *      uploadResult: // value for 'uploadResult'
  *   },
  * });
  */
@@ -536,8 +577,8 @@ export type AddPostMutationHookResult = ReturnType<typeof useAddPostMutation>;
 export type AddPostMutationResult = Apollo.MutationResult<AddPostMutation>;
 export type AddPostMutationOptions = Apollo.BaseMutationOptions<AddPostMutation, AddPostMutationVariables>;
 export const ChangeProfilePhotoDocument = gql`
-    mutation ChangeProfilePhoto {
-  changeProfilePhoto
+    mutation ChangeProfilePhoto($uploadResult: CloudinaryUploadResult!) {
+  changeProfilePhoto(uploadResult: $uploadResult)
 }
     `;
 export type ChangeProfilePhotoMutationFn = Apollo.MutationFunction<ChangeProfilePhotoMutation, ChangeProfilePhotoMutationVariables>;
@@ -555,6 +596,7 @@ export type ChangeProfilePhotoMutationFn = Apollo.MutationFunction<ChangeProfile
  * @example
  * const [changeProfilePhotoMutation, { data, loading, error }] = useChangeProfilePhotoMutation({
  *   variables: {
+ *      uploadResult: // value for 'uploadResult'
  *   },
  * });
  */
@@ -1014,6 +1056,43 @@ export function useGetSinglePostLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetSinglePostQueryHookResult = ReturnType<typeof useGetSinglePostQuery>;
 export type GetSinglePostLazyQueryHookResult = ReturnType<typeof useGetSinglePostLazyQuery>;
 export type GetSinglePostQueryResult = Apollo.QueryResult<GetSinglePostQuery, GetSinglePostQueryVariables>;
+export const GetUploadSignatureDocument = gql`
+    query GetUploadSignature($pathPrefix: EnumFilePathPrefix!) {
+  getUploadSignature(pathPrefix: $pathPrefix) {
+    publicId
+    signature
+    timestamp
+  }
+}
+    `;
+
+/**
+ * __useGetUploadSignatureQuery__
+ *
+ * To run a query within a React component, call `useGetUploadSignatureQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetUploadSignatureQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetUploadSignatureQuery({
+ *   variables: {
+ *      pathPrefix: // value for 'pathPrefix'
+ *   },
+ * });
+ */
+export function useGetUploadSignatureQuery(baseOptions: Apollo.QueryHookOptions<GetUploadSignatureQuery, GetUploadSignatureQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetUploadSignatureQuery, GetUploadSignatureQueryVariables>(GetUploadSignatureDocument, options);
+      }
+export function useGetUploadSignatureLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetUploadSignatureQuery, GetUploadSignatureQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetUploadSignatureQuery, GetUploadSignatureQueryVariables>(GetUploadSignatureDocument, options);
+        }
+export type GetUploadSignatureQueryHookResult = ReturnType<typeof useGetUploadSignatureQuery>;
+export type GetUploadSignatureLazyQueryHookResult = ReturnType<typeof useGetUploadSignatureLazyQuery>;
+export type GetUploadSignatureQueryResult = Apollo.QueryResult<GetUploadSignatureQuery, GetUploadSignatureQueryVariables>;
 export const GetUserDocument = gql`
     query GetUser($username: String!) {
   getUser(username: $username) {

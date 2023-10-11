@@ -3,6 +3,7 @@ import Cropper from 'react-easy-crop';
 import { Area } from 'react-easy-crop/types';
 import { FaCamera } from 'react-icons/fa';
 import {
+  EnumFilePathPrefix,
   MeDocument,
   useChangeProfilePhotoMutation,
   useMeQuery,
@@ -13,6 +14,7 @@ import { dataURLtoFile } from '../utils/dataURLtoFile';
 import Spinner from '../shared/Spinner';
 import { useMessageCtx } from '../context/MessageContext';
 import useCompressor from '../hooks/useCompressor';
+import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload';
 
 interface ChangeProfilePhotoProps {
   username: string;
@@ -25,18 +27,23 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
 
   const { setMessage } = useMessageCtx();
 
-  const triggerFileSelectPopup = () => inputRef.current?.click();
-
-  const [displayImage, setDisplayImage] = useState(meData?.me?.imgURL);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  const [imgSrc, setImgSrc] = useState(meData?.me?.imgURL);
   const [croppedArea, setCroppedArea] = useState<Area | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [image, setImage] = useState<string | null>(null);
   const [fileName, setFileName] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const { uploadToCloudinary } = useCloudinaryUpload();
+
   const compress = useCompressor();
   const [changeProfilePhoto] = useChangeProfilePhotoMutation();
+
+  const openFileSelector = () => {
+    inputRef.current?.click();
+  };
 
   const onCropComplete = (
     _croppedAreaPercentage: any,
@@ -61,7 +68,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
     setSubmitting(true);
     const croppedImageCanvas = await getCroppedImg(image!, croppedArea!);
     croppedImageCanvas.toBlob((blob) => {
-      setDisplayImage(URL.createObjectURL(blob!));
+      setImgSrc(URL.createObjectURL(blob!));
     });
     const imgURL = croppedImageCanvas.toDataURL();
     const fileToSend = dataURLtoFile(imgURL, fileName);
@@ -72,8 +79,12 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
         height: 180,
         mimeType: 'image/jpeg',
         success: async (result) => {
+          const uploadResult = await uploadToCloudinary(
+            EnumFilePathPrefix.Profiles,
+            result as File
+          );
           const res = await changeProfilePhoto({
-            variables: { file: result },
+            variables: { uploadResult },
             refetchQueries: [{ query: MeDocument }],
           });
           if (res.data?.changeProfilePhoto) {
@@ -127,19 +138,17 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
       ) : (
         <div className='grid items-center grid-cols-2 gap-5 mb-5 md:grid-cols-2-form md:gap-10'>
           <div
-            onClick={() => {
-              inputRef.current?.click();
-            }}
+            onClick={openFileSelector}
             className='ml-auto mr-auto transform border-2 border-gray-500 rounded-full cursor-pointer md:mr-0 hover:border-green-600 transition-all duration-300 hover:scale-110 w-28 h-28'
           >
             <img
               className='w-full h-full rounded-full'
-              src={displayImage}
+              src={imgSrc}
               alt='profile_photo_sample_display'
             />
             <div className='relative w-full py-3'>
               <Button
-                onClick={triggerFileSelectPopup}
+                onClick={openFileSelector}
                 className='absolute left-0 right-0 w-10 ml-auto mr-auto -top-5'
                 title='Choose Profile Image'
               >
@@ -147,7 +156,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
               </Button>
             </div>
           </div>
-          <div className=''>
+          <div>
             <input
               type='file'
               accept='image/*'
@@ -157,9 +166,7 @@ const ChangeProfilePhoto: React.FC<ChangeProfilePhotoProps> = ({
             />
             <div>
               <p className='mb-1 text-2xl'>{username}</p>
-              <Button onClick={() => inputRef.current?.click()}>
-                Change Profile Photo
-              </Button>
+              <Button onClick={openFileSelector}>Change Profile Photo</Button>
             </div>
           </div>
         </div>

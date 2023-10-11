@@ -18,11 +18,19 @@ import { Comment } from '../entities/Comment';
 import { Post } from '../entities/Post';
 import { User } from '../entities/User';
 import { isAuth } from '../middlewares/isAuth';
-import { FieldError, MyContext } from '../types';
+import {
+  CloudinaryUploadResult,
+  EnumFilePathPrefix,
+  FieldError,
+  MyContext,
+} from '../types';
 import { PaginatedPost } from '../types/postTypes';
-import { getUserFromToken } from '../utils/checkUserFromCookie';
 import { formatErrors } from '../utils/formatErrors';
-import { generateUrl, deleteCloudinaryFile } from '../utils/uploadHandler';
+import {
+  generateUrl,
+  deleteCloudinaryFile,
+  verifySignature,
+} from '../utils/cloudinary';
 import { AppDataSource } from '../data-source';
 
 @ObjectType()
@@ -68,7 +76,7 @@ export class PostResolver {
   @FieldResolver(() => String)
   imgURL(@Root() post: Post): string {
     if (post.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-      return generateUrl(post.imgURL, 'posts');
+      return generateUrl(post.imgURL, EnumFilePathPrefix.POSTS);
     }
     return post.imgURL;
   }
@@ -130,19 +138,20 @@ export class PostResolver {
   }
 
   @Mutation(() => CreatePostResponse)
+  @UseMiddleware(isAuth)
   async addPost(
+    @Arg('uploadResult') uploadResult: CloudinaryUploadResult,
     @Arg('caption') caption: string,
-    @Ctx() ctx: MyContext
+    @Ctx() { req }: MyContext
   ): Promise<CreatePostResponse> {
-    const { username } = await getUserFromToken(ctx);
+    verifySignature(uploadResult);
 
-    // const { isUploaded, imgURL } = await uploadFile(file, 'posts');
-    // const { url } = await uploadToCloudinary(file, 'posts');
-    // TODO: to update url with correct one
-    const url = '';
-    // if (isUploaded) {
-    if (url) {
-      const post = Post.create({ caption, imgURL: url, username });
+    if (uploadResult.publicId) {
+      const post = Post.create({
+        caption,
+        imgURL: uploadResult.publicId,
+        username: req.username,
+      });
       const errors = await validate(post);
       if (errors.length > 0) {
         return { ok: false, error: formatErrors(errors)[0] };

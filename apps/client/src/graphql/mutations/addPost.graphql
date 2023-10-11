@@ -1,5 +1,5 @@
-mutation AddPost($caption: String!) {
-  addPost(caption: $caption) {
+mutation AddPost($caption: String!, $uploadResult: CloudinaryUploadResult!) {
+  addPost(caption: $caption, uploadResult: $uploadResult) {
     ok
     post {
       id

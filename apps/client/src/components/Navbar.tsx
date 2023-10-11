@@ -15,6 +15,8 @@ const Navbar: React.FC = () => {
   const { data } = useMeQuery();
   const me = data?.me;
 
+  const closeAddPostModal = () => setOpen(false);
+
   return (
     <nav className='fixed inset-x-0 top-0 z-50 bg-white border border-gray-200 h-14'>
       <Container className='flex items-center h-full px-2 md:px-0'>
@@ -58,7 +60,7 @@ const Navbar: React.FC = () => {
             </div>
             {/* Add Post Modal */}
             <Modal isOpen={open} setIsOpen={setOpen}>
-              <AddPost setIsOpen={setOpen} />
+              <AddPost onClose={closeAddPostModal} />
             </Modal>
           </>
         )}

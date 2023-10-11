@@ -4,6 +4,4 @@ export const EXPRESS_ENDPOINT = process.env.EXPRESS_ENDPOINT!;
 export const FRONTEND_URL = process.env.FRONTEND_URL;
 export const GRAVATAR =
   'https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y';
-export const CLOUDINARY_ROOT_PATH = `apollo-instagram/${
-  __prod__ ? 'prod' : 'dev'
-}`;
+export const CLOUDINARY_ROOT_PATH = `apollogram/${__prod__ ? 'prod' : 'dev'}`;

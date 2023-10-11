@@ -19,39 +19,39 @@ const Explore = lazy(() => import('./pages/Explore'));
 
 const routes = [
   {
+    path: '/',
+    isPrivate: true,
+    Component: Posts,
+  },
+  {
     path: '/login',
     isPrivate: false,
-    Element: Login,
+    Component: Login,
   },
   {
     path: '/register',
     isPrivate: false,
-    Element: Register,
-  },
-  {
-    path: '/',
-    isPrivate: true,
-    Element: Posts,
+    Component: Register,
   },
   {
     path: '/explore',
     isPrivate: true,
-    Element: Explore,
+    Component: Explore,
   },
   {
     path: '/edit-profile',
     isPrivate: true,
-    Element: EditProfile,
+    Component: EditProfile,
   },
   {
     path: '/p/:postId',
     isPrivate: true,
-    Element: SinglePost,
+    Component: SinglePost,
   },
   {
     path: '/u/:username',
     isPrivate: true,
-    Element: Profile,
+    Component: Profile,
   },
 ];
 
@@ -71,16 +71,17 @@ const App: React.FC = () => {
         <MessageProvider>
           <div className='pb-10'>
             <Routes>
-              {routes.map(({ path, Element, isPrivate }) => (
+              {routes.map(({ path, Component, isPrivate }) => (
                 <Route
                   key={path}
+                  path={path}
                   element={
                     isPrivate ? (
                       <PrivateRoute>
-                        <Element />
+                        <Component />
                       </PrivateRoute>
                     ) : (
-                      <Element />
+                      <Component />
                     )
                   }
                 />

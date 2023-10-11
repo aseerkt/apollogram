@@ -11,7 +11,7 @@ import {
 } from 'type-graphql';
 import { validate } from 'class-validator';
 import { User } from '../entities/User';
-import { MyContext } from '../types';
+import { EnumFilePathPrefix, MyContext } from '../types';
 import {
   LoginResponse,
   RegisterResponse,
@@ -23,8 +23,7 @@ import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createToken } from '../utils/tokenHandler';
 import { isUser } from '../middlewares/isUser';
-import { isAuth } from '../middlewares/isAuth';
-import { generateUrl } from '../utils/uploadHandler';
+import { generateUrl } from '../utils/cloudinary';
 
 @Resolver(User)
 export class UserResolver {
@@ -41,7 +40,7 @@ export class UserResolver {
   @FieldResolver(() => String)
   imgURL(@Root() user: User): string {
     if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-      return generateUrl(user.imgURL, 'profiles');
+      return generateUrl(user.imgURL, EnumFilePathPrefix.PROFILES);
     }
     return user.imgURL;
   }

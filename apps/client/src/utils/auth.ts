@@ -3,7 +3,7 @@ import { JWT_TOKEN } from './constants';
 let jwtToken = '';
 
 export const getToken = () => {
-  return jwtToken ?? localStorage.getItem(JWT_TOKEN);
+  return jwtToken ? jwtToken : localStorage.getItem(JWT_TOKEN);
 };
 
 export const setToken = (token: string) => {
