@@ -18,7 +18,7 @@ import {
   RegisterVariables,
 } from '../types/userTypes';
 import { formatErrors } from '../utils/formatErrors';
-import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
+import { CLOUDINARY_ROOT_PATH, GRAVATAR, __prod__ } from '../constants';
 import { Profile } from '../entities/Profile';
 import { Post } from '../entities/Post';
 import { createToken } from '../utils/tokenHandler';
@@ -116,7 +116,7 @@ export class UserResolver {
         errors,
       };
 
-    const user = User.create({ username, email, password });
+    const user = User.create({ username, email, password, imgURL: GRAVATAR });
     errors = await validate(user);
     if (errors.length > 0) {
       // console.log(errors);
