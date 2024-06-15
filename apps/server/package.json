@@ -17,6 +17,7 @@
   "dependencies": {
     "@apollo/server": "^4.10.4",
     "@as-integrations/fastify": "^2.1.1",
+    "@fastify/cors": "^9.0.1",
     "@mikro-orm/core": "^6.2.9",
     "@mikro-orm/postgresql": "^6.2.9",
     "@mikro-orm/reflection": "^6.2.9",

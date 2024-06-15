@@ -80,6 +80,16 @@ export class PostResolver {
     return post.imgURL
   }
 
+  @FieldResolver(() => Int)
+  likeCount(@Root() post: Post, @Ctx() { loader }: MyContext) {
+    return loader.likeCount.load(post.id)
+  }
+
+  @FieldResolver(() => Int)
+  commentCount(@Root() post: Post, @Ctx() { loader }: MyContext) {
+    return loader.commentCount.load(post.id)
+  }
+
   // Feed posts
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)

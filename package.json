@@ -11,9 +11,10 @@
     "docker:postgres": "docker compose -d"
   },
   "dependencies": {
-    "turbo": "^1.13.4"
+    "turbo": "^2.0.4"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"
-  }
+  },
+  "packageManager": "pnpm@9.3.0"
 }

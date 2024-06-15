@@ -3,6 +3,7 @@ import {
   fastifyApolloDrainPlugin,
   fastifyApolloHandler,
 } from '@as-integrations/fastify'
+import cors from '@fastify/cors'
 import { RequestContext } from '@mikro-orm/core'
 import { fastify } from 'fastify'
 import { createLoader } from './dataloaders/index.js'
@@ -19,6 +20,8 @@ async function bootstrap(port = PORT) {
   const schema = await createSchema()
 
   const app = fastify()
+
+  app.register(cors, { origin: ['http://localhost:3000'] })
 
   // register request context hook
   app.addHook('onRequest', (_request, _reply, done) => {
