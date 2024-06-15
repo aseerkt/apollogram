@@ -1,7 +1,7 @@
 import { Arg, Query, Resolver, UseMiddleware } from 'type-graphql';
-import { createUploadSignature } from '../utils/cloudinary';
-import { CloudinarySignature, EnumFilePathPrefix } from '../types';
-import { isAuth } from '../middlewares/isAuth';
+import { createUploadSignature } from '../utils/cloudinary.js';
+import { CloudinarySignature, EnumFilePathPrefix } from '../types.js';
+import { isAuth } from '../middlewares/isAuth.js';
 
 @Resolver()
 export class CloudinaryResolver {

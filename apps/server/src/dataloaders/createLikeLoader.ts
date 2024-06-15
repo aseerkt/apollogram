@@ -1,24 +1,27 @@
-import DataLoader from 'dataloader';
-import { In } from 'typeorm';
-import { Like } from '../entities/Like';
+import { EntityManager } from '@mikro-orm/postgresql'
+import DataLoader from 'dataloader'
+import { Like } from '../entities/Like.js'
 
-export const createLikeLoader = () =>
-  new DataLoader<{ postId: string; username: string }, boolean>(async function (
+export const createLikeLoader = (em: EntityManager) =>
+  new DataLoader<{ postId: number; userId: number }, boolean>(async function (
     keys
   ) {
-    const likes = await Like.find({
-      where: {
-        postId: In(keys.map((key) => key.postId)),
-        username: In(keys.map((key) => key.username)),
+    const likes = await em.find(
+      Like,
+      {
+        post: keys.map((key) => key.postId),
+        user: keys.map((key) => key.userId),
       },
-      select: ['postId', 'username'],
-    });
+      {
+        fields: ['post', 'user'],
+      }
+    )
 
-    const likeForPost: Record<string, boolean> = {};
+    const likeForPost: Record<string, boolean> = {}
 
     likes.forEach((like) => {
-      likeForPost[`${like.postId}|${like.username}`] = true;
-    });
+      likeForPost[`${like.post.id}|${like.user.id}`] = true
+    })
 
-    return keys.map((key) => likeForPost[`${key.postId}|${key.username}`]);
-  });
+    return keys.map((key) => likeForPost[`${key.postId}|${key.userId}`])
+  })

@@ -1,56 +1,58 @@
-import { hash } from 'argon2';
-import { IsAlphanumeric, IsEmail, MinLength } from 'class-validator';
-import { verify } from 'argon2';
-import { Field, ObjectType } from 'type-graphql';
 import {
+  BeforeCreate,
+  BeforeUpdate,
+  Collection,
   Entity,
-  Column,
-  OneToMany,
-  BeforeInsert,
-  OneToOne,
   Index,
-} from 'typeorm';
-import { Post } from './Post';
-import { BaseColumns } from './BaseColumns';
-import { Profile } from './Profile';
-// import { Follow } from './Follow';
+  OneToMany,
+  OneToOne,
+  Property,
+  type EventArgs,
+} from '@mikro-orm/core'
+import { hash, verify } from 'argon2'
+import { IsEmail, MinLength } from 'class-validator'
+import { Field, ObjectType } from 'type-graphql'
+import { GRAVATAR } from '../constants.js'
+import { BaseEntity } from './BaseEntity.js'
+import { Post } from './Post.js'
+import { Profile } from './Profile.js'
+// import { Follow } from './Follow.js';
 
 @ObjectType()
-@Entity('users')
-export class User extends BaseColumns {
+@Entity({ tableName: 'users' })
+export class User extends BaseEntity<'name' | 'profile'> {
   @Field()
-  @IsAlphanumeric(undefined, { message: 'Username must be alphanumeric' })
   @MinLength(3, { message: 'Username must be atleast 3 characters long' })
   @Index()
-  @Column({ unique: true })
-  username: string;
+  @Property({ unique: true })
+  username: string
 
   @Field()
   @IsEmail(undefined, { message: 'Invalid Email Address' })
-  @Column({ unique: true })
-  email: string;
+  @Property({ unique: true })
+  email: string
 
   @MinLength(6, { message: 'Password must be atleast 6 characters long' })
-  @Column()
-  password: string;
+  @Property({ hidden: true, lazy: true })
+  password: string
 
   @Field()
-  @Column({ default: '' })
-  imgURL: string;
+  @Property({ default: GRAVATAR })
+  imgURL: string = GRAVATAR
 
   @Field()
-  @Column({ default: '' })
-  name: string;
+  @Property({ default: '' })
+  name: string
 
   // Relations
 
   @Field(() => [Post])
-  @OneToMany(() => Post, (post) => post.user)
-  posts: Post[];
+  @OneToMany({ mappedBy: 'author' })
+  posts = new Collection<Post>(this)
 
   @Field(() => Profile)
   @OneToOne(() => Profile, (profile) => profile.user)
-  profile: Profile;
+  profile: Profile
 
   // @OneToMany(() => Follow, (follow) => follow.user)
   // followings: Follow[];
@@ -58,13 +60,18 @@ export class User extends BaseColumns {
   // @OneToMany(() => Follow, (follow) => follow.following)
   // followers: Follow[];
 
-  // Methods
-  @BeforeInsert()
-  async hashPassword() {
-    this.password = await hash(this.password);
+  // // Methods
+  @BeforeCreate()
+  @BeforeUpdate()
+  async hashPassword(args: EventArgs<User>) {
+    const password = args.changeSet?.payload.password
+
+    if (password) {
+      this.password = await hash(this.password)
+    }
   }
 
   verifyPassword(password: string) {
-    return verify(this.password, password);
+    return verify(this.password, password)
   }
 }

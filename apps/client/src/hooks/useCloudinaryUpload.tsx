@@ -1,4 +1,5 @@
-import { useApolloClient } from '@apollo/client';
+import { apolloClient } from '@/utils/apolloClient';
+import { useState } from 'react';
 import {
   CloudinaryUploadResult,
   EnumFilePathPrefix,
@@ -7,25 +8,22 @@ import {
   GetUploadSignatureQueryVariables,
 } from '../generated/graphql';
 import { CLOUDINARY_API_KEY, CLOUDINARY_CLOUD_NAME } from '../utils/constants';
-import { useState } from 'react';
+
+const getUploadSignature = async (pathPrefix: EnumFilePathPrefix) => {
+  const res = await apolloClient.query<
+    GetUploadSignatureQuery,
+    GetUploadSignatureQueryVariables
+  >({
+    query: GetUploadSignatureDocument,
+    variables: { pathPrefix },
+    fetchPolicy: 'network-only',
+  });
+
+  return res.data.getUploadSignature;
+};
 
 export const useCloudinaryUpload = () => {
-  const apolloClient = useApolloClient();
-
   const [uploading, setUploading] = useState(false);
-
-  const getUploadSignature = async (pathPrefix: EnumFilePathPrefix) => {
-    const res = await apolloClient.query<
-      GetUploadSignatureQuery,
-      GetUploadSignatureQueryVariables
-    >({
-      query: GetUploadSignatureDocument,
-      variables: { pathPrefix },
-      fetchPolicy: 'network-only',
-    });
-
-    return res.data.getUploadSignature;
-  };
 
   const uploadToCloudinary = async (
     pathPrefix: EnumFilePathPrefix,

@@ -1,20 +1,13 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseColumns } from './BaseColumns';
-import { Post } from './Post';
-import { User } from './User';
+import { Entity, ManyToOne, type Rel } from '@mikro-orm/core'
+import { BaseEntity } from './BaseEntity.js'
+import { Post } from './Post.js'
+import { User } from './User.js'
 
-@Entity('likes')
-export class Like extends BaseColumns {
-  @Column('uuid')
-  username: string;
+@Entity({ tableName: 'likes' })
+export class Like extends BaseEntity<'post' | 'user'> {
+  @ManyToOne(() => User)
+  user: User
 
-  @Column('uuid')
-  postId: string;
-
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
-  user: User;
-
-  @ManyToOne(() => Post, (post) => post.likes, { onDelete: 'CASCADE' })
-  post: Post;
+  @ManyToOne(() => Post)
+  post: Rel<Post>
 }

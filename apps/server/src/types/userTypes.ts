@@ -1,6 +1,6 @@
 import { ObjectType, Field, ArgsType } from 'type-graphql';
-import { User } from '../entities/User';
-import { FieldError } from '../types';
+import { User } from '../entities/User.js';
+import { FieldError } from '../types.js';
 
 @ObjectType()
 export class RegisterResponse {

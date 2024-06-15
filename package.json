@@ -12,7 +12,7 @@
     "db:up": "pnpm dc start db_postgres"
   },
   "dependencies": {
-    "turbo": "^1.10.14"
+    "turbo": "^1.13.4"
   },
   "devDependencies": {
     "tsconfig": "workspace:*"

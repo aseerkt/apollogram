@@ -1,42 +1,39 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql';
-import { Like } from '../entities/Like';
-import { Post } from '../entities/Post';
-import { isAuth } from '../middlewares/isAuth';
-import { MyContext } from '../types';
+import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+import { Like } from '../entities/Like.js'
+import { isAuth } from '../middlewares/isAuth.js'
+import { type MyContext } from '../types.js'
 
 @Resolver()
 export class LikeResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async toggleLike(
-    @Arg('postId') postId: string,
-    @Ctx() { req, likeLoader }: MyContext
+    @Arg('postId') postId: number,
+    @Ctx() { req, em, loader }: MyContext
   ): Promise<boolean> {
     try {
-      const post = await Post.findOne({
-        where: { id: postId },
-        select: ['id', 'likeCount'],
-      });
-      if (!post) return false;
-      let like = await Like.findOne({
-        where: { postId, username: req.username },
-      });
+      let like = await em.findOne(Like, {
+        post: postId,
+        user: req.userId!,
+      })
       if (!like) {
-        await Like.create({ postId, username: req.username }).save();
-        post.likeCount += 1;
+        like = em.create(Like, {
+          post: postId,
+          user: req.userId!,
+        })
+        em.persist(like)
       } else {
-        await like.remove();
-        post.likeCount -= 1;
+        em.remove(like)
       }
-      await post.save();
-      likeLoader.clear({
-        postId: post.id,
-        username: req.username!,
-      });
-      return true;
+      await em.flush()
+      loader.like.clear({
+        postId: postId,
+        userId: req.userId!,
+      })
+      return true
     } catch (err) {
-      console.log(err);
-      return false;
+      console.log(err)
+      return false
     }
   }
 }

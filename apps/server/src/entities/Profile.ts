@@ -1,31 +1,29 @@
-import { IsUrl } from 'class-validator';
-import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
-import { BaseColumns } from './BaseColumns';
-import { User } from './User';
+import { Entity, OneToOne, Property, type Rel } from '@mikro-orm/core'
+import { IsUrl } from 'class-validator'
+import { Field, ObjectType } from 'type-graphql'
+import { BaseEntity } from './BaseEntity.js'
+import { User } from './User.js'
 
 @ObjectType()
-@Entity('profiles')
-export class Profile extends BaseColumns {
+@Entity({ tableName: 'profiles' })
+export class Profile extends BaseEntity {
   @Field()
   @IsUrl(undefined, { message: 'Invalid Website URL' })
-  @Column({ default: '' })
-  website: string;
+  @Property({ default: '' })
+  website: string
 
   @Field()
-  @Column({ type: 'text', default: '' })
-  bio: string;
+  @Property({ type: 'text', default: '' })
+  bio: string
 
   @Field()
-  @Column({ default: '' })
-  gender: 'Male' | 'Female' | 'Prefer not to say' | '';
+  @Property({ default: '' })
+  gender: 'Male' | 'Female' | 'Prefer not to say' | ''
 
-  // Relations
-
-  @Column()
-  username: string;
-
-  @OneToOne(() => User, (user) => user.profile)
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
-  user: User;
+  @OneToOne(() => User, (user) => user.profile, {
+    name: 'user_id',
+    owner: true,
+    orphanRemoval: true,
+  })
+  user: Rel<User>
 }

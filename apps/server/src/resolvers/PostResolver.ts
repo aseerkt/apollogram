@@ -1,4 +1,4 @@
-import { validate } from 'class-validator';
+import { validate } from 'class-validator'
 import {
   Arg,
   Ctx,
@@ -12,129 +12,128 @@ import {
   Resolver,
   Root,
   UseMiddleware,
-} from 'type-graphql';
-import { CLOUDINARY_ROOT_PATH, __prod__ } from '../constants';
-import { Comment } from '../entities/Comment';
-import { Post } from '../entities/Post';
-import { User } from '../entities/User';
-import { isAuth } from '../middlewares/isAuth';
+} from 'type-graphql'
+import { CLOUDINARY_ROOT_PATH } from '../constants.js'
+import { Comment } from '../entities/Comment.js'
+import { Post } from '../entities/Post.js'
+import { User } from '../entities/User.js'
+import { isAuth } from '../middlewares/isAuth.js'
 import {
   CloudinaryUploadResult,
   EnumFilePathPrefix,
   FieldError,
-  MyContext,
-} from '../types';
-import { PaginatedPost } from '../types/postTypes';
-import { formatErrors } from '../utils/formatErrors';
+  type MyContext,
+} from '../types.js'
+import { PaginatedPost } from '../types/postTypes.js'
 import {
-  generateUrl,
   deleteCloudinaryFile,
+  generateUrl,
   verifySignature,
-} from '../utils/cloudinary';
-import { AppDataSource } from '../data-source';
+} from '../utils/cloudinary.js'
+import { formatErrors } from '../utils/formatErrors.js'
 
 @ObjectType()
 class CreatePostResponse {
   @Field()
-  ok: boolean;
+  ok: boolean
 
   @Field(() => Post, { nullable: true })
-  post?: Post;
+  post?: Post
 
   @Field(() => FieldError, { nullable: true })
-  error?: FieldError;
+  error?: FieldError
 }
 
 @Resolver(Post)
 export class PostResolver {
   @FieldResolver(() => User)
-  user(@Root() post: Post, @Ctx() { userLoader }: MyContext): Promise<User> {
-    return userLoader.load(post.username);
+  user(@Root() post: Post, @Ctx() { loader }: MyContext): Promise<User> {
+    return loader.user.load(post.author.id)
   }
 
   @FieldResolver(() => Boolean)
   async userLike(
     @Root() post: Post,
-    @Ctx() { req, likeLoader }: MyContext
+    @Ctx() { req, loader }: MyContext
   ): Promise<boolean> {
-    if (!req.username) return false;
-    const like = await likeLoader.load({
+    if (!req.userId) return false
+    const like = await loader.like.load({
       postId: post.id,
-      username: req.username,
-    });
-    return like ? true : false;
+      userId: req.userId,
+    })
+    return like ? true : false
   }
 
   @FieldResolver(() => [Comment])
   async comments(
     @Root() post: Post,
-    @Ctx() { commentLoader }: MyContext
+    @Ctx() { em }: MyContext
   ): Promise<Comment[]> {
-    return await commentLoader.load(post.id);
+    return await em.find(Comment, { post: post.id })
   }
 
   @FieldResolver(() => String)
   imgURL(@Root() post: Post): string {
     if (post.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-      return generateUrl(post.imgURL, EnumFilePathPrefix.POSTS);
+      return generateUrl(post.imgURL, EnumFilePathPrefix.POSTS)
     }
-    return post.imgURL;
+    return post.imgURL
   }
 
   // Feed posts
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
   async getPosts(
-    @Ctx() { req }: MyContext,
+    @Ctx() { req, em }: MyContext,
     @Arg('limit', () => Int) limit: number,
-    @Arg('offset', () => Int, { nullable: true }) offset?: number
+    @Arg('offset', () => Int, { defaultValue: 0, nullable: true })
+    offset?: number
   ): Promise<PaginatedPost> {
-    const params = [req.username, limit + 1];
-    if (offset) params.push(offset);
+    const params = [req.userId, limit + 1]
+    if (offset) params.push(offset)
     // Get posts from followed peoples only
-    const posts: Post[] = await AppDataSource.query(
-      /*sql*/ `
-      SELECT 
-        p.* 
-      FROM posts p 
-      INNER JOIN follows f 
-      ON f."followingUsername" = p.username 
-      WHERE f.username = $1 
-      ORDER BY p."createdAt" DESC 
-      LIMIT $2 ${offset ? 'OFFSET $3' : ''};
-    `,
-      params
-    );
+    const posts = await em
+      .createQueryBuilder(Post, 'p')
+      .select('p.*')
+      .innerJoin('follows', 'f', { 'f.followingUserId': 'p.authorId' })
+      .where({ 'f.userId': req.userId })
+      .orderBy({ createdAt: 'DESC' })
+      .limit(limit + 1)
+      .offset(offset)
+
     return {
       posts: posts.slice(0, limit),
       hasMore: posts.length === limit + 1,
-    };
+    }
   }
 
   @Query(() => PaginatedPost)
   @UseMiddleware(isAuth)
   async getExplorePosts(
+    @Ctx() { em }: MyContext,
     @Arg('limit', () => Int) limit: number,
     @Arg('offset', () => Int, { nullable: true }) offset?: number
   ): Promise<PaginatedPost> {
-    const posts = await Post.find({
-      order: { createdAt: 'DESC' },
-      skip: offset ? offset : 0,
-      take: limit + 1,
-    });
+    const posts = await em.find(
+      Post,
+      {},
+      {
+        limit: limit + 1,
+        offset: offset ?? 0,
+        orderBy: { createdAt: 'desc' },
+      }
+    )
 
     return {
       posts: posts.slice(0, limit),
       hasMore: posts.length === limit + 1,
-    };
+    }
   }
 
   @Query(() => Post, { nullable: true })
   @UseMiddleware(isAuth)
-  getSinglePost(@Arg('postId') postId: string) {
-    return Post.findOne({
-      where: { id: postId },
-    });
+  getSinglePost(@Arg('postId') postId: number, @Ctx() { em }: MyContext) {
+    return em.findOne(Post, postId)
   }
 
   @Mutation(() => CreatePostResponse)
@@ -142,66 +141,67 @@ export class PostResolver {
   async addPost(
     @Arg('uploadResult') uploadResult: CloudinaryUploadResult,
     @Arg('caption') caption: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { req, em }: MyContext
   ): Promise<CreatePostResponse> {
-    verifySignature(uploadResult);
+    verifySignature(uploadResult)
 
     if (uploadResult.publicId) {
-      const post = Post.create({
+      const post = em.create(Post, {
         caption,
         imgURL: uploadResult.publicId,
-        username: req.username,
-      });
-      const errors = await validate(post);
+        author: req.userId!,
+      })
+      const errors = await validate(post)
       if (errors.length > 0) {
-        return { ok: false, error: formatErrors(errors)[0] };
+        return { ok: false, error: formatErrors(errors)[0] }
       }
-      await post.save();
-      return { ok: true, post };
+      await em.persist(post).flush()
+      return { ok: true, post }
     }
-    return { ok: false, error: { path: 'file', message: 'File Upload Fail' } };
+    return { ok: false, error: { path: 'file', message: 'File upload failed' } }
   }
 
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async deletePost(
-    @Arg('postId', () => ID) postId: string,
-    @Ctx() { req }: MyContext
+    @Arg('postId', () => ID) postId: number,
+    @Ctx() { req, em }: MyContext
   ) {
     try {
-      const post = await Post.findOne({
-        where: { id: postId, username: req.username },
-      });
-      if (!post) return false;
+      const post = await em.findOne(Post, postId)
+      if (!post || post.author.id !== req.userId) return false
       if (post.imgURL.startsWith(CLOUDINARY_ROOT_PATH)) {
-        const isImageDeleted = await deleteCloudinaryFile(post.imgURL);
-        if (!isImageDeleted) return false;
+        const isImageDeleted = await deleteCloudinaryFile(post.imgURL)
+        if (!isImageDeleted) return false
       }
-      await post.remove();
-      return true;
+      await em.remove(post).flush()
+      return true
     } catch (err) {
-      console.log(err);
-      return false;
+      console.log(err)
+      return false
     }
   }
 
   @Mutation(() => String, { nullable: true })
   @UseMiddleware(isAuth)
   async editCaption(
-    @Arg('postId', () => ID) postId: string,
+    @Arg('postId', () => ID) postId: number,
     @Arg('caption') caption: string,
-    @Ctx() { req }: MyContext
+    @Ctx() { req, em }: MyContext
   ) {
     try {
-      const result = await Post.update(
-        { id: postId, username: req.username },
-        { caption }
-      );
+      const post = await em.findOne(Post, postId)
 
-      return result.affected && result.affected > 0 ? caption : null;
+      if (!post || post.author.id !== req.userId) {
+        return null
+      }
+
+      post.caption = caption
+      await em.flush()
+      return caption
     } catch (err) {
-      console.log(err);
-      return null;
+      console.log(err)
+      return null
     }
   }
 }

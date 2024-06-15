@@ -1,0 +1,8 @@
+{
+  "exec": "node --no-warnings=ExperimentalWarning --loader ts-node/esm src/server.ts",
+  "watch": ["src/*"],
+  "events": {
+    "restart": "kill-port 5000"
+  },
+  "ext": "ts,js,json"
+}

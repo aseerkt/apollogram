@@ -1,17 +1,16 @@
-import DataLoader from 'dataloader';
-import { Profile } from '../entities/Profile';
-import { AppDataSource } from '../data-source';
+import { EntityManager } from '@mikro-orm/postgresql'
+import DataLoader from 'dataloader'
+import { Profile } from '../entities/Profile.js'
 
-export const createProfileLoader = () =>
-  new DataLoader<string, Profile>(async (usernames) => {
-    const profiles = await AppDataSource.manager
-      .createQueryBuilder(Profile, 'profile')
-      .where('profile.username IN (:...usernames)', { usernames })
-      .getMany();
+export const createProfileLoader = (em: EntityManager) =>
+  new DataLoader<number, Profile>(async (userIds) => {
+    const profiles = await em.find(Profile, {
+      user: { $in: userIds as number[] },
+    })
 
-    const usernameToProfile: Record<string, Profile> = {};
+    const userIdToProfile: Record<number, Profile> = {}
     profiles.forEach((u) => {
-      usernameToProfile[u.username] = u;
-    });
-    return usernames.map((username) => usernameToProfile[username]);
-  });
+      userIdToProfile[u.user.id] = u
+    })
+    return userIds.map((userId) => userIdToProfile[userId])
+  })

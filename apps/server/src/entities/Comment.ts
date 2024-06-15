@@ -1,28 +1,19 @@
-import { Field, ObjectType } from 'type-graphql';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
-import { BaseColumns } from './BaseColumns';
-import { Post } from './Post';
-import { User } from './User';
+import { Entity, ManyToOne, Opt, Property } from '@mikro-orm/core'
+import { Field, ObjectType } from 'type-graphql'
+import { BaseEntity } from './BaseEntity.js'
+import { Post } from './Post.js'
+import { User } from './User.js'
 
 @ObjectType()
-@Entity('comments')
-export class Comment extends BaseColumns {
+@Entity({ tableName: 'comments' })
+export class Comment extends BaseEntity {
   @Field()
-  @Column('text')
-  text: string;
+  @Property({ type: 'text' })
+  text: string
 
-  @Field()
-  @Column()
-  postId: string;
+  @ManyToOne(() => User)
+  author: User & Opt
 
-  @Field()
-  @Column()
-  username: string;
-
-  @ManyToOne(() => User, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
-  user: User;
-
-  @ManyToOne(() => Post, (post) => post.comments, { onDelete: 'CASCADE' })
-  post: Post;
+  @ManyToOne(() => Post)
+  post: Post & Opt
 }

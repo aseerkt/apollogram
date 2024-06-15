@@ -1,35 +1,16 @@
-import { Field, ObjectType } from 'type-graphql';
-import {
-  BaseEntity,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryColumn,
-} from 'typeorm';
-import { User } from './User';
+import { Entity, ManyToOne, Opt } from '@mikro-orm/core'
+import { ObjectType } from 'type-graphql'
+import { BaseEntity } from './BaseEntity.js'
+import { User } from './User.js'
 
 // User following who
 
 @ObjectType()
-@Entity('follows')
+@Entity({ tableName: 'follows' })
 export class Follow extends BaseEntity {
-  @Field()
-  @PrimaryColumn()
-  username: string;
+  @ManyToOne(() => User)
+  follower: User & Opt
 
-  @Field()
-  @PrimaryColumn()
-  followingUsername: string;
-
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
-  user: User;
-
-  @ManyToOne(() => User, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'followingUsername', referencedColumnName: 'username' })
-  following: User;
+  @ManyToOne(() => User)
+  following: User & Opt
 }

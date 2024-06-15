@@ -1,46 +1,31 @@
-import { MinLength } from 'class-validator';
-import { Field, ObjectType } from 'type-graphql';
-import { Entity, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
-import { BaseColumns } from './BaseColumns';
-import { Comment } from './Comment';
-import { Like } from './Like';
-import { User } from './User';
+import { Entity, ManyToOne, OneToMany, Property } from '@mikro-orm/core'
+import { MinLength } from 'class-validator'
+import { Field, ObjectType } from 'type-graphql'
+import { BaseEntity } from './BaseEntity.js'
+import { Comment } from './Comment.js'
+import { Like } from './Like.js'
+import { User } from './User.js'
 
 @ObjectType()
-@Entity('posts')
-export class Post extends BaseColumns {
+@Entity({ tableName: 'posts' })
+export class Post extends BaseEntity<'author' | 'comments' | 'likes'> {
   @Field()
   @MinLength(3, { message: 'Post caption must be minimum 3 characters long' })
-  @Column()
-  caption: string;
+  @Property()
+  caption: string
 
   @Field()
-  @Column()
-  imgURL: string;
+  @Property()
+  imgURL: string
 
   // Relations
 
-  @Field()
-  @Column()
-  username: string;
+  @ManyToOne({ name: 'author_id' })
+  author: User
 
-  @Field()
-  @Column({ default: 0 })
-  likeCount: number;
+  @OneToMany(() => Comment, (comment) => comment.post, { orphanRemoval: true })
+  comments: Comment[]
 
-  @Field()
-  @Column({ default: 0 })
-  commentCount: number;
-
-  @ManyToOne(() => User, (user) => user.posts, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'username', referencedColumnName: 'username' })
-  user: User;
-
-  @OneToMany(() => Comment, (comment) => comment.post)
-  comments: Comment[];
-
-  @OneToMany(() => Like, (like) => like.post)
-  likes: Like[];
+  @OneToMany(() => Like, (like) => like.post, { orphanRemoval: true })
+  likes: Like[]
 }

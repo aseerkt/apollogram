@@ -1,5 +1,3 @@
-import { gql } from '@apollo/client';
-import { useCallback } from 'react';
 import { useMessageCtx } from '@/context/MessageContext';
 import {
   GetFollowSuggestionsDocument,
@@ -9,17 +7,21 @@ import {
   User,
   useToggleFollowMutation,
 } from '@/generated/graphql';
+import { gql } from '@apollo/client';
+import { useCallback } from 'react';
 
 const useToggleFollowHook = (user: User) => {
   const { setMessage } = useMessageCtx();
   const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
   const { data: meData } = useMeQuery();
   const me = meData!.me!;
+
   const { data: selectedUserFollows } = useGetFollowsQuery({
     variables: { username: user?.username },
     skip: !user?.username,
     fetchPolicy: 'cache-only',
   });
+
   const { data: currentUserFollows } = useGetFollowsQuery({
     variables: { username: me.username },
     fetchPolicy: 'cache-only',

@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary'
 import {
   Arg,
   Args,
@@ -10,44 +11,42 @@ import {
   Resolver,
   Root,
   UseMiddleware,
-} from 'type-graphql';
-import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryUploadResult, FieldError, MyContext } from '../types';
+} from 'type-graphql'
+import { CloudinaryUploadResult, FieldError, type MyContext } from '../types.js'
 
-import { User } from '../entities/User';
-import { Profile } from '../entities/Profile';
-import { isAuth } from '../middlewares/isAuth';
-import { validate } from 'class-validator';
-import { formatErrors } from '../utils/formatErrors';
-import { getUserFromToken } from '../utils/checkUserFromCookie';
-import { CLOUDINARY_ROOT_PATH } from '../constants';
-import { AppDataSource } from '../data-source';
-import { verifySignature } from '../utils/cloudinary';
+import { validate } from 'class-validator'
+import { CLOUDINARY_ROOT_PATH } from '../constants.js'
+import { Profile } from '../entities/Profile.js'
+import { User } from '../entities/User.js'
+import { isAuth } from '../middlewares/isAuth.js'
+import { getUserFromToken } from '../utils/checkUserFromCookie.js'
+import { verifySignature } from '../utils/cloudinary.js'
+import { formatErrors } from '../utils/formatErrors.js'
 
 @ArgsType()
 export class EditProfileArgs {
   @Field()
-  name: string;
+  name: string
 
   @Field()
-  email: string;
+  email: string
 
   @Field()
-  website: string;
+  website: string
 
   @Field()
-  bio: string;
+  bio: string
 
   @Field()
-  gender: 'Male' | 'Female' | 'Prefer not to say' | '';
+  gender: 'Male' | 'Female' | 'Prefer not to say' | ''
 }
 
 @ObjectType()
 export class EditProfileResponse {
   @Field(() => User, { nullable: true })
-  user?: User;
+  user?: User
   @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+  errors?: FieldError[]
 }
 
 @Resolver(Profile)
@@ -56,10 +55,10 @@ export class ProfileResolver {
 
   @FieldResolver(() => String)
   gender(@Root() profile: Profile, @Ctx() { req }: MyContext): string {
-    if (req.username == profile.username) {
-      return profile.gender;
+    if (req.userId == profile.user.id) {
+      return profile.gender
     }
-    return '';
+    return ''
   }
 
   // MUTATIONS
@@ -69,39 +68,37 @@ export class ProfileResolver {
   @Mutation(() => Boolean)
   async changeProfilePhoto(
     @Arg('uploadResult') uploadResult: CloudinaryUploadResult,
-    @Ctx() ctx: MyContext
+    @Ctx() { em, req }: MyContext
   ) {
-    verifySignature(uploadResult);
+    verifySignature(uploadResult)
 
-    const { username } = await getUserFromToken(ctx);
-    const user = await User.findOne({ where: { username } });
+    const { userId } = await getUserFromToken(req)
+    const user = await em.findOne(User, userId)
 
     if (user) {
       if (user.imgURL.includes(CLOUDINARY_ROOT_PATH)) {
-        await cloudinary.uploader.destroy(user.imgURL);
+        await cloudinary.uploader.destroy(user.imgURL)
       }
 
-      user.imgURL = uploadResult.publicId;
-      await user.save();
-      return true;
+      user.imgURL = uploadResult.publicId
+      await em.flush()
+      return true
     }
-    return false;
+    return false
   }
 
   // Remove Profile Photo
 
   @Mutation(() => String, { nullable: true })
   @UseMiddleware(isAuth)
-  async removeProfilePhoto(@Ctx() { req }: MyContext) {
-    const user = await User.findOne({
-      where: { username: req.username },
-    });
+  async removeProfilePhoto(@Ctx() { req, em }: MyContext) {
+    const user = await em.findOne(User, req.userId!)
     if (user) {
-      user.imgURL = '/user.jpg';
-      await user.save();
-      return user;
+      user.imgURL = '/user.jpg'
+      await em.flush()
+      return user
     }
-    return false;
+    return false
   }
 
   // Edit Profile Fields
@@ -110,37 +107,36 @@ export class ProfileResolver {
   @UseMiddleware(isAuth)
   async editProfile(
     @Args() { name, gender, website, bio, email }: EditProfileArgs,
-    @Ctx() { req }: MyContext
+    @Ctx() { req, em }: MyContext
   ): Promise<EditProfileResponse> {
-    const user = await User.findOne({
-      where: { username: req.username },
-    });
-    const profile = await Profile.findOneBy({ username: req.username });
+    const user = await em.findOne(User, req.userId!)
+    const profile = await em.findOne(Profile, {
+      user: req.userId!,
+    })
 
     if (profile && user) {
-      user.email = email;
-      user.name = name;
-      profile.gender = gender;
-      profile.website = website;
-      profile.bio = bio;
+      user.email = email
+      user.name = name
+      profile.gender = gender
+      profile.website = website
+      profile.bio = bio
       try {
-        const userErrors = await validate(user);
-        const profileErrors = await validate(profile);
+        const userErrors = await validate(user)
+        const profileErrors = await validate(profile)
         if (userErrors.length > 0 || profileErrors.length > 0) {
-          const errors = formatErrors([...userErrors, ...profileErrors]);
-          return { errors };
+          const errors = formatErrors([...userErrors, ...profileErrors])
+          return { errors }
         }
-        await AppDataSource.manager.transaction(async (tem) => {
-          await tem.save(user);
-          await tem.save(profile);
-        });
-        return { user };
+
+        await em.flush()
+
+        return { user }
       } catch (err) {
-        console.log(err);
+        console.log(err)
       }
     }
     return {
       errors: [{ path: 'unknown', message: 'Server Error' }],
-    };
+    }
   }
 }

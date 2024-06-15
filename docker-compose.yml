@@ -3,11 +3,11 @@ services:
     image: postgres:16-alpine
     restart: always
     ports:
-      - '${DB_PORT}:5432'
+      - '5432:5432'
     environment:
-      - POSTGRES_PASSWORD=$DB_PASS
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=apollogram
     volumes:
       - dbdata:/var/lib/postgresql/data
 

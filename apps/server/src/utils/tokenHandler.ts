@@ -1,13 +1,12 @@
-import { __prod__ } from '../constants';
-import { User } from '../entities/User';
-import { sign, verify } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken'
+import { User } from '../entities/User.js'
 
 export const createToken = (user: User) => {
-  return sign({ username: user.username }, process.env.JWT_SECRET!, {
+  return jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
     expiresIn: '7d',
-  });
-};
+  })
+}
 
 export const verifyToken = (token: string) => {
-  return verify(token, process.env.JWT_SECRET!);
-};
+  return jwt.verify(token, process.env.JWT_SECRET!)
+}

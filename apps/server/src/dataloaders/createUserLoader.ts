@@ -1,18 +1,15 @@
-import DataLoader from 'dataloader';
-import { User } from '../entities/User';
-import { AppDataSource } from '../data-source';
+import { EntityManager } from '@mikro-orm/postgresql'
+import DataLoader from 'dataloader'
+import { User } from '../entities/User.js'
 
-export const createUserLoader = () =>
-  new DataLoader<string, User>(async (usernames) => {
-    const users = await AppDataSource.manager
-      .createQueryBuilder(User, 'user')
-      .where('user.username IN (:...usernames)', { usernames })
-      .getMany();
+export const createUserLoader = (em: EntityManager) =>
+  new DataLoader<number, User>(async (userIds) => {
+    const users = await em.find(User, { id: userIds as number[] })
 
-    const usernameToUser: Record<string, User> = {};
+    const userIdToUser: Record<number, User> = {}
     users.forEach((u) => {
-      usernameToUser[u.username] = u;
-    });
+      userIdToUser[u.id] = u
+    })
 
-    return usernames.map((username) => usernameToUser[username]);
-  });
+    return userIds.map((userId) => userIdToUser[userId])
+  })

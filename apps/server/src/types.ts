@@ -1,23 +1,21 @@
+import { EntityManager } from '@mikro-orm/postgresql'
+import { FastifyRequest } from 'fastify'
 import {
   Field,
   InputType,
   Int,
   ObjectType,
   registerEnumType,
-} from 'type-graphql';
-import { createUserLoader } from './dataloaders/createUserLoader';
-import { createProfileLoader } from './dataloaders/createProfileLoader';
-import { createLikeLoader } from './dataloaders/createLikeLoader';
-import { createCommentLoader } from './dataloaders/createCommentLoader';
-import { createFollowLoader } from './dataloaders/createFollowLoader';
+} from 'type-graphql'
+import { createLoader } from './dataloaders/index.js'
 
 @ObjectType()
 export class FieldError {
   @Field()
-  path: string;
+  path: string
 
   @Field()
-  message: string;
+  message: string
 }
 
 export enum EnumFilePathPrefix {
@@ -25,38 +23,34 @@ export enum EnumFilePathPrefix {
   POSTS = 'posts',
 }
 
-registerEnumType(EnumFilePathPrefix, { name: 'EnumFilePathPrefix' });
+registerEnumType(EnumFilePathPrefix, { name: 'EnumFilePathPrefix' })
 
 @InputType()
 export class CloudinaryUploadResult {
   @Field()
-  publicId: string;
+  publicId: string
 
   @Field()
-  signature: string;
+  signature: string
 
   @Field()
-  version: number;
+  version: number
 }
 
 @ObjectType()
 export class CloudinarySignature {
   @Field()
-  signature: string;
+  signature: string
 
   @Field(() => Int)
-  timestamp: number;
+  timestamp: number
 
   @Field()
-  publicId: string;
+  publicId: string
 }
 
 export interface MyContext {
-  req: Request & { username?: string };
-  // res: Response & { locals: { username: string } };
-  userLoader: ReturnType<typeof createUserLoader>;
-  profileLoader: ReturnType<typeof createProfileLoader>;
-  commentLoader: ReturnType<typeof createCommentLoader>;
-  likeLoader: ReturnType<typeof createLikeLoader>;
-  followLoader: ReturnType<typeof createFollowLoader>;
+  req: FastifyRequest & { userId?: number }
+  em: EntityManager
+  loader: ReturnType<typeof createLoader>
 }

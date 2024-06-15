@@ -1,53 +1,44 @@
 import {
   Arg,
   Ctx,
-  Mutation,
-  UseMiddleware,
-  Resolver,
   FieldResolver,
+  Mutation,
+  Resolver,
   Root,
-} from 'type-graphql';
-import { Comment } from '../entities/Comment';
-import { Post } from '../entities/Post';
-import { User } from '../entities/User';
-import { isAuth } from '../middlewares/isAuth';
-import { MyContext } from '../types';
+  UseMiddleware,
+} from 'type-graphql'
+import { Comment } from '../entities/Comment.js'
+import { User } from '../entities/User.js'
+import { isAuth } from '../middlewares/isAuth.js'
+import { type MyContext } from '../types.js'
 
 @Resolver(Comment)
 export class CommentResolver {
   @FieldResolver(() => User)
-  user(
-    @Root() comment: Comment,
-    @Ctx() { userLoader }: MyContext
-  ): Promise<User> {
-    return userLoader.load(comment.username);
+  user(@Root() comment: Comment, @Ctx() { loader }: MyContext): Promise<User> {
+    return loader.user.load(comment.author.id)
   }
 
   @Mutation(() => Comment, { nullable: true })
   @UseMiddleware(isAuth)
   async addComment(
-    @Arg('postId') postId: string,
+    @Arg('postId') postId: number,
     @Arg('text') text: string,
-    @Ctx() { req, commentLoader }: MyContext
+    @Ctx() { req, em }: MyContext
   ) {
     try {
-      const newComment = await Comment.create({
-        postId,
+      const comment = em.create(Comment, {
+        post: postId,
         text,
-        username: req.username,
-      }).save();
-      const post = await Post.findOne({
-        where: { id: postId },
-        select: ['id', 'commentCount'],
-      });
-      if (!post) return false;
-      post.commentCount += 1;
-      await post.save();
-      commentLoader.clear(postId);
-      return newComment;
+        author: req.userId!,
+      })
+      await em.persist(comment).flush()
+
+      // commentLoader.clear(postId)
+      return comment
     } catch (err) {
-      console.log(err);
-      return false;
+      console.log(err)
+      return false
     }
   }
 }

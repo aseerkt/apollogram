@@ -1,20 +1,20 @@
-import { MyContext } from '../types';
-import { verifyToken } from './tokenHandler';
+import { MyContext } from '../types.js'
+import { verifyToken } from './tokenHandler.js'
 
-export const getUserFromToken = async ({ req }: MyContext) => {
-  const token = req.headers.get('Authorization')?.replace('Bearer ', '');
+export const getUserFromToken = async (req: MyContext['req']) => {
+  const token = req.headers.authorization?.replace('Bearer ', '')
 
   if (!token) {
-    console.log('Something is wrong');
-    throw new Error('Unauthorized');
+    console.log('Something is wrong')
+    throw new Error('Unauthorized')
   }
-  const { username }: any = verifyToken(token);
+  const { userId }: any = verifyToken(token)
 
-  if (!username) {
-    console.log('Something is wrong');
-    throw new Error('Unauthorized');
+  if (!userId) {
+    console.log('Something is wrong')
+    throw new Error('Unauthorized')
   }
 
-  req.username = username;
-  return { username };
-};
+  req.userId = userId
+  return { userId }
+}
