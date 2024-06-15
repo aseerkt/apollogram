@@ -1,0 +1,478 @@
+version: api.keploy.io/v1beta1
+name: test-set-0-report
+status: FAILED
+success: 3
+failure: 1
+total: 4
+tests:
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718458504
+      completed: 1718458504
+      test_case_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0
+      mock_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0/mocks
+      test_case_id: test-1
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://127.0.0.1:5000/graphql
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Content-Length: "384"
+            Content-Type: application/json
+            Host: 127.0.0.1:5000
+            Origin: http://127.0.0.1:5000
+            Referer: http://127.0.0.1:5000/graphql
+            Sec-Ch-Ua: '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"Linux"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+        body: '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":null,"username":null},"operationName":"Login"}'
+        timestamp: 2024-06-15T18:52:08.772358463+05:30
+      resp:
+        status_code: 200
+        header:
+            Cache-Control: no-store
+            Connection: keep-alive
+            Content-Length: "3983"
+            Content-Type: application/json; charset=utf-8
+            Date: Sat, 15 Jun 2024 13:35:04 GMT
+            Keep-Alive: timeout=72
+        body: |
+            {"errors":[{"message":"Variable \"$password\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":16}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$password\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}},{"message":"Variable \"$username\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":36}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$username\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}}]}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:22:08 GMT
+              actual:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:35:04 GMT
+            - normal: true
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+              actual:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - no-store
+              actual:
+                key: Cache-Control
+                value:
+                    - no-store
+            - normal: true
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value:
+                    - keep-alive
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "3983"
+              actual:
+                key: Content-Length
+                value:
+                    - "3983"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+        body_result:
+            - normal: true
+              type: JSON
+              expected: |
+                {"errors":[{"message":"Variable \"$password\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":16}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$password\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}},{"message":"Variable \"$username\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":36}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$username\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}}]}
+              actual: |
+                {"errors":[{"message":"Variable \"$password\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":16}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$password\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}},{"message":"Variable \"$username\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":36}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$username\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}}]}
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: FAILED
+      started: 1718458504
+      completed: 1718458505
+      test_case_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0
+      mock_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0/mocks
+      test_case_id: test-2
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://127.0.0.1:5000/graphql
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Content-Length: "395"
+            Content-Type: application/json
+            Host: 127.0.0.1:5000
+            Origin: http://127.0.0.1:5000
+            Referer: http://127.0.0.1:5000/graphql
+            Sec-Ch-Ua: '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"Linux"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+        body: '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":"bob123","username":"Xzavier19"},"operationName":"Login"}'
+        timestamp: 2024-06-15T18:52:45.456446514+05:30
+      resp:
+        status_code: 200
+        header:
+            Cache-Control: no-store
+            Connection: keep-alive
+            Content-Length: "440"
+            Content-Type: application/json; charset=utf-8
+            Date: Sat, 15 Jun 2024 13:35:05 GMT
+            Keep-Alive: timeout=72
+        body: |
+            {"data":{"login":{"ok":true,"user":{"id":"2057","createdAt":"2023-11-09T10:38:42.541Z","updatedAt":"2024-03-02T22:10:34.583Z","username":"Xzavier19","email":"Ashley70@yahoo.com","imgURL":"https://avatars.githubusercontent.com/u/39815431","name":"Camille Luettgen"},"errors":null,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIwNTcsImlhdCI6MTcxODQ1ODUwNSwiZXhwIjoxNzE5MDYzMzA1fQ.TayROJpj8mTaJPMKDhYlGuDUtrmahvrbJVCIDKCQasc"}}}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        body.data.login.user.createdat: []
+        body.data.login.user.updatedat: []
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value:
+                    - keep-alive
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "440"
+              actual:
+                key: Content-Length
+                value:
+                    - "440"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:22:45 GMT
+              actual:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:35:05 GMT
+            - normal: true
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+              actual:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - no-store
+              actual:
+                key: Cache-Control
+                value:
+                    - no-store
+        body_result:
+            - normal: false
+              type: JSON
+              expected: |
+                {"data":{"login":{"ok":true,"user":{"id":"2057","createdAt":"2023-11-09T10:38:42.541Z","updatedAt":"2024-03-02T22:10:34.583Z","username":"Xzavier19","email":"Ashley70@yahoo.com","imgURL":"https://avatars.githubusercontent.com/u/39815431","name":"Camille Luettgen"},"errors":null,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIwNTcsImlhdCI6MTcxODQ1Nzc2NSwiZXhwIjoxNzE5MDYyNTY1fQ.I7JVBhj7pFR8vxtc-O1ujDhFmb4-mQdelWTsDx6IKOk"}}}
+              actual: |
+                {"data":{"login":{"ok":true,"user":{"id":"2057","createdAt":"2023-11-09T10:38:42.541Z","updatedAt":"2024-03-02T22:10:34.583Z","username":"Xzavier19","email":"Ashley70@yahoo.com","imgURL":"https://avatars.githubusercontent.com/u/39815431","name":"Camille Luettgen"},"errors":null,"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIwNTcsImlhdCI6MTcxODQ1ODUwNSwiZXhwIjoxNzE5MDYzMzA1fQ.TayROJpj8mTaJPMKDhYlGuDUtrmahvrbJVCIDKCQasc"}}}
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718458505
+      completed: 1718458505
+      test_case_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0
+      mock_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0/mocks
+      test_case_id: test-3
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://127.0.0.1:5000/graphql
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Content-Length: "396"
+            Content-Type: application/json
+            Host: 127.0.0.1:5000
+            Origin: http://127.0.0.1:5000
+            Referer: http://127.0.0.1:5000/graphql
+            Sec-Ch-Ua: '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"Linux"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+        body: '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":"bob@123","username":"Xzavier19"},"operationName":"Login"}'
+        timestamp: 2024-06-15T19:04:11.630323225+05:30
+      resp:
+        status_code: 200
+        header:
+            Cache-Control: no-store
+            Connection: keep-alive
+            Content-Length: "119"
+            Content-Type: application/json; charset=utf-8
+            Date: Sat, 15 Jun 2024 13:35:05 GMT
+            Keep-Alive: timeout=72
+        body: |
+            {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"Incorrect Password","path":"password"}],"token":null}}}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value:
+                    - keep-alive
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "119"
+              actual:
+                key: Content-Length
+                value:
+                    - "119"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:34:11 GMT
+              actual:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:35:05 GMT
+            - normal: true
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+              actual:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - no-store
+              actual:
+                key: Cache-Control
+                value:
+                    - no-store
+        body_result:
+            - normal: true
+              type: JSON
+              expected: |
+                {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"Incorrect Password","path":"password"}],"token":null}}}
+              actual: |
+                {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"Incorrect Password","path":"password"}],"token":null}}}
+        dep_result: []
+    - kind: Http
+      name: test-set-0
+      status: PASSED
+      started: 1718458505
+      completed: 1718458505
+      test_case_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0
+      mock_path: /home/aseerkt/Documents/projects/apollogram/apps/server/keploy/test-set-0/mocks
+      test_case_id: test-4
+      req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://127.0.0.1:5000/graphql
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Content-Length: "396"
+            Content-Type: application/json
+            Host: 127.0.0.1:5000
+            Origin: http://127.0.0.1:5000
+            Referer: http://127.0.0.1:5000/graphql
+            Sec-Ch-Ua: '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"Linux"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+        body: '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":"bob123","username":"X1zavier19"},"operationName":"Login"}'
+        timestamp: 2024-06-15T19:04:19.353888147+05:30
+      resp:
+        status_code: 200
+        header:
+            Cache-Control: no-store
+            Connection: keep-alive
+            Content-Length: "120"
+            Content-Type: application/json; charset=utf-8
+            Date: Sat, 15 Jun 2024 13:35:05 GMT
+            Keep-Alive: timeout=72
+        body: |
+            {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"User does not exist","path":"username"}],"token":null}}}
+        status_message: ""
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 0001-01-01T00:00:00Z
+      noise:
+        header.date: []
+      result:
+        status_code:
+            normal: true
+            expected: 200
+            actual: 200
+        headers_result:
+            - normal: true
+              expected:
+                key: Cache-Control
+                value:
+                    - no-store
+              actual:
+                key: Cache-Control
+                value:
+                    - no-store
+            - normal: true
+              expected:
+                key: Connection
+                value:
+                    - keep-alive
+              actual:
+                key: Connection
+                value:
+                    - keep-alive
+            - normal: true
+              expected:
+                key: Content-Length
+                value:
+                    - "120"
+              actual:
+                key: Content-Length
+                value:
+                    - "120"
+            - normal: true
+              expected:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+              actual:
+                key: Content-Type
+                value:
+                    - application/json; charset=utf-8
+            - normal: true
+              expected:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:34:19 GMT
+              actual:
+                key: Date
+                value:
+                    - Sat, 15 Jun 2024 13:35:05 GMT
+            - normal: true
+              expected:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+              actual:
+                key: Keep-Alive
+                value:
+                    - timeout=72
+        body_result:
+            - normal: true
+              type: JSON
+              expected: |
+                {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"User does not exist","path":"username"}],"token":null}}}
+              actual: |
+                {"data":{"login":{"ok":false,"user":null,"errors":[{"message":"User does not exist","path":"username"}],"token":null}}}
+        dep_result: []
+test_set: test-set-0

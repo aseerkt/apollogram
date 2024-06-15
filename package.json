@@ -8,8 +8,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "dc": "docker-compose --env-file apps/server/.env",
-    "db:up": "pnpm dc start db_postgres"
+    "docker:postgres": "docker compose -d"
   },
   "dependencies": {
     "turbo": "^1.13.4"

@@ -1,0 +1,68 @@
+version: api.keploy.io/v1beta1
+kind: Http
+name: test-1
+spec:
+    metadata: {}
+    req:
+        method: POST
+        proto_major: 1
+        proto_minor: 1
+        url: http://127.0.0.1:5000/graphql
+        header:
+            Accept: '*/*'
+            Accept-Encoding: gzip, deflate, br, zstd
+            Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+            Connection: keep-alive
+            Content-Length: "384"
+            Content-Type: application/json
+            Host: 127.0.0.1:5000
+            Origin: http://127.0.0.1:5000
+            Referer: http://127.0.0.1:5000/graphql
+            Sec-Ch-Ua: '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"'
+            Sec-Ch-Ua-Mobile: ?0
+            Sec-Ch-Ua-Platform: '"Linux"'
+            Sec-Fetch-Dest: empty
+            Sec-Fetch-Mode: cors
+            Sec-Fetch-Site: same-origin
+            User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36
+        body: '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":null,"username":null},"operationName":"Login"}'
+        timestamp: 2024-06-15T18:52:08.772358463+05:30
+    resp:
+        status_code: 200
+        header:
+            Cache-Control: no-store
+            Connection: keep-alive
+            Content-Length: "3983"
+            Content-Type: application/json; charset=utf-8
+            Date: Sat, 15 Jun 2024 13:22:08 GMT
+            Keep-Alive: timeout=72
+        body: |
+            {"errors":[{"message":"Variable \"$password\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":16}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$password\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}},{"message":"Variable \"$username\" of non-null type \"String!\" must not be null.","locations":[{"line":1,"column":36}],"extensions":{"code":"BAD_USER_INPUT","stacktrace":["GraphQLError: Variable \"$username\" of non-null type \"String!\" must not be null.","    at coerceVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:122:9)","    at getVariableValues (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/values.js:45:21)","    at buildExecutionContext (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:280:63)","    at execute (/home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/graphql@16.8.2/node_modules/graphql/execution/execute.js:116:22)","    at executeIncrementally (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/incrementalDeliveryPolyfill.js:21:12)","    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)","    at async execute (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:228:37)","    at async processGraphQLRequest (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/requestPipeline.js:157:32)","    at async internalExecuteOperation (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/ApolloServer.js:605:16)","    at async runHttpQuery (file:///home/aseerkt/Documents/projects/apollogram/node_modules/.pnpm/@apollo+server@4.10.4_graphql@16.8.2/node_modules/@apollo/server/dist/esm/runHttpQuery.js:129:29)"]}}]}
+        status_message: OK
+        proto_major: 0
+        proto_minor: 0
+        timestamp: 2024-06-15T18:52:10.876969662+05:30
+    objects: []
+    assertions:
+        noise:
+            header.Date: []
+    created: 1718457730
+curl: |-
+    curl --request POST \
+      --url http://127.0.0.1:5000/graphql \
+      --header 'Sec-Ch-Ua-Mobile: ?0' \
+      --header 'Connection: keep-alive' \
+      --header 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36' \
+      --header 'Sec-Fetch-Dest: empty' \
+      --header 'Accept-Encoding: gzip, deflate, br, zstd' \
+      --header 'Referer: http://127.0.0.1:5000/graphql' \
+      --header 'Sec-Ch-Ua: "Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"' \
+      --header 'Host: 127.0.0.1:5000' \
+      --header 'Accept: */*' \
+      --header 'Accept-Language: en-GB,en-US;q=0.9,en;q=0.8' \
+      --header 'Origin: http://127.0.0.1:5000' \
+      --header 'Sec-Ch-Ua-Platform: "Linux"' \
+      --header 'Content-Type: application/json' \
+      --header 'Sec-Fetch-Mode: cors' \
+      --header 'Sec-Fetch-Site: same-origin' \
+      --data '{"query":"mutation Login($password: String!, $username: String!) {\n  login(password: $password, username: $username) {\n    ok\n    user {\n      id\n      createdAt\n      updatedAt\n      username\n      email\n      imgURL\n      name\n    }\n    errors {\n      message\n      path\n    }\n    token\n  }\n}","variables":{"password":null,"username":null},"operationName":"Login"}'
