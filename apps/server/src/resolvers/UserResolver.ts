@@ -45,8 +45,11 @@ export class UserResolver {
     return user.imgURL
   }
 
-  @FieldResolver(() => Profile)
-  profile(@Root() user: User, @Ctx() { loader }: MyContext): Promise<Profile> {
+  @FieldResolver(() => Profile, { nullable: true })
+  profile(
+    @Root() user: User,
+    @Ctx() { loader }: MyContext
+  ): Promise<Profile | undefined> {
     return loader.profile.load(user.id)
   }
 

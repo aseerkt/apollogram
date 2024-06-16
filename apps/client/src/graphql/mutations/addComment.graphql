@@ -1,4 +1,4 @@
-mutation AddComment($text: String!, $postId: String!) {
+mutation AddComment($text: String!, $postId: ID!) {
   addComment(text: $text, postId: $postId) {
     ...RegularComment
   }

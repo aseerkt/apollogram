@@ -3,8 +3,6 @@ const path = require('path')
 
 const directoryPath = path.join(__dirname, '..', process.argv[2])
 
-console.log(directoryPath)
-
 function updateImports(dir) {
   fs.readdirSync(dir).forEach((file) => {
     const fullPath = path.join(dir, file)

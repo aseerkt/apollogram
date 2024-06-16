@@ -29,7 +29,7 @@ export class FollowResolver {
   @Query(() => FollowData, { nullable: true })
   @UseMiddleware(isAuth)
   async getFollows(
-    @Arg('userId') userId: number,
+    @Arg('userId', () => ID) userId: number,
     @Ctx() { em }: MyContext
   ): Promise<FollowData> {
     const followRepository = em.getRepository(Follow)
@@ -49,13 +49,19 @@ export class FollowResolver {
   @Query(() => [User])
   @UseMiddleware(isAuth)
   async getFollowSuggestions(@Ctx() { req, em }: MyContext): Promise<User[]> {
-    const followerIds = await em
-      .createQueryBuilder(Follow)
-      .select('followingId')
-      .where({ followerId: req.userId })
-    const suggestions = await em
-      .createQueryBuilder(User)
-      .where({ username: { $nin: followerIds } })
+    const followings = await em.find(
+      Follow,
+      { follower: req.userId },
+      { fields: ['following'] }
+    )
+
+    const suggestions = await em.find(
+      User,
+      {
+        id: { $nin: followings.map((f) => f.following.id) },
+      },
+      { limit: 10 }
+    )
 
     return suggestions
   }

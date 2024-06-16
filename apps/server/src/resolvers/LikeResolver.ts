@@ -1,4 +1,4 @@
-import { Arg, Ctx, Mutation, Resolver, UseMiddleware } from 'type-graphql'
+import { Arg, Ctx, ID, Mutation, Resolver, UseMiddleware } from 'type-graphql'
 import { Like } from '../entities/Like.js'
 import { isAuth } from '../middlewares/isAuth.js'
 import { type MyContext } from '../types.js'
@@ -8,7 +8,7 @@ export class LikeResolver {
   @Mutation(() => Boolean)
   @UseMiddleware(isAuth)
   async toggleLike(
-    @Arg('postId') postId: number,
+    @Arg('postId', () => ID) postId: number,
     @Ctx() { req, em, loader }: MyContext
   ): Promise<boolean> {
     try {

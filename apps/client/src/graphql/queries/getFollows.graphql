@@ -1,5 +1,5 @@
-query GetFollows($username: String!) {
-  getFollows(username: $username) {
+query GetFollows($userId: ID!) {
+  getFollows(userId: $userId) {
     followers {
       ...MinimalUser
       isFollowing

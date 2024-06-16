@@ -1,15 +1,15 @@
-import { useState, useEffect, useRef } from 'react';
-import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
-import { Comment, Post } from '../generated/graphql';
-import Avatar from '../shared/Avatar';
-import Card from '../shared/Card';
-import AddComment from './AddComment';
-import PostOptions from './PostOptions';
-import PostActions from './PostActions';
+import dayjs from 'dayjs'
+import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Comment, Post } from '../generated/graphql'
+import Avatar from '../shared/Avatar'
+import Card from '../shared/Card'
+import AddComment from './AddComment'
+import PostActions from './PostActions'
+import PostOptions from './PostOptions'
 
 interface PostCardProps {
-  post: Post;
+  post: Post
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post }) => {
@@ -22,21 +22,21 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     userLike,
     comments,
     createdAt,
-  } = post;
-  const [twoComments, setTwoComments] = useState<Comment[]>([]);
+  } = post
+  const [twoComments, setTwoComments] = useState<Comment[]>([])
 
   useEffect(() => {
     setTwoComments(
       comments.filter((_, index) => index === 0 || index === 1).reverse()
-    );
-  }, [comments, setTwoComments]);
+    )
+  }, [comments, setTwoComments])
 
-  const addCommentRef = useRef<HTMLInputElement>(null);
+  const addCommentRef = useRef<HTMLInputElement>(null)
 
   return (
-    <Card id={id} className='w-full mb-16'>
+    <Card id={id} className='mb-16 w-full'>
       {/* header */}
-      <div className='flex items-center justify-between px-3 border-b border-gray-300'>
+      <div className='flex items-center justify-between border-b border-gray-300 px-3'>
         <div className='flex items-center'>
           <Link to={`/u/${user.username}`} className='flex items-center'>
             <Avatar className='my-2 cursor-pointer' src={user.imgURL} />
@@ -49,8 +49,13 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <PostOptions post={post} />
       </div>
       {/* Media */}
-      <Link to={`/p/${id}`} className='flex items-center w-full'>
-        <img loading='lazy' className='w-full' src={imgURL} alt={caption} />
+      <Link to={`/p/${id}`} className='flex w-full items-center'>
+        <img
+          loading='lazy'
+          className='min-h-48 w-full'
+          src={imgURL}
+          alt={caption}
+        />
       </Link>
       {/* Likes and comments */}
       <div className='h-full'>
@@ -62,7 +67,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
             addCommentRef={addCommentRef}
           />
           {/* Like Count */}
-          <p className='font-semibold '>
+          <p className='font-semibold'>
             {likeCount} like{likeCount !== 1 ? 's' : ''}
           </p>
           {/* Post Caption */}
@@ -77,22 +82,19 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </div>
           {/* Comment Count */}
           {comments.length > 2 && (
-            <Link
-              to={`/p/${id}`}
-              className='py-1 text-gray-600 cursor-pointer '
-            >
+            <Link to={`/p/${id}`} className='cursor-pointer py-1 text-gray-600'>
               View all {comments.length} comments
             </Link>
           )}
           {/* Comments */}
-          <div className='py-1 '>
+          <div className='py-1'>
             {twoComments.map((c: Comment) => (
               <p key={c.id} className=''>
                 <Link
-                  to={`/u/${c.username}`}
+                  to={`/u/${c.user.username}`}
                   className='mr-1 font-semibold hover:underline'
                 >
-                  {c.username}
+                  {c.user.username}
                 </Link>
 
                 {c.text}
@@ -102,7 +104,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           {/* TimeStamp */}
           <Link
             to={`/p/${id}`}
-            className='py-1 text-xs text-gray-500 uppercase'
+            className='py-1 text-xs uppercase text-gray-500'
           >
             {dayjs(createdAt).fromNow()}
           </Link>
@@ -110,7 +112,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
         <AddComment customRef={addCommentRef} postId={id} />
       </div>
     </Card>
-  );
-};
+  )
+}
 
-export default PostCard;
+export default PostCard

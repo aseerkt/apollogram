@@ -1,4 +1,4 @@
-import { useMessageCtx } from '@/context/MessageContext';
+import { useMessageCtx } from '@/context/MessageContext'
 import {
   GetFollowSuggestionsDocument,
   GetPostsDocument,
@@ -6,35 +6,35 @@ import {
   useMeQuery,
   User,
   useToggleFollowMutation,
-} from '@/generated/graphql';
-import { gql } from '@apollo/client';
-import { useCallback } from 'react';
+} from '@/generated/graphql'
+import { gql } from '@apollo/client'
+import { useCallback } from 'react'
 
 const useToggleFollowHook = (user: User) => {
-  const { setMessage } = useMessageCtx();
-  const [toggleFollow, { loading: toggling }] = useToggleFollowMutation();
-  const { data: meData } = useMeQuery();
-  const me = meData!.me!;
+  const { setMessage } = useMessageCtx()
+  const [toggleFollow, { loading: toggling }] = useToggleFollowMutation()
+  const { data: meData } = useMeQuery()
+  const me = meData!.me!
 
   const { data: selectedUserFollows } = useGetFollowsQuery({
-    variables: { username: user?.username },
+    variables: { userId: user?.id },
     skip: !user?.username,
     fetchPolicy: 'cache-only',
-  });
+  })
 
   const { data: currentUserFollows } = useGetFollowsQuery({
-    variables: { username: me.username },
+    variables: { userId: me.id },
     fetchPolicy: 'cache-only',
-  });
+  })
 
   const onToggle = useCallback(
     (user: User) => async () => {
-      if (!user || me.id === user.id) return;
+      if (!user || me.id === user.id) return
       try {
-        const { id: userId, username, isFollowing } = user;
+        const { id: userId, username, isFollowing } = user
 
         await toggleFollow({
-          variables: { followingUsername: username },
+          variables: { followingId: userId },
           refetchQueries: [
             { query: GetPostsDocument, variables: { limit: 4 } },
             { query: GetFollowSuggestionsDocument },
@@ -51,35 +51,35 @@ const useToggleFollowHook = (user: User) => {
                 id: 'User:' + userId,
                 data: { isFollowing: !isFollowing },
                 broadcast: false,
-              });
+              })
               if (selectedUserFollows)
                 cache.evict({
                   fieldName: 'getFollows',
                   args: { username: user.username },
-                });
+                })
               if (currentUserFollows)
                 cache.evict({
                   fieldName: 'getFollows',
                   args: { username: me.username },
-                });
+                })
 
               setMessage(
                 `${isFollowing ? 'Unfollowed' : 'Followed'} ${username}`
-              );
+              )
               // cache.evict({ fieldName: 'getPosts' });
               // cache.evict({ fieldName: 'getExplorePosts' });
             }
           },
-        });
+        })
       } catch (err) {
         // console.log(err);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [user]
-  );
+  )
 
-  return { toggling, onToggle: onToggle(user) };
-};
+  return { toggling, onToggle: onToggle(user) }
+}
 
-export default useToggleFollowHook;
+export default useToggleFollowHook

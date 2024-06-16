@@ -2,6 +2,7 @@ import {
   Arg,
   Ctx,
   FieldResolver,
+  ID,
   Mutation,
   Resolver,
   Root,
@@ -22,7 +23,7 @@ export class CommentResolver {
   @Mutation(() => Comment, { nullable: true })
   @UseMiddleware(isAuth)
   async addComment(
-    @Arg('postId') postId: number,
+    @Arg('postId', () => ID) postId: number,
     @Arg('text') text: string,
     @Ctx() { req, em }: MyContext
   ) {

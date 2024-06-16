@@ -5,14 +5,13 @@ import { Follow } from '../entities/Follow.js'
 export const createFollowLoader = (em: EntityManager) =>
   new DataLoader<{ followerId: number; followingId: number }, boolean>(
     async (keys) => {
-      const followerIds = keys.map((key) => key.followerId)
-      const followingIds = keys.map((key) => key.followingId)
-
       const follows = await em.find(
         Follow,
         {
-          follower: { $in: followerIds },
-          following: { $in: followingIds },
+          $or: keys.map((key) => ({
+            follower: key.followerId,
+            following: key.followingId,
+          })),
         },
         {
           fields: ['follower', 'following'],
@@ -21,8 +20,8 @@ export const createFollowLoader = (em: EntityManager) =>
 
       const userFollowData = new Map<string, boolean>()
 
-      follows.forEach((f) => {
-        userFollowData.set(`${f.follower.id}|${f.following.id}`, true)
+      follows.forEach((follow) => {
+        userFollowData.set(`${follow.follower.id}|${follow.following.id}`, true)
       })
 
       return keys.map(

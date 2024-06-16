@@ -1,4 +1,4 @@
-query GetSinglePost($postId: String!) {
+query GetSinglePost($postId: ID!) {
   getSinglePost(postId: $postId) {
     ...RegularPost
   }

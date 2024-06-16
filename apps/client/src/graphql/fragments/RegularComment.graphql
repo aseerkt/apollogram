@@ -1,7 +1,6 @@
 fragment RegularComment on Comment {
   id
   text
-  username
   createdAt
   updatedAt
   user {

@@ -1,46 +1,39 @@
-import { useEffect, useRef } from 'react';
-import cn from 'classnames';
-import { useField } from 'formik';
+import cn from 'classnames'
+import { useField } from 'formik'
 
 type InterfaceProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
-  name: string;
-  label: string;
-  error?: string;
-  focusOnRender?: boolean;
-  inline?: boolean;
-  labelClassName?: string;
-  helperText?: string;
-};
+  name: string
+  label: string
+  error?: string
+  autoFocus?: boolean
+  inline?: boolean
+  labelClassName?: string
+  helperText?: string
+}
 
 const InputField: React.FC<InterfaceProps> = ({
   label,
-  focusOnRender,
+  autoFocus,
   inline,
   labelClassName,
   helperText,
   ref,
   ...props
 }) => {
-  const [field, { error, touched }] = useField(props);
-  const inputRef = useRef<HTMLInputElement>(null);
-  useEffect(() => {
-    if (focusOnRender) {
-      inputRef.current?.focus();
-    }
-  }, [focusOnRender]);
+  const [field, { error, touched }] = useField(props)
 
   return (
     <div
       className={cn('mb-5', {
-        'md:grid md:grid-cols-2-form gap-10 ': inline,
+        'md:grid-cols-2-form gap-10 md:grid': inline,
       })}
     >
       <label
-        className={cn('mb-1 font-bold inline-block', labelClassName, {
-          'md:text-right w-full': inline,
+        className={cn('mb-1 inline-block font-bold', labelClassName, {
+          'w-full md:text-right': inline,
         })}
         htmlFor={props.name}
       >
@@ -49,13 +42,13 @@ const InputField: React.FC<InterfaceProps> = ({
       <div>
         <input
           {...field}
-          className={`w-full px-2 mb-3 py-1 rounded-md border-gray-300 ${
+          className={`mb-3 w-full rounded-md border-gray-300 px-2 py-1 ${
             error && touched
               ? 'border-2 border-red-500 bg-red-100'
-              : 'bg-blue-50 border focus:border-gray-500'
+              : 'border bg-blue-50 focus:border-gray-500'
           }`}
           {...props}
-          ref={inputRef}
+          autoFocus={autoFocus}
           autoComplete=''
         />
         <small className='block leading-4 text-gray-500'>{helperText}</small>
@@ -64,7 +57,7 @@ const InputField: React.FC<InterfaceProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default InputField;
+export default InputField

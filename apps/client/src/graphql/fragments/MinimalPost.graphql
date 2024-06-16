@@ -11,8 +11,8 @@ fragment MinimalPost on Post {
   likeCount
   comments {
     text
-    username
     user {
+      username
       imgURL
     }
   }

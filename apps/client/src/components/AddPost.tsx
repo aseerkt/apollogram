@@ -1,41 +1,41 @@
-import React, { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
+import React, { useCallback, useState } from 'react'
+import { useDropzone } from 'react-dropzone'
+import { FaCameraRetro } from 'react-icons/fa'
+import { useNavigate } from 'react-router-dom'
+import { useMessageCtx } from '../context/MessageContext'
 import {
   CloudinaryUploadResult,
   EnumFilePathPrefix,
   useAddPostMutation,
-} from '../generated/graphql';
-import Button from '../shared/Button';
-import Card from '../shared/Card';
-import { FaCameraRetro } from 'react-icons/fa';
-import { useMessageCtx } from '../context/MessageContext';
-import { useNavigate } from 'react-router-dom';
-import useCompressor from '../hooks/useCompressor';
-import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload';
+} from '../generated/graphql'
+import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload'
+import useCompressor from '../hooks/useCompressor'
+import Button from '../shared/Button'
+import Card from '../shared/Card'
 
 type AddPostProps = {
-  className?: string;
-  onClose: () => void;
-};
+  className?: string
+  onClose: () => void
+}
 
 const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
-  const { setMessage } = useMessageCtx();
+  const { setMessage } = useMessageCtx()
 
-  const [caption, setCaption] = useState('');
-  const [uploadResult, setUploadResult] = useState<CloudinaryUploadResult>();
+  const [caption, setCaption] = useState('')
+  const [uploadResult, setUploadResult] = useState<CloudinaryUploadResult>()
 
-  const [imgSrc, setImgSrc] = useState<string | null>(null);
-  const [uploadError, setUploadError] = useState('');
-  const [submitting, setSubmitting] = useState(false);
+  const [imgSrc, setImgSrc] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
 
-  const navigate = useNavigate();
-  const compress = useCompressor();
-  const { uploadToCloudinary, uploading } = useCloudinaryUpload();
+  const navigate = useNavigate()
+  const compress = useCompressor()
+  const { uploadToCloudinary, uploading } = useCloudinaryUpload()
 
   const onDrop = useCallback((files: File[]) => {
     if (!files[0].type.includes('image')) {
-      setUploadError('Unsupported file format (Supported: JPEG/JPG/PNG)');
-      return;
+      setUploadError('Unsupported file format (Supported: JPEG/JPG/PNG)')
+      return
     }
     compress(files[0], {
       width: 600,
@@ -44,54 +44,56 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
         const res = await uploadToCloudinary(
           EnumFilePathPrefix.Posts,
           result as File
-        );
+        )
         if (res.publicId) {
-          setUploadResult(res);
-          setImgSrc(URL.createObjectURL(files[0]));
+          setUploadResult(res)
+          setImgSrc(URL.createObjectURL(files[0]))
         }
       },
       error: (err) => {
-        setUploadError(err.message);
+        setUploadError(err.message)
       },
-    });
-  }, []);
+    })
+  }, [])
 
   const [addPost] = useAddPostMutation({
     update: (cache, { data }) => {
       if (data?.addPost.post) {
-        cache.evict({ fieldName: 'getExplorePosts' });
+        cache.evict({ fieldName: 'getExplorePosts' })
         cache.evict({
           fieldName: 'getUser',
           args: { username: data.addPost.post.user.username },
-        });
+        })
       }
     },
-  });
+  })
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
-    if (!uploadResult) return setUploadError('Please upload file');
-
-    const res = await addPost({ variables: { uploadResult, caption } });
-    if (res.data?.addPost.post) {
-      onClose();
-      setMessage('Post uploaded successfully');
-      navigate(`/p/${res.data.addPost.post.id}`);
+    e.preventDefault()
+    setSubmitting(true)
+    if (!uploadResult) {
+      return setUploadError('Please upload file')
     }
-    setSubmitting(false);
-  };
 
-  const submitDisabled = !imgSrc || !caption;
+    const res = await addPost({ variables: { uploadResult, caption } })
+    if (res.data?.addPost.post) {
+      onClose()
+      setMessage('Post uploaded successfully')
+      navigate(`/p/${res.data.addPost.post.id}`)
+    }
+    setSubmitting(false)
+  }
+
+  const submitDisabled = !imgSrc || !caption
 
   return (
     <Card className={`p-5 ${className}`}>
-      <h1 className='mt-1 mb-3 text-xl font-semibold uppercase'>Upload Post</h1>
+      <h1 className='mb-3 mt-1 text-xl font-semibold uppercase'>Upload Post</h1>
       <form onSubmit={onSubmit}>
         <div className='mb-5'>
-          <label className='inline-block mb-1 font-bold' htmlFor='caption'>
+          <label className='mb-1 inline-block font-bold' htmlFor='caption'>
             Caption
           </label>
           <div>
@@ -99,7 +101,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
               id='caption'
               name='caption'
               placeholder='Add caption for your post...'
-              className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
+              className='mb-3 w-full rounded-md border border-gray-300 bg-blue-50 px-2 py-1 focus:border-gray-500'
               autoFocus
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
@@ -116,7 +118,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
           )}
         </div>
         <div
-          className='p-5 my-2 mb-5 text-gray-700 border border-blue-400 rounded cursor-pointer hover:bg-gray-100'
+          className='my-2 mb-5 cursor-pointer rounded border border-blue-400 p-5 text-gray-700 hover:bg-gray-100'
           {...getRootProps()}
         >
           <input
@@ -127,13 +129,13 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
           />
 
           {uploading ? (
-            <small className='text-sm text-center uppercase'>
+            <small className='text-center text-sm uppercase'>
               Uploading...
             </small>
           ) : uploadError ? (
             <small className='my-1 text-red-700'>{uploadError}</small>
           ) : isDragActive ? (
-            <p className='text-sm text-center uppercase'>
+            <p className='text-center text-sm uppercase'>
               Drop the files here ...
             </p>
           ) : (
@@ -146,7 +148,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
 
         <Button
           isLoading={submitting}
-          className='block mx-auto'
+          className='mx-auto block'
           color='dark'
           type='submit'
           disabled={submitDisabled}
@@ -155,7 +157,7 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
         </Button>
       </form>
     </Card>
-  );
-};
+  )
+}
 
-export default AddPost;
+export default AddPost

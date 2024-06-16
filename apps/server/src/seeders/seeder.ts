@@ -24,7 +24,7 @@ export class DatabaseSeeder extends Seeder {
 
     for (let i = 0; i < USER_COUNT; i++) {
       users.push({
-        username: faker.internet.userName(),
+        username: faker.internet.userName().toLowerCase(),
         email: faker.internet.email(),
         name: faker.person.fullName(),
         imgURL: faker.image.avatar(),
@@ -65,6 +65,6 @@ export class DatabaseSeeder extends Seeder {
     }
 
     await em.upsertMany(Profile, profiles)
-    await em.upsertMany(Post, posts)
+    await em.insertMany(Post, posts)
   }
 }

@@ -15,6 +15,7 @@ import {
 } from 'type-graphql'
 import { CLOUDINARY_ROOT_PATH } from '../constants.js'
 import { Comment } from '../entities/Comment.js'
+import { Follow } from '../entities/Follow.js'
 import { Post } from '../entities/Post.js'
 import { User } from '../entities/User.js'
 import { isAuth } from '../middlewares/isAuth.js'
@@ -102,14 +103,17 @@ export class PostResolver {
     const params = [req.userId, limit + 1]
     if (offset) params.push(offset)
     // Get posts from followed peoples only
-    const posts = await em
-      .createQueryBuilder(Post, 'p')
-      .select('p.*')
-      .innerJoin('follows', 'f', { 'f.followingUserId': 'p.authorId' })
-      .where({ 'f.userId': req.userId })
-      .orderBy({ createdAt: 'DESC' })
-      .limit(limit + 1)
-      .offset(offset)
+    const followingIds = await em.find(
+      Follow,
+      { follower: req.userId },
+      { fields: ['following'], limit: limit * 2 }
+    )
+
+    const posts = await em.find(
+      Post,
+      { author: { $in: followingIds.map((f) => f.following.id) } },
+      { orderBy: { createdAt: 'DESC' }, limit: limit + 1, offset }
+    )
 
     return {
       posts: posts.slice(0, limit),
@@ -142,7 +146,10 @@ export class PostResolver {
 
   @Query(() => Post, { nullable: true })
   @UseMiddleware(isAuth)
-  getSinglePost(@Arg('postId') postId: number, @Ctx() { em }: MyContext) {
+  getSinglePost(
+    @Arg('postId', () => ID) postId: number,
+    @Ctx() { em }: MyContext
+  ) {
     return em.findOne(Post, postId)
   }
 

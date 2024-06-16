@@ -12,14 +12,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  DateTime: any;
-};
-
-export type BaseColumns = {
-  __typename?: 'BaseColumns';
-  createdAt: Scalars['DateTime'];
-  id: Scalars['ID'];
-  updatedAt: Scalars['DateTime'];
+  DateTimeISO: any;
 };
 
 export type CloudinarySignature = {
@@ -37,13 +30,11 @@ export type CloudinaryUploadResult = {
 
 export type Comment = {
   __typename?: 'Comment';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTimeISO'];
   id: Scalars['ID'];
-  postId: Scalars['String'];
   text: Scalars['String'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTimeISO'];
   user: User;
-  username: Scalars['String'];
 };
 
 export type CreatePostResponse = {
@@ -69,12 +60,6 @@ export type FieldError = {
   __typename?: 'FieldError';
   message: Scalars['String'];
   path: Scalars['String'];
-};
-
-export type Follow = {
-  __typename?: 'Follow';
-  followingUsername: Scalars['String'];
-  username: Scalars['String'];
 };
 
 export type FollowData = {
@@ -108,7 +93,7 @@ export type Mutation = {
 
 
 export type MutationAddCommentArgs = {
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
   text: Scalars['String'];
 };
 
@@ -158,12 +143,12 @@ export type MutationRegisterArgs = {
 
 
 export type MutationToggleFollowArgs = {
-  followingUsername: Scalars['ID'];
+  followingId: Scalars['ID'];
 };
 
 
 export type MutationToggleLikeArgs = {
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
 };
 
 export type PaginatedPost = {
@@ -175,31 +160,24 @@ export type PaginatedPost = {
 export type Post = {
   __typename?: 'Post';
   caption: Scalars['String'];
-  commentCount: Scalars['Float'];
+  commentCount: Scalars['Int'];
   comments: Array<Comment>;
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTimeISO'];
   id: Scalars['ID'];
   imgURL: Scalars['String'];
-  likeCount: Scalars['Float'];
-  updatedAt: Scalars['DateTime'];
+  likeCount: Scalars['Int'];
+  updatedAt: Scalars['DateTimeISO'];
   user: User;
   userLike: Scalars['Boolean'];
-  username: Scalars['String'];
-};
-
-export type PostResponse = {
-  __typename?: 'PostResponse';
-  error?: Maybe<Scalars['String']>;
-  post?: Maybe<Post>;
 };
 
 export type Profile = {
   __typename?: 'Profile';
   bio: Scalars['String'];
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTimeISO'];
   gender: Scalars['String'];
   id: Scalars['ID'];
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTimeISO'];
   website: Scalars['String'];
 };
 
@@ -223,7 +201,7 @@ export type QueryGetExplorePostsArgs = {
 
 
 export type QueryGetFollowsArgs = {
-  username: Scalars['String'];
+  userId: Scalars['ID'];
 };
 
 
@@ -234,7 +212,7 @@ export type QueryGetPostsArgs = {
 
 
 export type QueryGetSinglePostArgs = {
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
 };
 
 
@@ -255,7 +233,7 @@ export type RegisterResponse = {
 
 export type User = {
   __typename?: 'User';
-  createdAt: Scalars['DateTime'];
+  createdAt: Scalars['DateTimeISO'];
   email: Scalars['String'];
   id: Scalars['ID'];
   imgURL: Scalars['String'];
@@ -263,29 +241,29 @@ export type User = {
   name: Scalars['String'];
   posts: Array<Post>;
   profile: Profile;
-  updatedAt: Scalars['DateTime'];
+  updatedAt: Scalars['DateTimeISO'];
   username: Scalars['String'];
 };
 
-export type MinimalPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, likeCount: number, user: { __typename?: 'User', username: string, imgURL: string }, comments: Array<{ __typename?: 'Comment', text: string, username: string, user: { __typename?: 'User', imgURL: string } }> };
+export type MinimalPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, createdAt: any, updatedAt: any, likeCount: number, user: { __typename?: 'User', username: string, imgURL: string }, comments: Array<{ __typename?: 'Comment', text: string, user: { __typename?: 'User', username: string, imgURL: string } }> };
 
 export type MinimalProfileFragment = { __typename?: 'Profile', id: string, website: string, bio: string, gender: string };
 
 export type MinimalUserFragment = { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string };
 
-export type RegularCommentFragment = { __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } };
+export type RegularCommentFragment = { __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } };
 
-export type RegularPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
+export type RegularPostFragment = { __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
 
 export type RegularUserFragment = { __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string } };
 
 export type AddCommentMutationVariables = Exact<{
   text: Scalars['String'];
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
 }>;
 
 
-export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
+export type AddCommentMutation = { __typename?: 'Mutation', addComment?: Maybe<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> };
 
 export type AddPostMutationVariables = Exact<{
   caption: Scalars['String'];
@@ -346,14 +324,14 @@ export type RegisterMutationVariables = Exact<{
 export type RegisterMutation = { __typename?: 'Mutation', register: { __typename?: 'RegisterResponse', ok: boolean, errors?: Maybe<Array<{ __typename?: 'FieldError', path: string, message: string }>> } };
 
 export type ToggleFollowMutationVariables = Exact<{
-  followingUsername: Scalars['ID'];
+  followingId: Scalars['ID'];
 }>;
 
 
 export type ToggleFollowMutation = { __typename?: 'Mutation', toggleFollow: boolean };
 
 export type ToggleLikeMutationVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
 }>;
 
 
@@ -365,7 +343,7 @@ export type GetExplorePostsQueryVariables = Exact<{
 }>;
 
 
-export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> } };
+export type GetExplorePostsQuery = { __typename?: 'Query', getExplorePosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> } };
 
 export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -373,7 +351,7 @@ export type GetFollowSuggestionsQueryVariables = Exact<{ [key: string]: never; }
 export type GetFollowSuggestionsQuery = { __typename?: 'Query', getFollowSuggestions: Array<{ __typename?: 'User', isFollowing: boolean, id: string, username: string, email: string, imgURL: string, name: string }> };
 
 export type GetFollowsQueryVariables = Exact<{
-  username: Scalars['String'];
+  userId: Scalars['ID'];
 }>;
 
 
@@ -385,14 +363,14 @@ export type GetPostsQueryVariables = Exact<{
 }>;
 
 
-export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> } };
+export type GetPostsQuery = { __typename?: 'Query', getPosts: { __typename?: 'PaginatedPost', hasMore: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> } };
 
 export type GetSinglePostQueryVariables = Exact<{
-  postId: Scalars['String'];
+  postId: Scalars['ID'];
 }>;
 
 
-export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> };
+export type GetSinglePostQuery = { __typename?: 'Query', getSinglePost?: Maybe<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }> };
 
 export type GetUploadSignatureQueryVariables = Exact<{
   pathPrefix: EnumFilePathPrefix;
@@ -406,7 +384,7 @@ export type GetUserQueryVariables = Exact<{
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, username: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }>, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string } }> };
+export type GetUserQuery = { __typename?: 'Query', getUser?: Maybe<{ __typename?: 'User', id: string, username: string, email: string, name: string, imgURL: string, isFollowing: boolean, posts: Array<{ __typename?: 'Post', id: string, caption: string, imgURL: string, likeCount: number, userLike: boolean, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string }, comments: Array<{ __typename?: 'Comment', id: string, text: string, createdAt: any, updatedAt: any, user: { __typename?: 'User', id: string, username: string, email: string, imgURL: string, name: string } }> }>, profile: { __typename?: 'Profile', id: string, website: string, bio: string, gender: string } }> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -427,8 +405,8 @@ export const MinimalPostFragmentDoc = gql`
   likeCount
   comments {
     text
-    username
     user {
+      username
       imgURL
     }
   }
@@ -447,7 +425,6 @@ export const RegularCommentFragmentDoc = gql`
     fragment RegularComment on Comment {
   id
   text
-  username
   createdAt
   updatedAt
   user {
@@ -495,7 +472,7 @@ export const RegularUserFragmentDoc = gql`
 }
     ${MinimalProfileFragmentDoc}`;
 export const AddCommentDocument = gql`
-    mutation AddComment($text: String!, $postId: String!) {
+    mutation AddComment($text: String!, $postId: ID!) {
   addComment(text: $text, postId: $postId) {
     ...RegularComment
   }
@@ -805,8 +782,8 @@ export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
 export const ToggleFollowDocument = gql`
-    mutation ToggleFollow($followingUsername: ID!) {
-  toggleFollow(followingUsername: $followingUsername)
+    mutation ToggleFollow($followingId: ID!) {
+  toggleFollow(followingId: $followingId)
 }
     `;
 export type ToggleFollowMutationFn = Apollo.MutationFunction<ToggleFollowMutation, ToggleFollowMutationVariables>;
@@ -824,7 +801,7 @@ export type ToggleFollowMutationFn = Apollo.MutationFunction<ToggleFollowMutatio
  * @example
  * const [toggleFollowMutation, { data, loading, error }] = useToggleFollowMutation({
  *   variables: {
- *      followingUsername: // value for 'followingUsername'
+ *      followingId: // value for 'followingId'
  *   },
  * });
  */
@@ -836,7 +813,7 @@ export type ToggleFollowMutationHookResult = ReturnType<typeof useToggleFollowMu
 export type ToggleFollowMutationResult = Apollo.MutationResult<ToggleFollowMutation>;
 export type ToggleFollowMutationOptions = Apollo.BaseMutationOptions<ToggleFollowMutation, ToggleFollowMutationVariables>;
 export const ToggleLikeDocument = gql`
-    mutation ToggleLike($postId: String!) {
+    mutation ToggleLike($postId: ID!) {
   toggleLike(postId: $postId)
 }
     `;
@@ -941,8 +918,8 @@ export type GetFollowSuggestionsQueryHookResult = ReturnType<typeof useGetFollow
 export type GetFollowSuggestionsLazyQueryHookResult = ReturnType<typeof useGetFollowSuggestionsLazyQuery>;
 export type GetFollowSuggestionsQueryResult = Apollo.QueryResult<GetFollowSuggestionsQuery, GetFollowSuggestionsQueryVariables>;
 export const GetFollowsDocument = gql`
-    query GetFollows($username: String!) {
-  getFollows(username: $username) {
+    query GetFollows($userId: ID!) {
+  getFollows(userId: $userId) {
     followers {
       ...MinimalUser
       isFollowing
@@ -967,7 +944,7 @@ export const GetFollowsDocument = gql`
  * @example
  * const { data, loading, error } = useGetFollowsQuery({
  *   variables: {
- *      username: // value for 'username'
+ *      userId: // value for 'userId'
  *   },
  * });
  */
@@ -1022,7 +999,7 @@ export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
 export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
 export type GetPostsQueryResult = Apollo.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
 export const GetSinglePostDocument = gql`
-    query GetSinglePost($postId: String!) {
+    query GetSinglePost($postId: ID!) {
   getSinglePost(postId: $postId) {
     ...RegularPost
   }
