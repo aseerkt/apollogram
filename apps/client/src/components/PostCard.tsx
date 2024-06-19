@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
-import { useEffect, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { Comment, Post } from '../generated/graphql'
+import { Post } from '../gql/graphql'
 import Avatar from '../shared/Avatar'
 import Card from '../shared/Card'
 import AddComment from './AddComment'
@@ -10,9 +10,10 @@ import PostOptions from './PostOptions'
 
 interface PostCardProps {
   post: Post
+  isCurrentUserPost: boolean
 }
 
-const PostCard: React.FC<PostCardProps> = ({ post }) => {
+const PostCard: React.FC<PostCardProps> = ({ post, isCurrentUserPost }) => {
   const {
     id,
     user,
@@ -23,15 +24,14 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
     comments,
     createdAt,
   } = post
-  const [twoComments, setTwoComments] = useState<Comment[]>([])
 
-  useEffect(() => {
-    setTwoComments(
-      comments.filter((_, index) => index === 0 || index === 1).reverse()
-    )
-  }, [comments, setTwoComments])
+  const twoComments = useMemo(() => comments.slice(-2).reverse(), [comments])
 
   const addCommentRef = useRef<HTMLInputElement>(null)
+
+  const handleCommentAction = () => {
+    addCommentRef.current?.focus()
+  }
 
   return (
     <Card id={id} className='mb-16 w-full'>
@@ -46,7 +46,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           </Link>
         </div>
         {/* TODO Icon Button */}
-        <PostOptions post={post} />
+        <PostOptions post={post} isCurrentUserPost={isCurrentUserPost} />
       </div>
       {/* Media */}
       <Link to={`/p/${id}`} className='flex w-full items-center'>
@@ -64,7 +64,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           <PostActions
             postId={id}
             userLike={userLike}
-            addCommentRef={addCommentRef}
+            onCommentAction={handleCommentAction}
           />
           {/* Like Count */}
           <p className='font-semibold'>
@@ -88,7 +88,7 @@ const PostCard: React.FC<PostCardProps> = ({ post }) => {
           )}
           {/* Comments */}
           <div className='py-1'>
-            {twoComments.map((c: Comment) => (
+            {twoComments.map((c) => (
               <p key={c.id} className=''>
                 <Link
                   to={`/u/${c.user.username}`}

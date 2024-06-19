@@ -1,4 +1,4 @@
 export interface ModalProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isOpen: boolean
+  onClose: React.Dispatch<React.SetStateAction<boolean>>
 }

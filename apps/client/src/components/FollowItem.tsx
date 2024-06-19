@@ -1,33 +1,33 @@
-import { Link } from 'react-router-dom';
-import Avatar from '../shared/Avatar';
-import Button from '../shared/Button';
-import { useMeQuery, User } from '../generated/graphql';
-import useToggleFollowHook from '../hooks/useToggleFollowHook';
+import { Link } from 'react-router-dom'
+import { User } from '../gql/graphql'
+import useToggleFollowHook from '../hooks/useToggleFollowHook'
+import Avatar from '../shared/Avatar'
+import Button from '../shared/Button'
 
-interface SuggestionItemProps {
-  s: User;
-  darkFollowButton?: boolean;
+interface FollowItemProps {
+  s: User
+  isCurrentUser: boolean
+  darkFollowButton?: boolean
 }
 
-const FollowItem: React.FC<SuggestionItemProps> = ({
+const FollowItem: React.FC<FollowItemProps> = ({
   s,
+  isCurrentUser,
   darkFollowButton = false,
 }) => {
-  const { onToggle, toggling } = useToggleFollowHook(s);
-  const { data: meData } = useMeQuery();
-  const me = meData!.me!;
+  const { onToggle, toggling } = useToggleFollowHook(s)
 
   return (
     <div className='mt-3' key={s.id + s.username + s.id}>
       <div className='flex items-center pb-2'>
         <Avatar src={s.imgURL} />
-        <div className='flex flex-col ml-2'>
+        <div className='ml-2 flex flex-col'>
           <Link className='font-bold hover:underline' to={`/u/${s.username}`}>
             {s.username}
           </Link>
           <small className='text-gray-500'>New to Instagram</small>
         </div>
-        {s.username === me.username ? (
+        {isCurrentUser ? (
           <Button className='ml-auto text-sm' color='dark' disabled>
             You
           </Button>
@@ -51,7 +51,7 @@ const FollowItem: React.FC<SuggestionItemProps> = ({
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FollowItem;
+export default FollowItem

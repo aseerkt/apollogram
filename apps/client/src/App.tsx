@@ -2,28 +2,30 @@ import { Suspense, lazy } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
 import PrivateRoute from './containers/PrivateRoute'
-import { MeDocument, useMeQuery } from './generated/graphql'
+import { useMeQuery } from './hooks/useMeQuery'
 import { routes } from './routes'
 import Alert from './shared/Alert'
+import ScrollToTop from './shared/ScrollToTop'
 import Spinner from './shared/Spinner'
-import { apolloClient } from './utils/apolloClient'
 
-const MessageProvider = lazy(() => import('./context/MessageContext'))
+const ToastProvider = lazy(() => import('./context/toast'))
 
 const App: React.FC = () => {
-  const { loading, error } = useMeQuery()
+  const result = useMeQuery()
 
-  if (loading) {
+  const { isFetching, error } = result
+
+  if (isFetching) {
     return <Spinner />
   } else if (error) {
-    apolloClient.writeQuery({ query: MeDocument, data: { me: null } })
     return <Alert severity='danger'>{error.message}</Alert>
   }
 
   return (
     <Suspense fallback={<Spinner />}>
       <BrowserRouter>
-        <MessageProvider>
+        <ScrollToTop />
+        <ToastProvider>
           <div className='pb-10'>
             <Routes>
               {routes.map(({ path, Component, isPrivate }) => (
@@ -43,7 +45,7 @@ const App: React.FC = () => {
               ))}
             </Routes>
           </div>
-        </MessageProvider>
+        </ToastProvider>
       </BrowserRouter>
     </Suspense>
   )

@@ -1,6 +1,6 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  purge: ['./src/**/*.{js,jsx,ts,tsx}', './index.html'],
-  darkMode: false, // or 'media' or 'class'
+  content: ['./src/**/*.{js,jsx,ts,tsx}', './index.html'],
   theme: {
     minHeight: {
       450: '450px',
@@ -41,7 +41,7 @@ module.exports = {
           '@screen md': { maxWidth: 'calc(768px * 4/12  - 1rem)' },
           '@screen lg': { maxWidth: 'calc(975px * 4/12  - 1rem)' },
         },
-      });
+      })
     },
   ],
-};
+}

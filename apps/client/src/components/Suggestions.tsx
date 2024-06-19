@@ -1,28 +1,41 @@
-import { useGetFollowSuggestionsQuery, User } from '../generated/graphql';
-import FollowItem from './FollowItem';
-import Spinner from '../shared/Spinner';
+import { User } from '../gql/graphql'
+import { GetFollowSuggestionsQueryDocument } from '../graphql/queries'
+import { useMeQuery } from '../hooks/useMeQuery'
+import Spinner from '../shared/Spinner'
+import { useGqlQuery } from '../utils/react-query-gql'
+import FollowItem from './FollowItem'
 
 const Suggestions = () => {
-  const { data, loading } = useGetFollowSuggestionsQuery();
+  const { currentUser } = useMeQuery()
+  const { data, isFetching } = useGqlQuery(
+    GetFollowSuggestionsQueryDocument,
+    {}
+  )
 
-  if (loading) {
-    return <Spinner />;
+  let content: JSX.Element | JSX.Element[]
+
+  if (isFetching) {
+    content = <Spinner />
+  } else if (!data?.getFollowSuggestions.length) {
+    content = <p>No Suggestions</p>
+  } else {
+    content = data.getFollowSuggestions.map((user) => (
+      <FollowItem
+        key={user.username + user.id}
+        s={user as User}
+        isCurrentUser={currentUser?.id === user.id}
+      />
+    ))
   }
 
   return (
     <div>
-      <div className='flex items-center justify-between py-3 '>
+      <div className='flex items-center justify-between py-3'>
         <p className='font-bold text-gray-500'>Suggestions For You</p>
       </div>
-      <div className='flex flex-col'>
-        {data?.getFollowSuggestions.map((s) => (
-          <FollowItem key={s.username + s.id} s={s as User} />
-        ))}
-        {!data?.getFollowSuggestions ||
-          (data.getFollowSuggestions.length < 1 && <p>No Suggestions</p>)}
-      </div>
+      <div className='flex flex-col'>{content}</div>
     </div>
-  );
-};
+  )
+}
 
-export default Suggestions;
+export default Suggestions

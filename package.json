@@ -3,7 +3,7 @@
   "author": {
     "name": "Aseer KT",
     "email": "aseermiqdad@gmail.com",
-    "url": "https://aseerkt.vercel.app"
+    "url": "https://aseerkt.vercel.com"
   },
   "scripts": {
     "dev": "turbo dev",
@@ -14,7 +14,8 @@
     "turbo": "^2.0.4"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*"
+    "tsconfig": "workspace:*",
+    "typescript": "5.4.5"
   },
   "packageManager": "pnpm@9.3.0"
 }

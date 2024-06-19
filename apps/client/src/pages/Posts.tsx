@@ -1,76 +1,61 @@
-import React from 'react';
-import PostCard from '../components/PostCard';
-import Container from '../shared/Container';
-import { Post, useGetPostsQuery } from '../generated/graphql';
-import Spinner from '../shared/Spinner';
-import Alert from '../shared/Alert';
-import MiniProfileView from '../components/MiniProfileView';
-import { Link } from 'react-router-dom';
+import { keepPreviousData } from '@tanstack/react-query'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import MiniProfileView from '../components/MiniProfileView'
+import PostCard from '../components/PostCard'
+import { Post } from '../gql/graphql'
+import { GetPostsQueryDocument } from '../graphql/queries'
+import { useMeQuery } from '../hooks/useMeQuery'
+import Alert from '../shared/Alert'
+import Container from '../shared/Container'
+import Spinner from '../shared/Spinner'
+import { useGqlQuery } from '../utils/react-query-gql'
 
 const Posts: React.FC = () => {
-  const [observedPost, setObservedPost] = React.useState('');
-  const { data, loading, error, fetchMore, variables } = useGetPostsQuery({
-    variables: { limit: 3 },
-  });
+  const [pageParams, setPageParams] = useState({ limit: 3, offset: 0 })
 
-  React.useEffect(() => {
-    if (data) {
-      const posts = data.getPosts.posts;
-      if (!posts || posts.length === 0) return;
+  const { data, isFetching, error } = useGqlQuery(GetPostsQueryDocument, {
+    variables: pageParams,
+    placeholderData: keepPreviousData,
+  })
 
-      const id = posts[posts.length - 1].id;
-      if (!data.getPosts.hasMore) return;
+  const { currentUser } = useMeQuery()
 
-      if (id !== observedPost) {
-        setObservedPost(id);
-        observeElement(document.getElementById(id)!);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.getPosts.posts]);
+  const loadMore = () => {
+    setPageParams({
+      limit: pageParams.limit,
+      offset: data?.getPosts.posts.length || 0,
+    })
+  }
 
-  const observeElement = (element: HTMLElement) => {
-    if (!element) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting === true) {
-          // console.log('Reached bottom of post');
-          fetchMore({
-            variables: {
-              limit: variables?.limit,
-              offset: data?.getPosts.posts.length || 0,
-            },
-          });
-          observer.unobserve(element);
-        }
-      },
-      { threshold: 0.5 }
-    );
-    observer.observe(element);
-  };
+  useScrollPaginate(data?.getPosts.posts, data?.getPosts.hasMore, loadMore)
 
-  if (loading) {
-    return <Spinner />;
+  if (isFetching) {
+    return <Spinner />
   } else if (error) {
-    return <Alert>{error.message}</Alert>;
+    return <Alert>{error.message}</Alert>
   }
 
   return (
     <Container>
-      <div className='flex flex-wrap justify-between w-full pt-15'>
+      <div className='pt-15 flex w-full flex-wrap justify-between'>
         {data && data.getPosts.posts.length > 0 ? (
           <>
-            <div className='md:w-8/12 sm:w-full'>
+            <div className='sm:w-full md:w-8/12'>
               {data.getPosts.posts.map((post) => (
-                <PostCard key={post.id} post={post as Post} />
+                <PostCard
+                  key={post.id}
+                  post={post as Post}
+                  isCurrentUserPost={currentUser?.id === post.user.id}
+                />
               ))}
             </div>
-            <div className='relative flex-1 hidden md:block md:ml-4'>
+            <div className='relative hidden flex-1 md:ml-4 md:block'>
               {data && data.getPosts.posts.length > 0 && <MiniProfileView />}
             </div>
           </>
         ) : (
-          <div className='w-full mx-auto sm:w-9/12 md:w-6/12'>
+          <div className='mx-auto w-full sm:w-9/12 md:w-6/12'>
             <h1 className='text-lg font-bold'>No Posts from your followings</h1>
             <p>
               Follow more people or{' '}
@@ -83,7 +68,7 @@ const Posts: React.FC = () => {
         )}
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default Posts;
+export default Posts

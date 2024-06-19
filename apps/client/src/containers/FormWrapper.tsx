@@ -1,28 +1,32 @@
-import React from 'react';
-import { FaInstagram } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-import Card from '@/shared/Card';
+import Card from '@/shared/Card'
+import React from 'react'
+import { FaInstagram } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
-interface FormWrapperProps {
-  title: string;
+interface AuthFormWrapperProps {
+  title: string
+  children: React.ReactNode
 }
 
-const FormWrapper: React.FC<FormWrapperProps> = ({ children, title }) => {
+const AuthFormWrapper: React.FC<AuthFormWrapperProps> = ({
+  children,
+  title,
+}) => {
   return (
-    <div className='w-screen mt-5 justify-content-center'>
-      <div className='max-w-screen-sm mx-auto w-96'>
+    <div className='justify-content-center mt-5 w-screen'>
+      <div className='mx-auto w-96 max-w-screen-sm'>
         <Card>
-          <div className='flex flex-col items-center justify-center p-4 bg-gray-100'>
+          <div className='flex flex-col items-center justify-center bg-gray-100 p-4'>
             <Link
               to='/'
-              className='flex items-center justify-center space-x-2 mb-2'
+              className='mb-2 flex items-center justify-center space-x-2'
             >
               <FaInstagram size='2em' />
               <h1 style={{ fontFamily: 'Grand Hotel', fontSize: '2rem' }}>
                 Apollogram
               </h1>
             </Link>
-            <h2 className='text-xl font-semibold text-center text-gray-900'>
+            <h2 className='text-center text-xl font-semibold text-gray-900'>
               {title}
             </h2>
           </div>
@@ -30,7 +34,7 @@ const FormWrapper: React.FC<FormWrapperProps> = ({ children, title }) => {
         </Card>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default FormWrapper;
+export default AuthFormWrapper

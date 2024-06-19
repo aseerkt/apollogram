@@ -1,15 +1,17 @@
-import { gql } from '@apollo/client';
-import { createRef, useEffect, useState } from 'react';
-import Button from '../shared/Button';
-import Card from '../shared/Card';
-import { useMessageCtx } from '../context/MessageContext';
-import { useEditCaptionMutation } from '../generated/graphql';
+import { useQueryClient } from '@tanstack/react-query'
+import { useState } from 'react'
+import { useToast } from '../context/toast'
+import { GetPostsDocument } from '../gql/graphql'
+import { EditCaptionMutationDocument } from '../graphql/mutations'
+import Button from '../shared/Button'
+import Card from '../shared/Card'
+import { getCacheKey, useGqlMutation } from '../utils/react-query-gql'
 
 interface EditCaptionProps {
-  postId: string;
-  postCaption: string;
-  postImage: string;
-  close: Function;
+  postId: string
+  postCaption: string
+  postImage: string
+  close: Function
 }
 
 const EditCaption: React.FC<EditCaptionProps> = ({
@@ -18,54 +20,38 @@ const EditCaption: React.FC<EditCaptionProps> = ({
   postImage,
   close,
 }) => {
-  const { setMessage } = useMessageCtx();
-  const [caption, setCaption] = useState(postCaption);
-  const [editCaption] = useEditCaptionMutation();
-  const inputRef = createRef<HTMLInputElement>();
-  const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, [inputRef]);
+  const toast = useToast()
+  const [caption, setCaption] = useState(postCaption)
+  const queryClient = useQueryClient()
+  const { mutate: editCaption, isPending: submitting } = useGqlMutation(
+    EditCaptionMutationDocument,
+    {
+      onSuccess: (data) => {
+        if (data.editCaption) {
+          // TODO: check cache invalidation
+          queryClient.invalidateQueries({
+            queryKey: [getCacheKey(GetPostsDocument)],
+          })
+          toast('Post caption updated')
+        }
+        close()
+      },
+    }
+  )
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSubmitting(true);
-    try {
-      await editCaption({
-        variables: { postId, caption },
-        update: (cache, { data }) => {
-          const newCaption = data?.editCaption;
-          if (newCaption) {
-            cache.writeFragment<{ caption: string }>({
-              fragment: gql`
-                fragment PostCaption on Post {
-                  caption
-                }
-              `,
-              id: 'Post:' + postId,
-              data: { caption },
-            });
-            setMessage('Post caption updated');
-          }
-          close();
-        },
-      });
-      setSubmitting(false);
-    } catch (err) {
-      console.error(err);
-      setSubmitting(false);
-    }
-  };
+    e.preventDefault()
+    editCaption({ postId, caption })
+  }
 
   return (
     <Card className={`p-5`}>
-      <h1 className='mt-1 mb-3 text-xl font-semibold uppercase'>
+      <h1 className='mb-3 mt-1 text-xl font-semibold uppercase'>
         Edit Caption
       </h1>
       <form onSubmit={onSubmit}>
         <div className='mb-5'>
-          <label className='inline-block mb-1 font-bold' htmlFor='caption'>
+          <label className='mb-1 inline-block font-bold' htmlFor='caption'>
             Caption
           </label>
           <div>
@@ -73,8 +59,8 @@ const EditCaption: React.FC<EditCaptionProps> = ({
               id='caption'
               name='caption'
               placeholder='Add caption for your post...'
-              className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
-              ref={inputRef}
+              className='mb-3 w-full rounded-md border border-gray-300 bg-blue-50 px-2 py-1 focus:border-gray-500'
+              autoFocus
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
             />
@@ -90,7 +76,7 @@ const EditCaption: React.FC<EditCaptionProps> = ({
 
         <Button
           isLoading={submitting}
-          className='block mx-auto'
+          className='mx-auto block'
           color='dark'
           type='submit'
           disabled={!caption || postCaption === caption}
@@ -99,7 +85,7 @@ const EditCaption: React.FC<EditCaptionProps> = ({
         </Button>
       </form>
     </Card>
-  );
-};
+  )
+}
 
-export default EditCaption;
+export default EditCaption

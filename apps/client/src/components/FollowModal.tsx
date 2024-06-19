@@ -1,68 +1,76 @@
-import { useMemo, useState } from 'react';
-import { FaTimes } from 'react-icons/fa';
-import { useParams } from 'react-router';
-import Modal from '../shared/Modal';
-import Spinner from '../shared/Spinner';
+import { useMemo } from 'react'
+import { FaTimes } from 'react-icons/fa'
+import { useParams } from 'react-router'
+import { User } from '../gql/graphql'
 import {
-  useGetFollowsQuery,
-  useGetUserQuery,
-  User,
-} from '../generated/graphql';
-import FollowItem from './FollowItem';
+  GetFollowsQueryDocument,
+  GetUserQueryDocument,
+} from '../graphql/queries'
+import { useDisclosure } from '../hooks/useDisclosure'
+import { useMeQuery } from '../hooks/useMeQuery'
+import Modal from '../shared/Modal'
+import Spinner from '../shared/Spinner'
+import { useGqlQuery } from '../utils/react-query-gql'
+import FollowItem from './FollowItem'
 
 interface FollowModalProps {
-  modalTitle: 'Followers' | 'Followings';
+  modalTitle: 'Followers' | 'Followings'
 }
 
 const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { username } = useParams<{ username: string }>();
-  const { data, loading } = useGetFollowsQuery({
+  const { isOpen, toggle } = useDisclosure(false)
+  const { username } = useParams<{ username: string }>()
+  const { currentUser } = useMeQuery()
+  const { data: userData } = useGqlQuery(GetUserQueryDocument, {
     variables: { username: username! },
-    skip: typeof username !== 'string',
-  });
+  })
+  const userId = userData?.getUser?.id
+  const { data, isFetching: loading } = useGqlQuery(GetFollowsQueryDocument, {
+    variables: {
+      userId: userId!,
+    },
+    enabled: Boolean(userId),
+  })
+
   const follows = useMemo(
     () =>
       modalTitle === 'Followers'
         ? data?.getFollows?.followers
         : data?.getFollows?.followings,
     [data, modalTitle]
-  );
+  )
 
   if (loading && isOpen) {
-    return <Spinner />;
+    return <Spinner />
   }
 
   return (
     <>
-      <button
-        onClick={() => {
-          if (follows?.length) setIsOpen(!isOpen);
-        }}
-        className='md:flex'
-      >
-        <strong className='md:mr-1'>{follows?.length}</strong>
+      <button onClick={toggle} disabled={!follows?.length} className='md:flex'>
+        <strong className='md:mr-1'>{follows?.length || 0}</strong>
         <p className='text-gray-600 md:text-black'>
           {modalTitle.toLowerCase()}
         </p>
       </button>
-      <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
-        <main className='bg-white rounded-md'>
-          <header className='flex items-center justify-between p-3 border-b-2'>
-            <div> </div>
+      <Modal isOpen={isOpen} onClose={toggle}>
+        <main className='rounded-md bg-white'>
+          <header className='flex items-center justify-between border-b-2 p-3'>
+            <div></div>
             <h1 className='font-bold'>{modalTitle}</h1>
             <FaTimes
               className='ml-auto cursor-pointer'
               size='1.2em'
-              onClick={() => setIsOpen(false)}
+              role='button'
+              onClick={toggle}
             />
           </header>
-          <div className='px-3 overflow-y-auto max-h-96 h-96'>
+          <div className='h-96 max-h-96 overflow-y-auto px-3'>
             {follows?.map((u) => (
               <FollowItem
                 key={`follow_${u.id}`}
                 darkFollowButton
                 s={u as User}
+                isCurrentUser={u.id === currentUser?.id}
               />
             ))}
             {follows?.length === 0 && (
@@ -72,7 +80,7 @@ const FollowModal: React.FC<FollowModalProps> = ({ modalTitle }) => {
         </main>
       </Modal>
     </>
-  );
-};
+  )
+}
 
-export default FollowModal;
+export default FollowModal

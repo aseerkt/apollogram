@@ -1,17 +1,25 @@
+import { useQueryClient } from '@tanstack/react-query'
 import React, { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { FaCameraRetro } from 'react-icons/fa'
 import { useNavigate } from 'react-router-dom'
-import { useMessageCtx } from '../context/MessageContext'
+import { useToast } from '../context/toast'
 import {
   CloudinaryUploadResult,
   EnumFilePathPrefix,
-  useAddPostMutation,
-} from '../generated/graphql'
+  GetExplorePostsDocument,
+} from '../gql/graphql'
+import { AddPostMutationDocument } from '../graphql/mutations'
+import { GetUserQueryDocument } from '../graphql/queries'
 import { useCloudinaryUpload } from '../hooks/useCloudinaryUpload'
 import useCompressor from '../hooks/useCompressor'
 import Button from '../shared/Button'
 import Card from '../shared/Card'
+import {
+  getCacheKey,
+  getQueryKey,
+  useGqlMutation,
+} from '../utils/react-query-gql'
 
 type AddPostProps = {
   className?: string
@@ -19,20 +27,42 @@ type AddPostProps = {
 }
 
 const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
-  const { setMessage } = useMessageCtx()
+  const toast = useToast()
 
   const [caption, setCaption] = useState('')
   const [uploadResult, setUploadResult] = useState<CloudinaryUploadResult>()
 
   const [imgSrc, setImgSrc] = useState<string | null>(null)
   const [uploadError, setUploadError] = useState('')
-  const [submitting, setSubmitting] = useState(false)
 
   const navigate = useNavigate()
   const compress = useCompressor()
   const { uploadToCloudinary, uploading } = useCloudinaryUpload()
 
-  const onDrop = useCallback((files: File[]) => {
+  const queryClient = useQueryClient()
+
+  const { mutate: addPost, isPending: submitting } = useGqlMutation(
+    AddPostMutationDocument,
+    {
+      onSuccess: (data) => {
+        if (data?.addPost.post) {
+          onClose()
+          toast('Post uploaded successfully')
+          navigate(`/p/${data.addPost.post.id}`)
+          queryClient.invalidateQueries({
+            queryKey: [getCacheKey(GetExplorePostsDocument)],
+          })
+          queryClient.invalidateQueries({
+            queryKey: getQueryKey(GetUserQueryDocument, {
+              username: data.addPost.post.user.username,
+            }),
+          })
+        }
+      },
+    }
+  )
+
+  const handleDrop = useCallback((files: File[]) => {
     if (!files[0].type.includes('image')) {
       setUploadError('Unsupported file format (Supported: JPEG/JPG/PNG)')
       return
@@ -56,34 +86,16 @@ const AddPost: React.FC<AddPostProps> = ({ className, onClose }) => {
     })
   }, [])
 
-  const [addPost] = useAddPostMutation({
-    update: (cache, { data }) => {
-      if (data?.addPost.post) {
-        cache.evict({ fieldName: 'getExplorePosts' })
-        cache.evict({
-          fieldName: 'getUser',
-          args: { username: data.addPost.post.user.username },
-        })
-      }
-    },
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop: handleDrop,
   })
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setSubmitting(true)
     if (!uploadResult) {
       return setUploadError('Please upload file')
     }
-
-    const res = await addPost({ variables: { uploadResult, caption } })
-    if (res.data?.addPost.post) {
-      onClose()
-      setMessage('Post uploaded successfully')
-      navigate(`/p/${res.data.addPost.post.id}`)
-    }
-    setSubmitting(false)
+    addPost({ caption, uploadResult })
   }
 
   const submitDisabled = !imgSrc || !caption

@@ -1,52 +1,60 @@
-import { useState } from 'react';
-import { MdMoreHoriz } from 'react-icons/md';
-import { useNavigate } from 'react-router-dom';
-import Modal from '../shared/Modal';
-import { useMessageCtx } from '../context/MessageContext';
-import { useMeQuery, useDeletePostMutation, Post } from '../generated/graphql';
-import ActionModal from './ActionModal';
-import EditCaption from './EditCaption';
+import { MdMoreHoriz } from 'react-icons/md'
+import { useNavigate } from 'react-router-dom'
+import { useToast } from '../context/toast'
+import { Post } from '../gql/graphql'
+import { DeletePostMutationDocument } from '../graphql/mutations'
+import { useDisclosure } from '../hooks/useDisclosure'
+import Modal from '../shared/Modal'
+import { useGqlMutation } from '../utils/react-query-gql'
+import ActionModal from './ActionModal'
+import EditCaption from './EditCaption'
 
-const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
-  const { id, caption, imgURL, user } = post;
-  const { setMessage } = useMessageCtx();
-  const [isOpen, setIsOpen] = useState(false);
-  const [openEditCaption, setOpenEditCaption] = useState(false);
+const PostOptions: React.FC<{ post: Post; isCurrentUserPost: boolean }> = ({
+  post,
+  isCurrentUserPost,
+}) => {
+  const { id, caption, imgURL } = post
 
-  const { data: meData } = useMeQuery();
-  const [deletePost] = useDeletePostMutation();
-  const navigate = useNavigate();
+  const toast = useToast()
+  const navigate = useNavigate()
+
+  const { isOpen: isActionModalOpen, toggle: toggleActionModal } =
+    useDisclosure(false)
+
+  const { isOpen: isEditCaptionModalOpen, toggle: toggleEditCaptionModal } =
+    useDisclosure()
+
+  const { mutate: deletePost } = useGqlMutation(DeletePostMutationDocument, {
+    onSuccess(data) {
+      if (data.deletePost) {
+        toggleActionModal()
+        toast('Post removed successfully')
+        navigate('/')
+      }
+    },
+  })
+
+  const handleOpenEditCaptionModal = () => {
+    toggleActionModal()
+    toggleEditCaptionModal()
+  }
+
+  const handleDeletePost = () => {
+    deletePost({
+      postId: id,
+    })
+  }
 
   return (
     <div className='cursor-pointer' role='button'>
-      <MdMoreHoriz size='1.5em' onClick={(e) => setIsOpen(true)} />
-      <ActionModal isOpen={isOpen} setIsOpen={setIsOpen}>
-        {meData && meData.me && meData.me.username === user.username && (
+      <MdMoreHoriz size='1.5em' onClick={toggleActionModal} />
+      <ActionModal isOpen={isActionModalOpen} onClose={toggleActionModal}>
+        {isCurrentUserPost && (
           <>
-            <li
-              className='red'
-              onClick={async () => {
-                await deletePost({
-                  variables: { postId: id },
-                  update: (cache, { data }) => {
-                    if (data?.deletePost) {
-                      cache.evict({ id: 'Post:' + id });
-                      setIsOpen(false);
-                      setMessage('Post removed successfully');
-                      navigate('/');
-                    }
-                  },
-                });
-              }}
-            >
+            <li role='button' className='red' onClick={handleDeletePost}>
               Delete Post
             </li>
-            <li
-              onClick={() => {
-                setOpenEditCaption(true);
-                setIsOpen(false);
-              }}
-            >
+            <li role='button' onClick={handleOpenEditCaptionModal}>
               Edit caption
             </li>
           </>
@@ -54,19 +62,16 @@ const PostOptions: React.FC<{ post: Post }> = ({ post }) => {
         <li onClick={() => navigate(`/p/${id}`)}>Go to Post</li>
       </ActionModal>
       {/* Edit Caption Modal */}
-      <Modal isOpen={openEditCaption} setIsOpen={setOpenEditCaption}>
+      <Modal isOpen={isEditCaptionModalOpen} onClose={toggleEditCaptionModal}>
         <EditCaption
           postCaption={caption}
           postId={id}
           postImage={imgURL}
-          close={() => {
-            setOpenEditCaption(false);
-            setIsOpen(false);
-          }}
+          close={toggleEditCaptionModal}
         />
       </Modal>
     </div>
-  );
-};
+  )
+}
 
-export default PostOptions;
+export default PostOptions

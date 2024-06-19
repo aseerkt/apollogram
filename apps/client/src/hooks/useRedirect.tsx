@@ -1,20 +1,19 @@
 import { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useMeQuery } from '../generated/graphql'
+import { useNavigate } from 'react-router'
+import { useMeQuery } from './useMeQuery'
 
-function useRedirect(route: 'guest' | 'private') {
+function useUserRedirect(route: 'guest' | 'private') {
   const navigate = useNavigate()
-  const { data, loading } = useMeQuery()
-
+  const { currentUser, isFetching } = useMeQuery()
   useEffect(() => {
-    if (loading) return
-    if (route === 'guest' && data?.me) {
+    if (isFetching) return
+    if (route === 'guest' && currentUser) {
       navigate('/', { replace: true })
     }
-    if (route === 'private' && !data?.me) {
+    if (route === 'private' && !currentUser) {
       navigate('/login', { replace: true })
     }
-  }, [data, loading])
+  }, [currentUser, isFetching])
 }
 
-export default useRedirect
+export default useUserRedirect

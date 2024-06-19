@@ -6,5 +6,11 @@
       "@/*": ["./*"]
     }
   },
+  "plugins": [
+    {
+      "name": "@0no-co/graphqlsp",
+      "schema": "http://localhost:5000/graphql"
+    }
+  ],
   "include": ["./src"]
 }

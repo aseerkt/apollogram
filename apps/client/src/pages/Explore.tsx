@@ -1,56 +1,35 @@
-import { useEffect, useState } from 'react';
-import Alert from '../shared/Alert';
-import Container from '../shared/Container';
-import Spinner from '../shared/Spinner';
-import PostsGrid from '../components/PostsGrid';
-import { Post, useGetExplorePostsQuery } from '../generated/graphql';
+import PostsGrid from '../components/PostsGrid'
+import { Post, useGetExplorePostsQuery } from '../generated/graphql'
+import useScrollPaginate from '../hooks/usePaginate'
+import Alert from '../shared/Alert'
+import Container from '../shared/Container'
+import Spinner from '../shared/Spinner'
 
 const Explore = () => {
-  const [observedPost, setObservedPost] = useState('');
   const { data, loading, error, fetchMore, variables } =
     useGetExplorePostsQuery({
       variables: { limit: 12 },
-    });
+    })
 
-  useEffect(() => {
-    if (data) {
-      const posts = data.getExplorePosts.posts;
-      if (!posts || posts.length === 0) return;
-
-      const id = posts[posts.length - 1].id;
-
-      if (id !== observedPost) {
-        setObservedPost(id);
-        observeElement(document.getElementById(id)!);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.getExplorePosts.posts]);
-
-  const observeElement = (element: HTMLElement) => {
-    if (!element) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting === true) {
-          // console.log('Reached bottom of post');
-          fetchMore({
-            variables: {
-              limit: variables?.limit,
-              offset: data?.getExplorePosts.posts.length || 0,
-            },
-          });
-          observer.unobserve(element);
-        }
+  const loadMore = () => {
+    fetchMore({
+      variables: {
+        limit: variables?.limit,
+        offset: data?.getExplorePosts.posts.length || 0,
       },
-      { threshold: 0.5 }
-    );
-    observer.observe(element);
-  };
+    })
+  }
+
+  useScrollPaginate(
+    data?.getExplorePosts.posts,
+    data?.getExplorePosts.hasMore,
+    loadMore
+  )
 
   if (loading) {
-    return <Spinner />;
+    return <Spinner />
   } else if (error) {
-    return <Alert>{error.message}</Alert>;
+    return <Alert>{error.message}</Alert>
   }
 
   return (
@@ -59,7 +38,7 @@ const Explore = () => {
         <PostsGrid posts={data.getExplorePosts.posts as Post[]} />
       )}
     </Container>
-  );
-};
+  )
+}
 
-export default Explore;
+export default Explore

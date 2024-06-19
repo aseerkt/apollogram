@@ -1,54 +1,49 @@
-import { useToggleLikeMutation } from '../generated/graphql';
-import useToggleLikeInCache from '../hooks/useToggleLikeInCache';
-import { BsHeart, BsHeartFill } from 'react-icons/bs';
-import { useMessageCtx } from '@/context/MessageContext';
+import { useToast } from '@/context/toast'
+import { BsHeart, BsHeartFill } from 'react-icons/bs'
+import { ToggleLikeMutationDocument } from '../graphql/mutations'
+import { useGqlMutation } from '../utils/react-query-gql'
 
 interface LikeButtonProps {
-  postId: string;
-  userLike: boolean;
+  postId: string
+  userLike: boolean
 }
 
-const TOGGLE_LIKE_FAIL_MESSAGE = 'Unable to toggle like for post';
+const TOGGLE_LIKE_FAIL_MESSAGE = 'Unable to toggle like for post'
 
 const LikeButton: React.FC<LikeButtonProps> = ({ postId, userLike }) => {
-  const toggleLikeInCache = useToggleLikeInCache();
-  const { setMessage } = useMessageCtx();
+  const toast = useToast()
 
-  const [toggleLike] = useToggleLikeMutation({
-    variables: { postId },
-    update: (cache, { data }) => {
-      if (!data?.toggleLike) {
-        toggleLikeInCache(postId, cache);
-        setMessage(TOGGLE_LIKE_FAIL_MESSAGE);
+  const { mutate: toggleLike } = useGqlMutation(ToggleLikeMutationDocument, {
+    onSuccess: (data) => {
+      if (data.toggleLike) {
+        // TODO: invalidate cache
       }
     },
-  });
+  })
 
   const likeAction = async () => {
     try {
-      toggleLikeInCache(postId);
-      await toggleLike();
+      toggleLike({ postId })
     } catch (err) {
-      toggleLikeInCache(postId);
-      setMessage(TOGGLE_LIKE_FAIL_MESSAGE);
+      toast(TOGGLE_LIKE_FAIL_MESSAGE)
     }
-  };
+  }
 
   return (
     <button onClick={likeAction}>
       {userLike ? (
         <BsHeartFill
           size='1.9em'
-          className='text-red-600 duration-150 transform cursor-pointer active:scale-110'
+          className='transform cursor-pointer text-red-600 duration-150 active:scale-110'
         />
       ) : (
         <BsHeart
           size='1.9em'
-          className='duration-150 transform cursor-pointer active:scale-110'
+          className='transform cursor-pointer duration-150 active:scale-110'
         />
       )}
     </button>
-  );
-};
+  )
+}
 
-export default LikeButton;
+export default LikeButton

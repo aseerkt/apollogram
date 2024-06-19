@@ -1,39 +1,39 @@
-import Button from '../shared/Button';
-import Container from '../shared/Container';
-import InputField from '../shared/InputField';
+import SelectField from '@/shared/SelectField'
+import { Field, Form, Formik } from 'formik'
+import ChangeProfilePhoto from '../components/ChangeProfilePhoto'
+import { useToast } from '../context/toast'
 import {
   MeDocument,
   useEditProfileMutation,
   useMeQuery,
-} from '../generated/graphql';
-import ChangeProfilePhoto from '../components/ChangeProfilePhoto';
-import { Field, Form, Formik } from 'formik';
-import { useMessageCtx } from '../context/MessageContext';
-import SelectField from '@/shared/SelectField';
+} from '../generated/graphql'
+import Button from '../shared/Button'
+import Container from '../shared/Container'
+import InputField from '../shared/InputField'
 
 const EditProfile: React.FC = () => {
-  const { setMessage } = useMessageCtx();
-  const { data } = useMeQuery();
-  const [editProfile] = useEditProfileMutation();
+  const toast = useToast()
+  const { data } = useMeQuery()
+  const [editProfile] = useEditProfileMutation()
 
-  if (!data) return null;
+  if (!data) return null
 
-  const user = data.me!;
+  const user = data.me!
 
   return (
     <Container>
-      <div className='flex bg-white border border-gray-300 rounded-lg md:pl-0'>
-        <div className='hidden pt-5 border-gray-300 md:w-80 md:border-r md:flex'>
-          <div className='flex flex-col flex-1'>
+      <div className='flex rounded-lg border border-gray-300 bg-white md:pl-0'>
+        <div className='hidden border-gray-300 pt-5 md:flex md:w-80 md:border-r'>
+          <div className='flex flex-1 flex-col'>
             <ul>
-              <li className='px-5 py-2 font-bold border-l-2 border-black'>
+              <li className='border-l-2 border-black px-5 py-2 font-bold'>
                 Edit Profile
               </li>
               {/* <li className='px-5 py-2'>Change Password</li> */}
             </ul>
           </div>
         </div>
-        <div className='flex flex-col w-full p-5 md:mx-20'>
+        <div className='flex w-full flex-col p-5 md:mx-20'>
           <div className='py-4'>
             <ChangeProfilePhoto username={user.username} />
           </div>
@@ -51,29 +51,29 @@ const EditProfile: React.FC = () => {
                   variables: values,
                   update: (cache, { data }) => {
                     if (data) {
-                      const { errors, user } = data.editProfile;
+                      const { errors, user } = data.editProfile
                       if (errors) {
                         errors.forEach(({ path, message }) => {
-                          action.setFieldError(path, message);
-                        });
+                          action.setFieldError(path, message)
+                        })
                       }
                       if (user) {
                         cache.writeQuery({
                           query: MeDocument,
                           data: { me: user },
-                        });
-                        setMessage('Profile updated');
+                        })
+                        toast('Profile updated')
                       }
                     }
                   },
-                });
+                })
               } catch (err) {
                 // console.log(err);
               }
             }}
           >
             {({ isSubmitting, values: { email } }) => (
-              <Form className='flex flex-col w-full mb-5'>
+              <Form className='mb-5 flex w-full flex-col'>
                 <InputField
                   inline
                   name='name'
@@ -82,7 +82,7 @@ const EditProfile: React.FC = () => {
                   helperText="Help people discover your account by using the name you're known by: either your full name, nickname, or business name."
                 />
                 <InputField inline type='url' name='website' label='Website' />
-                <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
+                <div className='md:grid-cols-2-form mb-5 gap-10 md:grid'>
                   <label
                     htmlFor='bio'
                     className='block font-bold md:text-right'
@@ -93,7 +93,7 @@ const EditProfile: React.FC = () => {
                     as='textarea'
                     name='bio'
                     row='3'
-                    className='w-full px-2 py-1 mb-3 border border-gray-300 rounded-md bg-blue-50 focus:border-gray-500'
+                    className='mb-3 w-full rounded-md border border-gray-300 bg-blue-50 px-2 py-1 focus:border-gray-500'
                   ></Field>
                 </div>
 
@@ -103,7 +103,7 @@ const EditProfile: React.FC = () => {
                   <option value='Female'>Female</option>
                   <option value='Prefer not to say'>Prefer not to say</option>
                 </SelectField>
-                <div className='gap-10 mb-5 md:grid md:grid-cols-2-form'>
+                <div className='md:grid-cols-2-form mb-5 gap-10 md:grid'>
                   <div aria-label='offset'></div>
                   <Button
                     isLoading={isSubmitting}
@@ -121,7 +121,7 @@ const EditProfile: React.FC = () => {
         </div>
       </div>
     </Container>
-  );
-};
+  )
+}
 
-export default EditProfile;
+export default EditProfile

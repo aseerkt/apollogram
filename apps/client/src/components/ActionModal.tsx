@@ -1,17 +1,22 @@
-import Card from '../shared/Card';
-import Modal from '../shared/Modal';
-import { ModalProps } from '../prop-types/ModalProps';
-import './ActionModal.css';
+import { PropsWithChildren } from 'react'
+import { ModalProps } from '../prop-types/ModalProps'
+import Card from '../shared/Card'
+import Modal from '../shared/Modal'
+import './ActionModal.css'
 
-const ActionModal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
+const ActionModal: React.FC<PropsWithChildren<ModalProps>> = ({
+  isOpen,
+  onClose: setIsOpen,
+  children,
+}) => {
   return (
-    <Modal isOpen={isOpen} setIsOpen={setIsOpen}>
+    <Modal isOpen={isOpen} onClose={setIsOpen}>
       <Card className='rounded-lg'>
         <ul className='action-modal-list'>
           {children}
           <li
             onClick={() => {
-              setIsOpen(false);
+              setIsOpen(false)
             }}
           >
             Cancel
@@ -19,7 +24,7 @@ const ActionModal: React.FC<ModalProps> = ({ isOpen, setIsOpen, children }) => {
         </ul>
       </Card>
     </Modal>
-  );
-};
+  )
+}
 
-export default ActionModal;
+export default ActionModal

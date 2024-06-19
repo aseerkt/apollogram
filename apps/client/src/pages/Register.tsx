@@ -1,11 +1,12 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { Form, Formik } from 'formik';
-import FormWrapper from '../containers/FormWrapper';
-import Button from '../shared/Button';
-import InputField from '../shared/InputField';
-import { useRegisterMutation } from '../generated/graphql';
-import * as Yup from 'yup';
-import useRedirect from '../hooks/useRedirect';
+import { Form, Formik } from 'formik'
+import { Link, useNavigate } from 'react-router-dom'
+import * as Yup from 'yup'
+import AuthFormWrapper from '../containers/FormWrapper'
+import { RegisterMutationDocument } from '../graphql/mutations'
+import useUserRedirect from '../hooks/useRedirect'
+import Button from '../shared/Button'
+import InputField from '../shared/InputField'
+import { useGqlMutation } from '../utils/react-query-gql'
 
 const RegisterSchema = Yup.object().shape({
   username: Yup.string()
@@ -23,16 +24,16 @@ const RegisterSchema = Yup.object().shape({
   password2: Yup.string()
     .required('Confirm password is required')
     .oneOf([Yup.ref('password'), null], 'Passwords must match'),
-});
+})
 
 const Register: React.FC = ({}) => {
-  const [register] = useRegisterMutation();
-  const navigate = useNavigate();
+  useUserRedirect('guest')
+  const navigate = useNavigate()
 
-  useRedirect('guest');
+  const { mutateAsync: register } = useGqlMutation(RegisterMutationDocument, {})
 
   return (
-    <FormWrapper title='Register'>
+    <AuthFormWrapper title='Register'>
       <div className='p-4'>
         <Formik
           initialValues={{
@@ -43,23 +44,25 @@ const Register: React.FC = ({}) => {
           }}
           validationSchema={RegisterSchema}
           onSubmit={async (values, { setFieldError }) => {
-            const { email, username, password, password2 } = values;
+            const { email, username, password, password2 } = values
             if (password !== password2) {
-              setFieldError('password2', 'Password Mismatch');
-              return;
+              setFieldError('password2', 'Password Mismatch')
+              return
             }
-            const res = await register({
-              variables: { email, username, password },
-            });
-            const errors = res.data?.register.errors;
-            const ok = res.data?.register.ok;
+            const data = await register({
+              email,
+              username,
+              password,
+            })
+            const errors = data?.register.errors
+            const ok = data?.register.ok
             if (errors) {
               errors.forEach(({ path, message }) => {
-                setFieldError(path, message);
-              });
+                setFieldError(path, message)
+              })
             }
             if (ok) {
-              navigate('/login');
+              navigate('/login')
             }
           }}
         >
@@ -94,8 +97,8 @@ const Register: React.FC = ({}) => {
           </Link>{' '}
         </small>
       </div>
-    </FormWrapper>
-  );
-};
+    </AuthFormWrapper>
+  )
+}
 
-export default Register;
+export default Register
