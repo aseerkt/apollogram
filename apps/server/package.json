@@ -23,7 +23,7 @@
     "@mikro-orm/reflection": "^6.2.9",
     "argon2": "^0.40.3",
     "class-validator": "^0.14.1",
-    "cloudinary": "^2.2.0",
+    "cloudinary": "^2.7.0",
     "colors": "^1.4.0",
     "dataloader": "^2.2.2",
     "dotenv": "^16.4.5",
