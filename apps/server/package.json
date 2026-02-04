@@ -15,7 +15,7 @@
     "seed": " pnpm build && npx mikro-orm-esm seeder:run"
   },
   "dependencies": {
-    "@apollo/server": "^4.10.4",
+    "@apollo/server": "^5.4.0",
     "@as-integrations/fastify": "^2.1.1",
     "@fastify/cors": "^9.0.1",
     "@mikro-orm/core": "^6.2.9",
